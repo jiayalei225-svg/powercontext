@@ -786,11 +786,20 @@ def _artifact_processing_bindings(  # noqa: C901 - validate and assemble one reg
                 pending_provider=None
                 if family == "skill"
                 else SourceProcessingPendingProvider(contexts.database, binding, family),
+                source_count_threshold=_source_count_threshold(config.runtime, family),
                 automatic_scope_filter=enabled_profile_scopes if family == "profile" else None,
             )
         )
     _validate_processing_registrations(configured)
     return tuple(configured)
+
+
+def _source_count_threshold(runtime: RuntimeConfig, family: str) -> int | None:
+    if family == "memory":
+        return runtime.memory_source_count_threshold
+    if family == "topic-memory":
+        return runtime.topic_memory_source_count_threshold
+    return None
 
 
 def _validate_processing_registrations(configured: Sequence[ArtifactProcessingBinding]) -> None:

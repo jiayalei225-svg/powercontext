@@ -171,6 +171,37 @@ class ArtifactProcessingIntentRepository:
         )
         return cast(StoredArtifactProcessingIntent, await self.load(connection, scope_id, binding_name))
 
+    async def admit_pending(
+        self,
+        connection: AsyncConnection,
+        scope_id: str,
+        binding_name: str,
+        /,
+    ) -> StoredArtifactProcessingIntent | None:
+        """Accept one dirty generation unless an invocation is already outstanding.
+
+        The caller has already established that this binding's input reached its
+        admission policy. Returning ``None`` keeps repeated discovery probes
+        idempotent while an accepted invocation remains unhandled.
+        """
+
+        current = await self.load(connection, scope_id, binding_name, for_update=True)
+        if (
+            current is None
+            or current.dirty_generation <= current.clean_generation
+            or current.requested_generation > current.handled_generation
+        ):
+            return None
+        table = ARTIFACT_PROCESSING_INTENTS_TABLE
+        await connection.execute(
+            update(table)
+            .where(table.c.scope_id == scope_id, table.c.binding_name == binding_name)
+            .values(requested_generation=table.c.requested_generation + 1)
+        )
+        return cast(
+            StoredArtifactProcessingIntent, await self.load(connection, scope_id, binding_name, for_update=True)
+        )
+
     async def scan(
         self,
         connection: AsyncConnection,
