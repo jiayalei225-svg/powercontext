@@ -126,6 +126,7 @@ from powercontext.builtin.code.errors import CodeError
 from powercontext.builtin.code.models import CodeConfig, CodeQueryRequest, CodeQueryResult
 from powercontext.builtin.code.service import CodeService
 from powercontext.builtin.context import BuiltinArtifacts, BuiltinSources
+from powercontext.builtin.triggers import SOURCE_WINDOW_TRIGGER_NAME
 from powercontext.builtin.dream.application import DreamApplication
 from powercontext.builtin.dream.service import CandidateAttester, DreamAuthorizer, DreamService
 from powercontext.builtin.evidence.resolver import AuthorizationContext, ScopedEvidenceAuthorizer
@@ -340,6 +341,12 @@ _MEMORY_SEARCH_MODE = "powercontext.memory.search.mode"
 _MEMORY_SEARCH_RESULT_COUNT = "powercontext.memory.search.result_count"
 
 ScopeIds = Callable[[], Awaitable[tuple[str, ...]]]
+SourceProgress = Callable[[str, str], Awaitable[tuple[int, int]]]
+TopicMemoryWaveInFlight = Callable[[str], Awaitable[bool]]
+
+# Count admission is a lightweight durable-progress check, not a polling processor:
+# one journal/cursor read per configured Family and scope on each pass.
+_SOURCE_COUNT_POLL_SECONDS = 0.2
 ReviewServiceFactory = Callable[[str], ReviewService]
 GenerationServiceFactory = Callable[[str], ReviewedGenerationService]
 ExternalSkillRegistryFactory = Callable[[str], ExternalSkillRegistryService]
@@ -2983,6 +2990,14 @@ def _log_scheduled_processing(
     )
 
 
+def _validate_source_count_threshold(value: int | None) -> int | None:
+    if value is None:
+        return None
+    if type(value) is not int or value < 1:
+        raise _RuntimeConfigurationError("source_count_threshold")
+    return value
+
+
 class BuiltinRuntime:
     """Add business-specific operations over composed built-in contexts."""
 
@@ -2993,6 +3008,10 @@ class BuiltinRuntime:
         capabilities: RuntimeCapabilities,
         code_service: CodeService | None = None,
         source_window_limit: int = 100,
+        memory_source_count_threshold: int | None = None,
+        topic_memory_source_count_threshold: int | None = None,
+        source_progress: SourceProgress | None = None,
+        topic_memory_wave_in_flight: TopicMemoryWaveInFlight | None = None,
         context_assembly_max_entries: int = 8,
         recall_sufficiency_policy: RecallSufficiencyPolicy | None = None,
         scope_cache_size: int = DEFAULT_SCOPE_CACHE_SIZE,
@@ -3096,6 +3115,14 @@ class BuiltinRuntime:
         self._tracing = tracing
         self._scheduled_source_runner = scheduled_source_runner
         self._scheduled_experience_runner = scheduled_experience_runner
+        self._scope_ids = scope_ids
+        self._memory_source_count_threshold = _validate_source_count_threshold(memory_source_count_threshold)
+        self._topic_memory_source_count_threshold = _validate_source_count_threshold(
+            topic_memory_source_count_threshold
+        )
+        self._source_progress = source_progress
+        self._topic_memory_wave_in_flight = topic_memory_wave_in_flight
+        self._count_trigger_task: asyncio.Task[None] | None = None
         self.source_window_limit = source_window_limit
         self.context_assembly_max_entries = context_assembly_max_entries
         self.recall_sufficiency_policy = recall_sufficiency_policy
@@ -3142,6 +3169,109 @@ class BuiltinRuntime:
 
     async def __aexit__(self, exc_type: object, exc_value: object, traceback: object) -> None:
         await self.close()
+
+    def start_source_count_trigger(self) -> None:
+        """Start Source count admission when a Family threshold is configured."""
+
+        if self._memory_source_count_threshold is None and self._topic_memory_source_count_threshold is None:
+            return
+        if self._source_progress is None or self._scope_ids is None:
+            return
+        if self._count_trigger_task is not None or self._closing or self._closed:
+            return
+        self._count_trigger_task = asyncio.create_task(
+            self._run_source_count_trigger(),
+            name="powercontext-source-count-trigger",
+        )
+
+    async def _run_source_count_trigger(self) -> None:
+        """Re-check durable journal progress until the Runtime closes."""
+
+        while not (self._closing or self._closed):
+            try:
+                async with self._processor_lock:
+                    if self._closing or self._closed:
+                        return
+                    for scope_id in await self._scope_ids():
+                        if self._closing or self._closed:
+                            return
+                        await self._admit_source_counts(scope_id)
+            except asyncio.CancelledError:
+                raise
+            except Exception as error:
+                log_safely(
+                    logger,
+                    logging.ERROR,
+                    "Source count admission pass failed",
+                    exc_info=error,
+                    extra={
+                        "event": "processing.source_count.pass_failed",
+                        "outcome": "failure",
+                        "unit": "source",
+                    },
+                )
+            await asyncio.sleep(_SOURCE_COUNT_POLL_SECONDS)
+
+    async def _admit_source_counts(self, scope_id: str) -> None:
+        await self._admit_memory_source_count(scope_id)
+        await self._admit_topic_memory_source_count(scope_id)
+
+    async def _admit_memory_source_count(self, scope_id: str) -> None:
+        threshold = self._memory_source_count_threshold
+        if threshold is None or self._source_progress is None:
+            return
+        while not (self._closing or self._closed):
+            head, cursor = await self._source_progress(scope_id, SOURCE_WINDOW_TRIGGER_NAME)
+            if head - cursor < threshold:
+                return
+            try:
+                await self.memory.for_scope(scope_id).flush()
+            except asyncio.CancelledError:
+                raise
+            except Exception as error:
+                log_safely(
+                    logger,
+                    logging.ERROR,
+                    "Memory Source count admission failed",
+                    exc_info=error,
+                    extra={
+                        "event": "processing.source_count.memory_failed",
+                        "outcome": "failure",
+                        "unit": "memory",
+                    },
+                )
+                return
+            _, new_cursor = await self._source_progress(scope_id, SOURCE_WINDOW_TRIGGER_NAME)
+            if new_cursor <= cursor:
+                return
+
+    async def _admit_topic_memory_source_count(self, scope_id: str) -> None:
+        threshold = self._topic_memory_source_count_threshold
+        if threshold is None or self._source_progress is None or not self._topic_memory_processing_available:
+            return
+        head, cursor = await self._source_progress(scope_id, TOPIC_MEMORY_SOURCE_WINDOW_BINDING)
+        if head - cursor < threshold:
+            return
+        if self._topic_memory_wave_in_flight is not None and await self._topic_memory_wave_in_flight(scope_id):
+            return
+        try:
+            await self.topic_memory.for_scope(scope_id).flush()
+        except asyncio.CancelledError:
+            raise
+        except TopicMemoryProcessingUnavailableError:
+            return
+        except Exception as error:
+            log_safely(
+                logger,
+                logging.ERROR,
+                "Topic Memory Source count admission failed",
+                exc_info=error,
+                extra={
+                    "event": "processing.source_count.topic_memory_failed",
+                    "outcome": "failure",
+                    "unit": "topic-memory",
+                },
+            )
 
     async def capabilities(self) -> RuntimeCapabilities:
         async with self._operation():
@@ -3286,6 +3416,13 @@ class BuiltinRuntime:
                 await self.artifact_processing_supervisor.close()
             async with self._processor_lock:
                 pass
+            if self._count_trigger_task is not None:
+                self._count_trigger_task.cancel()
+                try:
+                    await self._count_trigger_task
+                except asyncio.CancelledError:
+                    pass
+                self._count_trigger_task = None
             try:
                 if self._scheduler is not None and self._scheduler.running:
                     self._scheduler.shutdown(wait=False)

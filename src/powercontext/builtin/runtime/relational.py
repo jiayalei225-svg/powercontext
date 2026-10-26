@@ -1338,6 +1338,25 @@ class RelationalContexts:
             ).scalars()
             return tuple(str(value) for value in values)
 
+    async def source_progress(self, scope_id: str, binding_name: str, /) -> tuple[int, int]:
+        """Return one binding's journal high watermark and last committed cursor."""
+
+        scope = validate_scope_id(scope_id)
+        async with self.database.transaction() as connection:
+            head = await self.repositories.sources.journal_position(connection, scope)
+            cursor = await self.repositories.cursors.load(connection, scope, binding_name)
+        return int(head), 0 if cursor is None else cursor.cursor.sequence
+
+    async def topic_memory_wave_in_flight(self, scope_id: str, /) -> bool:
+        """Report whether an accepted Topic Memory flush generation is still unhandled."""
+
+        scope = validate_scope_id(scope_id)
+        async with self.database.transaction() as connection:
+            pending = await self.repositories.processing_pending.load(
+                connection, scope, TOPIC_MEMORY_SOURCE_WINDOW_BINDING
+            )
+        return pending is not None and pending.flush_generation > pending.handled_flush_generation
+
     async def handoff_scope_ids(self) -> tuple[str, ...]:
         """Return scopes with a committed Handoff head, in deterministic order."""
 
