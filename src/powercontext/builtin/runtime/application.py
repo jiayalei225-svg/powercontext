@@ -143,6 +143,7 @@ from powercontext.builtin.persistence.artifact_governance import (
     ArtifactGovernance,
     ArtifactLifecycleState,
 )
+from powercontext.builtin.persistence.database import AsyncDatabase
 from powercontext.builtin.persistence.skill_publications import SkillPublication
 from powercontext.builtin.publication import ArtifactPublicationApplication
 from powercontext.builtin.records import (
@@ -248,6 +249,7 @@ from powercontext.builtin.runtime.recall_sufficiency import (
     build_recall_candidates,
     recall_effort,
 )
+from powercontext.builtin.runtime.source_lifecycle import LifecycleApplication
 from powercontext.builtin.runtime.statistics import RelationalScopedStatistics, overview_selection
 from powercontext.builtin.scope import ScopeApplication, ScopeDescriptor, ScopeSelection
 from powercontext.builtin.scope.subject_sources import SubjectSourceService
@@ -1642,6 +1644,20 @@ def _topic_identity(hit: TopicMemorySearchHit) -> tuple[str, int]:
     return (hit.artifact_ref.artifact_id, hit.artifact_ref.revision)
 
 
+def _exclude_inactive_topics(
+    result: TopicMemorySearchResult,
+    inactive: tuple[ArtifactRef, ...],
+    limit: int,
+) -> TopicMemorySearchResult:
+    excluded = {(reference.family, reference.artifact_id, reference.revision) for reference in inactive}
+    hits = tuple(
+        hit
+        for hit in result.hits
+        if (hit.artifact_ref.family, hit.artifact_ref.artifact_id, hit.artifact_ref.revision) not in excluded
+    )
+    return result.model_copy(update={"hits": hits[:limit]})
+
+
 def _admission_keyword(admission: AdmissionFloor | None) -> dict[str, Any]:
     """Forward ``admission`` only when set, keeping today's exact downstream calls otherwise."""
 
@@ -2645,6 +2661,10 @@ class ScopedTopicMemoryApplication:
             self.scope_id,
             embedding_purpose=ModelUsagePurpose.TOPIC_MEMORY_RECALL,
         ):
+            inactive = await self._runtime.lifecycle.for_scope(self.scope_id)._inactive_topic_references()
+            search_request = (
+                request if not inactive else request.model_copy(update={"limit": MAX_TOPIC_MEMORY_SEARCH_LIMIT})
+            )
             embedding = self._runtime._topic_memory_embedding_model if allow_embedding else None
             browse = self._runtime._topic_memory_browse
             if embedding is not None and browse is not None and not await browse(self.scope_id, limit=1, after=None):
@@ -2653,20 +2673,22 @@ class ScopedTopicMemoryApplication:
                 result = await search(
                     self.scope_id,
                     query,
-                    limit=request.limit,
+                    limit=search_request.limit,
                     mode="fts",
                     **_admission_keyword(admission),
                 )
                 result = result.model_copy(update={"embedding_calls": 0})
             else:
                 result, used_fallback = await self._search_with_embedding(
-                    request,
+                    search_request,
                     embedding,
                     search,
                     admission,
                     query_embedding,
                     embedding_timeout_seconds,
                 )
+            if inactive:
+                result = _exclude_inactive_topics(result, inactive, request.limit)
         observer = self._runtime._topic_memory_search_observer
         if observer is not None:
             try:
@@ -3019,6 +3041,7 @@ class BuiltinRuntime:
         decision_model: DecisionModel | None = None,
         publication_application: ArtifactPublicationApplication | None = None,
         scope_application: ScopeApplication | None = None,
+        lifecycle_database: AsyncDatabase | None = None,
         readiness: RuntimeReadinessChecks | None = None,
         clock: Clock | None = None,
         tracing: RuntimeTracing | None = None,
@@ -3077,6 +3100,7 @@ class BuiltinRuntime:
         self.decision_model = decision_model
         self.publications = publication_application
         self.scopes = scope_application
+        self.lifecycle = LifecycleApplication(self, lifecycle_database)
         self._readiness = RuntimeReadinessChecks() if readiness is None else readiness
         self._clock = _utc_now if clock is None else clock
         self._tracing = tracing
