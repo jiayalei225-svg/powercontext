@@ -34,6 +34,11 @@ from powercontext.builtin.runtime.prepared_code import (
     PreparedCodeCandidate,
     assemble_code,
 )
+from powercontext.builtin.runtime.prepared_evidence import (
+    EvidenceCandidate,
+    render_evidence,
+    select_evidence_fragments,
+)
 from powercontext.builtin.runtime.prepared_text import (
     TRUST_POLICY,
     ContextTextItem,
@@ -100,12 +105,17 @@ class PreparedContextBuild:
     **not** a field here: ``ScopedContextApplication._prepare`` returns ``build.context`` and
     discards the rest, so such a field would have no production observer. The trace is
     delivered through the Runtime's optional ``RecallEffortSink`` instead.
+
+    ``fragments`` is populated only by evidence selection, where each fragment is one exact
+    literal range carried by an item of the rendered context. ``origins`` and ``fragments``
+    are parallel tuples in that mode.
     """
 
     context: PreparedContext
     origins: tuple[PreparedContextOrigin, ...]
     omissions: PreparedContextOmissions = PreparedContextOmissions()
     code_origins: tuple[CodeEvidenceRef, ...] = ()
+    fragments: tuple[PreparedFragment, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -115,6 +125,16 @@ class MemoryEntryAddress:
     memory: ArtifactAddress
     entry_id: str
     entry_version_id: str
+
+
+@dataclass(frozen=True)
+class PreparedFragment:
+    """One literal character range selected from an exact Memory entry version."""
+
+    address: MemoryEntryAddress
+    start: int
+    end: int
+    text: str
 
 
 PreparedContextOrigin = MemoryCitation | ArtifactRef | MemoryEntryAddress | ArtifactAddress
@@ -235,7 +255,7 @@ class PreparedContextBuilder:
         if sum(len(candidates.hits) for candidates in experience_candidates) > self.experience_candidate_limit:
             raise PreparedContextInvariantError("experience-candidate-limit")
 
-        content, origins, omissions = self._select_entries(
+        content, origins, omissions, fragments = self._select_entries(
             request=request,
             current_scope_id=current_scope_id,
             memory_candidates=memory_candidates,
@@ -254,6 +274,7 @@ class PreparedContextBuilder:
             context=PreparedContext(status="ready", content=content, content_bytes=content_bytes),
             origins=origins,
             omissions=omissions,
+            fragments=fragments,
         )
 
     def probe_budget(
@@ -277,7 +298,7 @@ class PreparedContextBuilder:
         counters because both go through :meth:`_select_entries`.
         """
 
-        content, origins, omissions = self._select_entries(
+        content, origins, omissions, _ = self._select_entries(
             request=request,
             current_scope_id=current_scope_id,
             memory_candidates=memory_candidates,
@@ -303,14 +324,26 @@ class PreparedContextBuilder:
         topic_memory_hits: Sequence[TopicMemorySearchHit],
         experience_candidates: Sequence[PreparedExperienceCandidates],
         profile_candidates: Sequence[PreparedProfileCandidate],
-    ) -> tuple[str | None, tuple[PreparedContextOrigin, ...], PreparedContextOmissions]:
+    ) -> tuple[
+        str | None,
+        tuple[PreparedContextOrigin, ...],
+        PreparedContextOmissions,
+        tuple[PreparedFragment, ...],
+    ]:
         """Run one complete pure selection pass and render it.
 
-        Returns ``(content, origins, omissions)``; ``content`` is ``None`` exactly when nothing
-        was selected, which is the empty-result case for both paths. This is the single
-        selection path shared by :meth:`build_scopes_result` and :meth:`probe_budget`, so the
-        probe's counters always describe the selection the build would actually perform.
+        Returns ``(content, origins, omissions, fragments)``; ``content`` is ``None`` exactly
+        when nothing was selected, which is the empty-result case for both paths. This is the
+        single selection path shared by :meth:`build_scopes_result` and :meth:`probe_budget`,
+        so the probe's counters always describe the selection the build would actually perform.
         """
+
+        if request.evidence_selection:
+            return self._select_evidence(
+                request,
+                current_scope_id=current_scope_id,
+                memory_candidates=memory_candidates,
+            )
 
         if request.assembly is not None:
             return self._select_text(
@@ -344,8 +377,69 @@ class PreparedContextBuilder:
         )[: self.experience_entry_limit]
         entries, omissions = self._fit_entries(request, memory_entries, topic_memory_entries, experience_entries)
         if not entries:
-            return None, (), omissions
-        return _render(entries), tuple(entry.origin for entry in entries), omissions
+            return None, (), omissions, ()
+        return _render(entries), tuple(entry.origin for entry in entries), omissions, ()
+
+    def _select_evidence(
+        self,
+        request: PrepareContextRequest,
+        *,
+        current_scope_id: str | None,
+        memory_candidates: Sequence[PreparedMemoryCandidates],
+    ) -> tuple[
+        str | None,
+        tuple[PreparedContextOrigin, ...],
+        PreparedContextOmissions,
+        tuple[PreparedFragment, ...],
+    ]:
+        """Select literal Memory fragments and render them as one evidence envelope."""
+
+        candidates: list[EvidenceCandidate] = []
+        for group in memory_candidates:
+            scope_id = group.scope_id or current_scope_id
+            if group.hits and group.memory_ref is None:
+                raise PreparedContextInvariantError("memory-ref-missing")
+            if group.hits and not scope_id:
+                raise PreparedContextInvariantError("memory-scope-missing")
+            for hit in group.hits:
+                if hit.memory_ref != group.memory_ref:
+                    raise PreparedContextInvariantError("memory-ref-mismatch")
+                candidates.append(
+                    EvidenceCandidate(
+                        scope_id=scope_id or "",
+                        memory_ref=hit.memory_ref,
+                        entry_id=hit.entry_id,
+                        entry_version_id=hit.entry_version_id,
+                        text=hit.text,
+                    )
+                )
+
+        fragments = select_evidence_fragments(request.query, candidates, max_bytes=request.max_bytes)
+        if not fragments:
+            return None, (), PreparedContextOmissions(), ()
+
+        prepared: list[PreparedFragment] = []
+        origins: list[PreparedContextOrigin] = []
+        for fragment in fragments:
+            address = MemoryEntryAddress(
+                memory=ArtifactAddress(
+                    scope_id=fragment.candidate.scope_id,
+                    artifact=fragment.candidate.memory_ref,
+                ),
+                entry_id=fragment.candidate.entry_id,
+                entry_version_id=fragment.candidate.entry_version_id,
+            )
+            prepared.append(
+                PreparedFragment(
+                    address=address,
+                    start=fragment.start,
+                    end=fragment.end,
+                    text=fragment.text,
+                )
+            )
+            origins.append(address)
+        content = render_evidence(fragments)
+        return content, tuple(origins), PreparedContextOmissions(), tuple(prepared)
 
     def _select_text(
         self,
@@ -356,7 +450,12 @@ class PreparedContextBuilder:
         experience_candidates: Sequence[PreparedExperienceCandidates],
         profile_candidates: Sequence[PreparedProfileCandidate],
         topic_memory_hits: Sequence[TopicMemorySearchHit],
-    ) -> tuple[str | None, tuple[PreparedContextOrigin, ...], PreparedContextOmissions]:
+    ) -> tuple[
+        str | None,
+        tuple[PreparedContextOrigin, ...],
+        PreparedContextOmissions,
+        tuple[PreparedFragment, ...],
+    ]:
         assembly = request.assembly
         if assembly is None:
             raise PreparedContextInvariantError("text-assembly-missing")
@@ -429,9 +528,9 @@ class PreparedContextBuilder:
             dropped_no_fitting_truncation=dropped_no_fitting_truncation,
         )
         if not included:
-            return None, (), omissions
+            return None, (), omissions, ()
         content = render_context_text(included, assembly)
-        return content, tuple(origins), omissions
+        return content, tuple(origins), omissions, ()
 
     def _profile_entries(self, candidates: Sequence[PreparedProfileCandidate]) -> tuple[_PreparedContextEntry, ...]:
         entries = []
