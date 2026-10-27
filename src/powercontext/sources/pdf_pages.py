@@ -209,6 +209,23 @@ _QUERY_SYNONYMS = {
     "annual": ("yearly", "fiscal year"),
 }
 
+# Questions that ask *who* a company's customers are describe the buyer in prose
+# ("the U.S. government", "airlines") instead of using the word "customer" on the
+# evidence page. Expand that customer-identity intent with generic buyer categories
+# so those pages stay reachable. Questions about customer *concentration* or
+# *revenue by customer* are a different intent and are left untouched.
+_CUSTOMER_IDENTITY_QUESTION = re.compile(r"\bwho\b[^?]*\b(?:customers?|clients?)\b", re.IGNORECASE)
+_CUSTOMER_IDENTITY_TERMS = ("government", "defense", "contracts")
+_CUSTOMER_IDENTITY_WEIGHT = 2.0
+
+
+def _customer_identity_terms(question: str) -> tuple[str, ...]:
+    """Return buyer-category terms for questions that ask who the customers are."""
+
+    if _CUSTOMER_IDENTITY_QUESTION.search(question) is None:
+        return ()
+    return _CUSTOMER_IDENTITY_TERMS
+
 
 def _question_terms(question: str) -> tuple[str, ...]:
     """Return the bounded lexical key terms of one natural-language question."""
@@ -622,6 +639,7 @@ def _rank_stored_pages(
         return ()
     terms = _question_terms(question)
     synonyms = _synonym_variants(terms)
+    intent_terms = _customer_identity_terms(question)
     sections = tuple(
         (tuple(_heading_forms(section)), analyze_text(section).split())
         for section in _section_variants(terms)
@@ -663,6 +681,8 @@ def _rank_stored_pages(
             matched = sum(1 for term in set(variant_terms) if term in page.counts)
             if matched:
                 score += 0.25 * matched * min(inverse_frequency.get(term, 1.0) for term in variant_terms)
+        for term in intent_terms:
+            score += _CUSTOMER_IDENTITY_WEIGHT * bm25(page, term)
         for heading_forms, heading_terms in sections:
             if any(form and form in page.heading for form in heading_forms):
                 score += 18.0
@@ -719,7 +739,9 @@ async def search_pdf_pages(
     # window per query and restrict to the target document afterwards.
     per_query_limit = min(max(limit * 10, 200), 300)
     terms = _question_terms(question)
-    base_variants = _base_variants(question, terms)
+    base_variants = _dedupe_variants(
+        [*_base_variants(question, terms), *_customer_identity_terms(question)]
+    )
     base_set = set(base_variants)
     synonym_variants = tuple(
         variant
