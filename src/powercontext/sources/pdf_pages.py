@@ -514,6 +514,12 @@ def _select_documents(question: str, document_ids: set[str]) -> set[str] | None:
 
 _PAGE_HEADING_CHARS = 800
 _PAGE_HEAD_TOKENS_CHARS = 320
+# A section title at the very top of the page body means the page *is* that
+# section. The same words further down usually sit in a table of contents that
+# lists several statements, so they are weaker evidence for this page.
+_PAGE_TITLE_CHARS = 40
+_PAGE_TITLE_WEIGHT = 24.0
+_PAGE_REFERENCE_WEIGHT = 6.0
 _HEADING_NOISE = re.compile(r"[^a-z0-9]+")
 _HEADING_PLURALS = (
     ("statements", "statement"),
@@ -548,7 +554,15 @@ class _StoredPage:
         self.page_number = page_number
         self.counts = Counter(tokens)
         self.length = len(tokens)
-        self.heading = _HEADING_NOISE.sub("", text[:_PAGE_HEADING_CHARS].lower())
+        # The projection puts the document id on the first line; section titles
+        # only ever appear in the page body. Drop a repeated running header so the
+        # title's distance from the body start reflects its real position.
+        _, separator, body = text.partition("\n")
+        body = body if separator else text
+        heading = _HEADING_NOISE.sub("", body[:_PAGE_HEADING_CHARS].lower())
+        if heading.startswith("tableofcontents"):
+            heading = heading[len("tableofcontents") :]
+        self.heading = heading
         self.head_tokens = set(analyze_text(text[:_PAGE_HEAD_TOKENS_CHARS]).split())
 
 
@@ -684,8 +698,11 @@ def _rank_stored_pages(
         for term in intent_terms:
             score += _CUSTOMER_IDENTITY_WEIGHT * bm25(page, term)
         for heading_forms, heading_terms in sections:
-            if any(form and form in page.heading for form in heading_forms):
-                score += 18.0
+            positions = [position for form in heading_forms if (position := page.heading.find(form)) >= 0]
+            if positions and min(positions) <= _PAGE_TITLE_CHARS:
+                score += _PAGE_TITLE_WEIGHT
+            elif positions:
+                score += _PAGE_REFERENCE_WEIGHT
             elif heading_terms and set(heading_terms) <= page.head_tokens:
                 score += 12.0
             elif heading_terms and all(term in page.counts for term in heading_terms):
