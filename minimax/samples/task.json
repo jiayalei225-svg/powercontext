@@ -1,0 +1,50 @@
+{
+  "task_id": "ORD-FILTER-001",
+  "title": "订单列表接口增加状态筛选与创建时间窗口",
+  "description": "orderhub 的 GET /orders 目前只支持 page/page_size 分页。运营后台需要按订单状态与创建时间窗口查询，请在保持既有分页与排序行为不变的前提下，为列表接口增加 status（可多值）、created_from、created_to 三个查询参数，并按规格返回对应的错误码。",
+  "acceptance": [
+    "status 支持多值并集，取值限定在待处理/已支付/已发货/已送达/已取消五种状态内，非法值返回 400 invalid_status",
+    "状态比较不区分大小写并忽略两端空白",
+    "created_from 与 created_to 构成闭区间，按 UTC 归一化后比较，支持 YYYY-MM-DD 与完整 ISO8601",
+    "created_from 晚于 created_to 或时间无法解析时返回 400 invalid_range",
+    "筛选后的 total 为过滤后的总数，分页在结果集上生效",
+    "不带新参数时响应与修改前完全一致，排序仍为 created_at 降序、id 降序"
+  ],
+  "touched_paths": [
+    "src/orderhub/api.py",
+    "src/orderhub/service.py"
+  ],
+  "keywords": [
+    "status",
+    "created_from",
+    "created_to",
+    "invalid_status",
+    "invalid_range",
+    "filter",
+    "UTC"
+  ],
+  "required_sources": {
+    "specs": [
+      "SPEC-ORD-001",
+      "SPEC-ORD-010",
+      "SPEC-ORD-014",
+      "SPEC-ORD-014.1",
+      "SPEC-ORD-014.2",
+      "SPEC-ORD-021",
+      "SPEC-ORD-021.1",
+      "SPEC-ORD-024",
+      "SPEC-ORD-030"
+    ],
+    "code": [
+      "src/orderhub/api.py::handle_get_orders",
+      "src/orderhub/service.py::OrderService.list_orders"
+    ],
+    "tests": [
+      "tests/test_order_filters.py::test_filter_single_status",
+      "tests/test_order_filters.py::test_filter_multiple_statuses_is_union",
+      "tests/test_order_filters.py::test_unknown_status_rejected",
+      "tests/test_order_filters.py::test_reversed_window_rejected",
+      "tests/test_orders_pagination.py::test_default_page_size_is_20"
+    ]
+  }
+}

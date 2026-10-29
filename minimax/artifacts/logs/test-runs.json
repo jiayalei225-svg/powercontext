@@ -1,0 +1,35 @@
+{
+  "recorded_at": "2026-10-29T02:52:16+00:00",
+  "commit": "cc132a47cc4c7eafaffe6e64a6cc1007daad916e",
+  "python": "3.13.14",
+  "suite_is_identical_before_and_after": true,
+  "before": {
+    "note": "修改前代码快照见 artifacts/before/；该次运行的完整输出见 artifacts/logs/test-runs.md",
+    "target": {
+      "exit_code": 1,
+      "summary": "10 failed, 29 passed"
+    },
+    "regression": {
+      "exit_code": 0,
+      "summary": "29 passed"
+    }
+  },
+  "after": {
+    "target": {
+      "command": "python -m pytest -q tests/test_order_filters.py",
+      "cwd": "minimax/sample_project",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": "..............                                                           [100%]\n14 passed in 0.35s\n",
+      "stderr": ""
+    },
+    "regression": {
+      "command": "python -m pytest -q tests/test_orders_pagination.py tests/test_orders_sorting.py tests/test_order_detail.py tests/test_http_contract.py",
+      "cwd": "minimax/sample_project",
+      "exit_code": 0,
+      "passed": true,
+      "stdout": ".........................                                                [100%]\n25 passed in 1.22s\n",
+      "stderr": ""
+    }
+  }
+}

@@ -1,0 +1,12 @@
+# 运行时数据（可由 scripts 重建，不入库）
+.data/
+**/__pycache__/
+*.pyc
+.pytest_cache/
+
+# 凭据
+.env
+.env.local
+
+# 本地临时
+*.log.tmp

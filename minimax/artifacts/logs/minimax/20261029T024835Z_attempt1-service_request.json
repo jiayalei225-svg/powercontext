@@ -1,0 +1,72 @@
+{
+  "attempt": "1-service",
+  "task_id": "ORD-FILTER-001",
+  "focus": "src/orderhub/service.py",
+  "model_hint": "MiniMax-M1",
+  "prompt_tokens_estimate": 2812,
+  "max_tokens": 6188,
+  "tpM_budget": 9000,
+  "messages": [
+    {
+      "role": "system",
+      "content": "你是一名严格遵守规格驱动开发（SDD）约束的 Python 工程师。\n\n工作规则：\n1. 只能修改用户指定的目标文件，不要新增文件，不要改动测试。\n2. 逐条满足规格；规格中\"兼容性约束\"部分列出的既有行为一条都不能破坏。\n3. 不要引入新的第三方依赖，只用标准库与工程现有依赖。\n4. 代码需保持工程既有风格（类型标注、docstring、错误码结构）。\n5. 输出必须是**一个 JSON 对象**，不要输出任何解释性文字或 Markdown 代码围栏。"
+    },
+    {
+      "role": "user",
+      "content": "## 开发任务\n任务编号：ORD-FILTER-001\n标题：订单列表接口增加状态筛选与创建时间窗口\norderhub 的 GET /orders 目前只支持 page/page_size 分页。运营后台需要按订单状态与创建时间窗口查询，请在保持既有分页与排序行为不变的前提下，为列表接口增加 status（可多值）、created_from、created_to 三个查询参数，并按规格返回对应的错误码。\n\n### 验收要点\n- status 支持多值并集，取值限定在待处理/已支付/已发货/已送达/已取消五种状态内，非法值返回 400 invalid_status\n- 状态比较不区分大小写并忽略两端空白\n- created_from 与 created_to 构成闭区间，按 UTC 归一化后比较，支持 YYYY-MM-DD 与完整 ISO8601\n- created_from 晚于 created_to 或时间无法解析时返回 400 invalid_range\n- 筛选后的 total 为过滤后的总数，分页在结果集上生效\n- 不带新参数时响应与修改前完全一致，排序仍为 created_at 降序、id 降序\n\n## 必须遵守的规格条目（来自工程规格库）\n### SPEC-ORD-021 创建时间窗口（来源 v1/order-list-filter.md#SPEC-ORD-021）\nSPEC-ORD-021 创建时间窗口\n新增查询参数 `created_from` 与 `created_to`，用于按订单创建时间过滤：\n\n- 窗口为**闭区间**：`created_from <= created_at <= created_to`。\n- `created_at` 必须先归一化为 UTC 再比较；数据中的 `+08:00` 偏移不得直接按字面时间比较。\n- 允许 `YYYY-MM-DD` 与完整 ISO8601（含 `Z` 或偏移）两种写法；仅给日期时，`created_from` 取当日 `00:00:00`，`created_to` 取当日 `23:59:59.999999`（UTC）。\n- 两个参数可以只提供其中一个，缺省一侧表示不设边界。\nsrc/orderhub/api.py::handle_get_orders src/orderhub/service.py::OrderService.list_orders src/orderhub/models.py::parse_iso8601\n\n### SPEC-ORD-030 兼容性约束（来源 v1/order-list-filter.md#SPEC-ORD-030）\nSPEC-ORD-030 兼容性约束\n本次修改必须保持以下既有行为，任何一项改变都视为回归缺陷：\n\n- 排序固定为 `created_at` 降序、`id` 降序；筛选不得改变排序。\n- 不带任何新参数时，`GET /orders` 的响应与修改前完全一致。\n- 未知查询参数继续被忽略，不返回错误。\n- 错误响应结构保持 `{\"error\": <code>, \"detail\": <detail>}`。\n- `GET /orders/{id}` 与 `GET /health` 行为不变。\nsrc/orderhub/service.py::OrderService.list_orders src/orderhub/api.py::dispatch\n\n### SPEC-ORD-024 组合筛选与总数语义（来源 v1/order-list-filter.md#SPEC-ORD-024）\nSPEC-ORD-024 组合筛选与总数语义\n- 多个筛选条件之间为**逻辑与**关系。\n- `total` 必须是应用全部筛选条件之后的记录数，而不是原始总数。\n- 分页在筛选后的结果集上生效，`page`/`page_size` 语义不变。\nsrc/orderhub/service.py::OrderService.list_orders\n\n### SPEC-ORD-010 分页参数校验（来源 v1/order-list-filter.md#SPEC-ORD-010）\nSPEC-ORD-010 分页参数校验\n- `page` 缺省为 1，必须为正整数；非整数或小于 1 时返回 400，错误码 `invalid_pagination`。\n- `page_size` 缺省为 20，取值范围 1..100（含端点）；越界返回 400，错误码 `invalid_page_size`。\n- 页码超出结果范围时返回空 `items`，`total` 仍为真实总数，不得返回 404。\nsrc/orderhub/service.py::OrderService.list_orders\n\n### SPEC-ORD-014 状态筛选（来源 v1/order-list-filter.md#SPEC-ORD-014）\nSPEC-ORD-014 状态筛选\n新增查询参数 `status`，可重复出现：\n\n- 单个 `status` 只返回该状态订单。\n- 多个 `status` 按**并集**处理，等价于 SQL `IN`；重复值只计一次。\n- 不传 `status` 或传空字符串时等价于不过滤。\n- 允许的取值集合为：`pending`、`paid`、`shipped`、`delivered`、`cancelled`。\nsrc/orderhub/api.py::handle_get_orders src/orderhub/service.py::OrderService.list_orders\n\n### SPEC-ORD-001 列表响应结构（来源 v1/order-list-filter.md#SPEC-ORD-001）\nSPEC-ORD-001 列表响应结构\n成功响应固定为 200，body 为 JSON 对象，包含四个字段：\n\n- `items`：订单数组，元素字段为 `id`、`customer`、`status`、`total_cents`、`created_at`、`channel`\n- `total`：当前筛选条件下的记录总数（不受分页影响）\n- `page`：当前页码，从 1 开始\n- `page_size`：当前页大小\nsrc/orderhub/service.py::OrderService.list_orders src/orderhub/api.py::handle_get_orders\n\n## 相关代码（当前工作区实际内容）\n### src/orderhub/service.py\n```python\n\"\"\"订单查询服务。\n\n本模块承载订单列表的核心查询语义：排序、分页。\n\"\"\"\n\nfrom __future__ import annotations\n\nfrom dataclasses import dataclass\nfrom typing import Any\n\nfrom .errors import ApiError, InvalidPageSize\nfrom .models import Order\nfrom .repository import OrderRepository\n\n\n@dataclass(frozen=True, slots=True)\nclass OrderPage:\n    \"\"\"一页订单查询结果。\"\"\"\n\n    items: list[Order]\n    total: int\n    page: int\n    page_size: int\n\n    def to_dict(self) -> dict[str, Any]:\n        return {\n            \"items\": [order.to_dict() for order in self.items],\n            \"total\": self.total,\n            \"page\": self.page,\n            \"page_size\": self.page_size,\n        }\n\n\ndef _parse_positive_int(raw: str | None, *, field: str, default: int) -> int:\n    if raw is None or raw == \"\":\n        return default\n    try:\n        value = int(raw)\n    except (TypeError, ValueError) as exc:\n        raise ApiError(\"invalid_pagination\", f\"{field} 必须是整数\") from exc\n    if value < 1:\n        raise ApiError(\"invalid_pagination\", f\"{field} 必须大于 0\")\n    return value\n\n\nclass OrderService:\n    \"\"\"订单查询服务。\"\"\"\n\n    DEFAULT_PAGE_SIZE = 20\n    MAX_PAGE_SIZE = 100\n\n    def __init__(self, repository: OrderRepository) -> None:\n        self._repository = repository\n\n    def get_order(self, order_id: str) -> Order:\n        \"\"\"按 ID 返回单条订单，不存在时抛 :class:`OrderNotFoundError`。\"\"\"\n        return self._repository.get(order_id)\n\n    def list_orders(\n        self,\n        *,\n        page: int = 1,\n        page_size: int = DEFAULT_PAGE_SIZE,\n    ) -> OrderPage:\n        \"\"\"返回分页后的订单列表。\n\n        排序固定为 ``created_at`` 降序、``id`` 降序，保证翻页结果稳定。\n        \"\"\"\n        if page_size < 1 or page_size > self.MAX_PAGE_SIZE:\n            raise InvalidPageSize(self.MAX_PAGE_SIZE)\n        if page < 1:\n            raise ApiError(\"invalid_pagination\", \"page 必须大于 0\")\n\n        ordered = sorted(\n            self._repository.all(),\n            key=lambda order: (order.created_at, order.id),\n            reverse=True,\n        )\n        total = len(ordered)\n        start = (page - 1) * page_size\n        return OrderPage(\n            items=ordered[start : start + page_size],\n            total=total,\n            page=page,\n            page_size=page_size,\n        )\n\n```\n\n## 必须满足的测试行为\n### tests/test_order_filters.py 的断言（必须满足，不得修改测试）\n- test_filter_single_status：SPEC-ORD-014：单个 status 只返回该状态的订单。\n    · assert status == 200\n    · assert payload[\"total\"] == 6\n    · assert _ids(payload) == PAID_IDS\n- test_filter_multiple_statuses_is_union：SPEC-ORD-014：重复出现的 status 按并集处理。\n    · assert status == 200\n    · assert payload[\"total\"] == 9\n    · assert _ids(payload) == PAID_IDS | SHIPPED_IDS\n- test_filter_status_is_case_insensitive：SPEC-ORD-014.2：状态匹配不区分大小写。\n    · assert status == 200\n    · assert _ids(payload) == PAID_IDS\n- test_filter_status_trims_whitespace：SPEC-ORD-014.2：状态值两端空白不影响匹配。\n    · assert status == 200\n    · assert _ids(payload) == PAID_IDS\n- test_unknown_status_rejected：SPEC-ORD-014.1：非法状态返回 400 / invalid_status。\n    · assert excinfo.value.code == \"invalid_status\"\n    · assert excinfo.value.status == 400\n- test_empty_status_means_no_filter：SPEC-ORD-014：status 为空等价于不过滤。\n    · assert status == 200\n    · assert payload[\"total\"] == 16\n- test_filter_created_at_window_inclusive：SPEC-ORD-021：时间窗口为闭区间，按 UTC 归一化后比较。\n    · assert status == 200\n    · assert payload[\"total\"] == 4\n    · assert _ids(payload) == {\"ORD-1009\", \"ORD-1010\", \"ORD-1011\", \"ORD-1012\"}\n- test_filter_window_excludes_utc_shifted_order：SPEC-ORD-021：+08:00 的订单按 UTC 归一化后落在窗口外。\n    · assert status == 200\n    · assert \"ORD-1008\" not in _ids(payload)\n    · assert payload[\"total\"] == 0\n- test_reversed_window_rejected：SPEC-ORD-021.1：created_from 晚于 created_to 返回 400 / invalid_range。\n    · assert excinfo.value.code == \"invalid_range\"\n    · assert excinfo.value.status == 400\n- test_invalid_date_format_rejected：SPEC-ORD-021.1：无法解析的时间返回 400 / invalid_range。\n    · assert excinfo.value.code == \"invalid_range\"\n- test_combined_filters_and_pagination：SPEC-ORD-024：组合筛选后 total 为过滤后的总数，分页在结果集上生效。\n    · assert first[\"total\"] == 2\n    · assert len(first[\"items\"]) == 1\n    · assert first[\"items\"][0][\"id\"] == \"ORD-1014\"\n- test_filtered_result_keeps_desc_order：SPEC-ORD-030：筛选不改变排序契约。\n    · assert timestamps == sorted(timestamps, reverse=True)\n- test_no_filter_behaviour_unchanged：SPEC-ORD-030：不带新参数时行为与修改前一致。\n    · assert status == 200\n    · assert payload[\"total\"] == 16\n    · assert payload[\"items\"][0][\"id\"] == \"ORD-1016\"\n\n### 同时不得破坏的既有回归测试\n- tests/test_order_filters.py::test_no_filter_behaviour_unchanged（覆盖 SPEC-ORD-030）\n- tests/test_orders_pagination.py::test_default_page_size_is_20（覆盖 SPEC-ORD-030）\n- tests/test_order_filters.py::test_unknown_query_param_still_ignored（覆盖 SPEC-ORD-030）\n- tests/test_orders_sorting.py::test_orders_sorted_by_created_at_desc（覆盖 SPEC-ORD-030）\n- tests/test_order_filters.py::test_filtered_result_keeps_desc_order（覆盖 SPEC-ORD-030）\n\n## 输出\n只输出文件 src/orderhub/service.py 修改后的**完整内容**，用一个 JSON 对象：\n{\"summary\": \"一句话说明改了什么\", \"spec_coverage\": [{\"spec_id\": \"...\", \"how\": \"...\"}], \"files\": [{\"path\": \"src/orderhub/service.py\", \"content\": \"完整文件内容\"}]}\n不要输出其他文件，不要输出 Markdown 围栏，JSON 字符串里的换行要正确转义。"
+    }
+  ],
+  "context_refs": {
+    "spec_ids": [
+      "SPEC-ORD-021.1",
+      "SPEC-ORD-021",
+      "SPEC-ORD-030",
+      "SPEC-ORD-014.2",
+      "SPEC-ORD-024",
+      "SPEC-ORD-010",
+      "SPEC-ORD-014.1",
+      "SPEC-ORD-014",
+      "SPEC-ORD-001"
+    ],
+    "code_targets": [
+      "src/orderhub/api.py::handle_get_orders",
+      "src/orderhub/models.py::parse_iso8601",
+      "src/orderhub/service.py::OrderService.list_orders",
+      "src/orderhub/api.py::dispatch",
+      "src/orderhub/service.py::src.orderhub.service",
+      "src/orderhub/service.py::OrderService",
+      "src/orderhub/api.py::make_handler",
+      "src/orderhub/errors.py::src.orderhub.errors",
+      "src/orderhub/__init__.py::src.orderhub.__init__",
+      "src/orderhub/models.py::src.orderhub.models",
+      "src/orderhub/repository.py::src.orderhub.repository",
+      "src/orderhub/errors.py::ApiError"
+    ],
+    "tests": {
+      "functional": [
+        "tests/test_order_filters.py::test_combined_filters_and_pagination",
+        "tests/test_order_filters.py::test_reversed_window_rejected",
+        "tests/test_order_filters.py::test_filter_created_at_window_inclusive",
+        "tests/test_order_filters.py::test_invalid_date_format_rejected",
+        "tests/test_order_filters.py::test_filter_status_is_case_insensitive",
+        "tests/test_order_filters.py::test_unknown_status_rejected",
+        "tests/test_order_filters.py::test_filter_window_excludes_utc_shifted_order",
+        "tests/test_order_filters.py::test_filter_single_status",
+        "tests/test_order_filters.py::test_filter_status_trims_whitespace",
+        "tests/test_order_filters.py::test_filter_multiple_statuses_is_union",
+        "tests/test_order_filters.py::test_empty_status_means_no_filter"
+      ],
+      "regression": [
+        "tests/test_order_filters.py::test_no_filter_behaviour_unchanged",
+        "tests/test_orders_pagination.py::test_default_page_size_is_20",
+        "tests/test_order_filters.py::test_unknown_query_param_still_ignored",
+        "tests/test_orders_sorting.py::test_orders_sorted_by_created_at_desc",
+        "tests/test_order_filters.py::test_filtered_result_keeps_desc_order"
+      ]
+    }
+  },
+  "files_read_from_workspace": [
+    "src/orderhub/service.py"
+  ],
+  "done_notes": null
+}
