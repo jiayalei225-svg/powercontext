@@ -1,0 +1,37 @@
+diff --git a/minimax/sample_project/src/orderhub/api.py b/minimax/sample_project/src/orderhub/api.py
+index e127c0c..f290ac8 100644
+--- a/minimax/sample_project/src/orderhub/api.py
++++ b/minimax/sample_project/src/orderhub/api.py
+@@ -43,17 +43,31 @@ def handle_get_orders(
+ 
+     page_size = OrderService.DEFAULT_PAGE_SIZE
+     if page_size_raw not in (None, ""):
+         try:
+             page_size = int(page_size_raw)
+         except ValueError:
+             raise ApiError("invalid_pagination", "page_size 必须是整数") from None
+ 
+-    result = service.list_orders(page=page, page_size=page_size)
++    # 解析状态筛选参数
++    status_values = params.get("status", [])
++    status_list: list[str] | None = status_values if status_values else None
++
++    # 解析时间窗口参数
++    created_from = _first(params, "created_from")
++    created_to = _first(params, "created_to")
++
++    result = service.list_orders(
++        page=page,
++        page_size=page_size,
++        status=status_list,
++        created_from=created_from,
++        created_to=created_to,
++    )
+     return 200, result.to_dict()
+ 
+ 
+ def handle_get_order(service: OrderService, order_id: str) -> tuple[int, dict[str, Any]]:
+     """处理 ``GET /orders/{id}``。"""
+     try:
+         order = service.get_order(order_id)
+     except OrderNotFoundError:

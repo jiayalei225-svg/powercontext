@@ -1,0 +1,7 @@
+# SDD 上下文模块运行依赖（已在 Windows 11 + Python 3.12/3.13 与 Linux 上验证的版本）
+powercontext[cli,server]==1.4.1
+pyseekdb==1.4.0.post1
+# 嵌入式 seekdb 的本地引擎；无此包时 pyseekdb 只能连远程 Server
+pylibseekdb==1.4.0.post2
+httpx>=0.27
+pytest>=8,<10

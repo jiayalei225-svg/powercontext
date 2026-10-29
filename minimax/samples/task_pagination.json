@@ -1,0 +1,30 @@
+{
+  "task_id": "ORD-PAGING-002",
+  "title": "分页参数 page_size 上限调整与越界提示优化",
+  "description": "运营侧反馈 page_size 越界时错误提示不明确。请调整分页参数校验的错误码与提示文案，并保持列表默认分页行为不变。本任务只涉及分页，不涉及状态筛选与时间窗口。",
+  "acceptance": [
+    "page_size 缺省仍为 20，取值范围 1..100",
+    "越界返回 400 invalid_page_size，detail 中说明允许范围",
+    "page 非正整数返回 400 invalid_pagination",
+    "不涉及 status / created_from / created_to 任何改动"
+  ],
+  "touched_paths": [
+    "src/orderhub/service.py"
+  ],
+  "keywords": [
+    "page_size",
+    "page",
+    "invalid_page_size",
+    "invalid_pagination",
+    "分页"
+  ],
+  "required_sources": {
+    "specs": [
+      "SPEC-ORD-010"
+    ],
+    "code": [
+      "src/orderhub/service.py::OrderService.list_orders"
+    ],
+    "tests": []
+  }
+}
