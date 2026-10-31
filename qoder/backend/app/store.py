@@ -15,6 +15,27 @@ COLLECTION_PREFIX = "paper_chunks"
 
 _lock = threading.Lock()
 _state: dict[str, Any] = {}
+_corpus_texts: list[str] | None = None
+
+
+def _invalidate_corpus() -> None:
+    global _corpus_texts
+    _corpus_texts = None
+
+
+def _corpus() -> list[str]:
+    """All chunk texts, cached in memory.
+
+    Rarity probing used to issue one ``$contains`` query per candidate word;
+    on a small corpus that dominated search latency (3 x ~2 s).  A cached text
+    list turns it into a microsecond-scale Python scan.  Uploads and deletes
+    invalidate the cache.
+    """
+    global _corpus_texts
+    if _corpus_texts is None:
+        result = _collection().get(include=["documents"], limit=20000)
+        _corpus_texts = [text for text in (result.get("documents") or []) if text]
+    return _corpus_texts
 
 
 def _collection():
@@ -39,6 +60,7 @@ def reset_handle() -> None:
     """Drop the cached handle so settings changes take effect (tests use this)."""
     with _lock:
         _state.clear()
+        _invalidate_corpus()
 
 
 def _chunk_metadata(paper: dict, chunk: Chunk) -> dict:
@@ -70,11 +92,13 @@ def add_paper(paper: dict, chunks: list[Chunk]) -> int:
         )
         written += len(window)
     collection.refresh_index()
+    _invalidate_corpus()
     return written
 
 
 def delete_paper(paper_id: str) -> None:
     _collection().delete(where={"paper_id": paper_id})
+    _invalidate_corpus()
 
 
 def paper_exists(path_hash: str) -> bool:
@@ -125,8 +149,7 @@ def count_matches(keyword: str) -> int:
     """How many chunks literally contain this term — a cheap corpus rarity probe."""
     if not keyword:
         return 0
-    found = _collection().get(where_document={"$contains": keyword}, include=["metadatas"], limit=1000)
-    return len(found.get("ids") or [])
+    return sum(1 for text in _corpus() if keyword in text)
 
 
 def hybrid_search(query: str, keyword: str | None, where: dict | None, limit: int) -> list[dict]:

@@ -15,6 +15,19 @@
 
 两者的因果链是可验证的：**同一句 query，写入偏好前后结果集不同**，`scripts/verify.py` 会把这条链路跑一遍并逐项断言（见下文"验收样例"）。
 
+## 性能
+
+一次检索的实测中位耗时（12 段样例，Windows 11 / Python 3.13）：**约 115 ms**。
+优化前约 6.5 s，原因是每次检索新建 3 个 PowerContext HTTP 连接（本机建连约 1.5 s）
+并做 3 次 `$contains` 稀有度探测。现在改为连接池 + 偏好 TTL 缓存 + 语料缓存，
+详见 `docs/architecture.md` 的"性能"一节。
+
+## 运行环境的一个坑：数据目录不能含中文
+
+seekdb 的原生层打不开非 ASCII 路径。仓库放在 `C:\Users\张三\OneDrive\文档\...` 这类路径时，
+`config.py` 会自动把数据目录回退到 `%LOCALAPPDATA%\PaperDesk\data` 并打印一行提示；
+也可以用 `PAPERDESK_DATA_DIR` 显式指定一个纯英文路径。上传文件与 seekdb 数据都会放在那里。
+
 ## 功能
 
 - 上传 PDF / Markdown / TXT，自动解析标题、页数、年份，按页切成约 360 字的块（重叠 60 字）
@@ -66,6 +79,12 @@ scripts/
   make_samples.py        # 生成 4 篇可复现的样例阅读笔记 PDF
   seed.py                # 把样例灌进运行中的库
   verify.py              # 验收脚本：14 项断言，输出证据
+docs/
+  architecture.md        # 组件分工、seekdb 检索、性能数据
+  development-log.md     # 需求拆解、实现、踩坑与修复
+  verification-log.txt   # 本机 14/14 的完整输出
+  qoder-sites.md         # Qoder Sites 发布记录（ID、链路、公开访问）
+  qoder-records/         # Qoder 桌面端/CLI/站点记录
 data/
   samples/               # 样例 PDF（由 make_samples.py 生成）
   seekdb/  uploads/      # 运行时数据，已被 .gitignore 忽略
@@ -260,10 +279,11 @@ PAPERDESK_MEMORY_ENABLED=true
 - **上传扫描版 PDF 报 422**：当前不做 OCR，只接受带文本层的文件。
 - **界面显示"记忆未连接"**：PowerContext 没起或地址不对。检索本身不受影响。
 
-## 参赛提交信息（提交前填写）
+## 参赛提交信息
 
-- 项目网站：`https://<your-site>.qoder.site`（Qoder Sites，公开访问）
-- 代码仓库：`https://github.com/<your-account>/<your-repo>/tree/2026-competition-ecosystem/qoder`
-- 提交分支 / commit：`2026-competition-ecosystem` @ `<commit-hash>`
-- Qoder UID：`<your-qoder-uid>`
-- 开发记录：`docs/qoder-records/`（需求拆解、编码、调试过程截图与录屏索引）
+- 项目网站：<https://paperdesk-4qzym26fsnz.qoder.zone>（Qoder Sites，公开访问，未登录可打开）
+- 代码仓库：<https://github.com/jiayalei225-svg/powercontext/tree/2026-competition-ecosystem/qoder>
+- 提交分支：`2026-competition-ecosystem`（commit 以 `git rev-parse HEAD` 为准）
+- Qoder 账号 UID：`01a191a9-93d1-776f-b48c-c3727d164e84`
+- 开发记录：`docs/development-log.md`、`docs/qoder-sites.md`、`docs/qoder-records/`
+- 验证记录：`docs/verification-log.txt`（14/14）

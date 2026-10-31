@@ -38,12 +38,13 @@
         <div class="actions">
           <a class="btn btn-primary" href="#verify">看可复现的验证记录</a>
           <a class="btn" href="#run">怎么跑起来</a>
+          <a class="btn" href="https://github.com/jiayalei225-svg/powercontext/tree/2026-competition-ecosystem/qoder" target="_blank" rel="noopener">查看源码</a>
         </div>
         <ul class="metrics" aria-label="项目数据">
-          <li><b>4</b><span>篇样例文献</span></li>
-          <li><b>12</b><span>个页级段落</span></li>
+          <li><b>115ms</b><span>检索中位耗时</span></li>
           <li><b>14/14</b><span>验收断言通过</span></li>
           <li><b>12 → 3</b><span>记忆过滤后的命中</span></li>
+          <li><b>4 篇 / 12 段</b><span>页级样例文献</span></li>
         </ul>
       </div>
 
@@ -187,6 +188,12 @@
           因果关系是可验证的：<b>同一句 query，写入偏好前后结果集不同</b>。
           不是“装了组件”“通了连接”，而是偏好真的改变了 seekdb 的过滤条件与返回结果。
         </p>
+
+        <p class="tech-note">
+          性能也做了实测：一次检索的中位耗时从 <b>6.5s</b> 降到 <b>115ms</b>。
+          瓶颈不在 seekdb，而在每次检索新建 3 个 PowerContext 连接（本机建连约 1.5s）；
+          改成连接池、偏好 TTL 缓存和语料缓存后，检索路径只剩一次库内混合检索。
+        </p>
       </div>
     </section>
 
@@ -328,6 +335,50 @@ export MSYS_NO_PATHCONV=1</code>
       </div>
     </section>
 
+    <section id="qoder" class="section alt">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">07 · Qoder</p>
+          <h2>Qoder 负责发布与账号归属，开发过程全程留痕。</h2>
+        </div>
+
+        <div class="split">
+          <article class="tech-card">
+            <header>
+              <span class="tag">Qoder Sites</span>
+              <h3>站点怎么上线的</h3>
+            </header>
+            <ul>
+              <li>AppHub project <code>01a191be-acc7-7d2d-8403-aae09c693514</code>，Site ID <code>01a191be-accb-777c-927c-adb7a1c58023</code>。</li>
+              <li>发布走 Qoder Sites 的 deployment → publish 链路，首次发布 release <code>01a191bf-8af0-753e-b459-f740a343f8f9</code>。</li>
+              <li>访问范围设为「任何人都可访问」，未登录窗口可直接打开。</li>
+              <li>Qoder CLI 1.1.81 读取过 Sites 操作目录与 <code>publish_site</code> 契约，记录在仓库 <code>docs/qoder-records/</code>。</li>
+            </ul>
+          </article>
+
+          <article class="tech-card">
+            <header>
+              <span class="tag">边界说明</span>
+              <h3>哪些是 Qoder 做的</h3>
+            </header>
+            <ul>
+              <li>Qoder 账号 UID：<code>01a191a9-93d1-776f-b48c-c3727d164e84</code>。</li>
+              <li>Qoder 负责：账号与站点归属、Sites 发布、站点运维记录。</li>
+              <li>代码主体由作者与 AI 结对（DeepSeek Harness）完成；需求拆解、实现、踩坑与修复见 <code>docs/development-log.md</code>。</li>
+              <li>不把未参与的编码写成 Qoder 的产出；可核对材料以仓库与 Qoder Sites 后台为准。</li>
+            </ul>
+          </article>
+        </div>
+
+        <p class="tech-note">
+          发布 ID、上传工件 SHA-256、operation 状态与公开访问验证见
+          <a href="https://github.com/jiayalei225-svg/powercontext/blob/2026-competition-ecosystem/qoder/docs/qoder-sites.md" target="_blank" rel="noopener">docs/qoder-sites.md</a>；
+          开发记录见
+          <a href="https://github.com/jiayalei225-svg/powercontext/blob/2026-competition-ecosystem/qoder/docs/development-log.md" target="_blank" rel="noopener">docs/development-log.md</a>。
+        </p>
+      </div>
+    </section>
+
     <section class="section submit">
       <div class="wrap">
         <div class="section-head">
@@ -335,13 +386,14 @@ export MSYS_NO_PATHCONV=1</code>
           <h2>代码、记录与站点。</h2>
         </div>
         <ul class="submit-list">
-          <li><span>代码仓库</span><span class="value"><code>https://github.com/&lt;your-account&gt;/&lt;your-repo&gt;/tree/2026-competition-ecosystem/qoder</code></span></li>
-          <li><span>提交分支</span><span class="value"><code>2026-competition-ecosystem @ &lt;commit-hash&gt;</code></span></li>
-          <li><span>项目网站</span><span class="value"><code>https://&lt;your-site&gt;.qoder.site</code></span></li>
-          <li><span>Qoder UID</span><span class="value"><code>&lt;your-qoder-uid&gt;</code></span></li>
-          <li><span>开发记录</span><span class="value"><code>docs/qoder-records/</code><em>需求拆解、编码、调试截图与录屏索引</em></span></li>
+          <li><span>代码仓库</span><span class="value"><a href="https://github.com/jiayalei225-svg/powercontext/tree/2026-competition-ecosystem/qoder" target="_blank" rel="noopener"><code>jiayalei225-svg/powercontext · qoder/</code></a></span></li>
+          <li><span>提交分支</span><span class="value"><code>2026-competition-ecosystem</code></span></li>
+          <li><span>项目网站</span><span class="value"><a href="https://paperdesk-4qzym26fsnz.qoder.zone" target="_blank" rel="noopener"><code>paperdesk-4qzym26fsnz.qoder.zone</code></a></span></li>
+          <li><span>Qoder UID</span><span class="value"><code>01a191a9-93d1-776f-b48c-c3727d164e84</code></span></li>
+          <li><span>开发记录</span><span class="value"><code>docs/development-log.md</code><em>需求拆解、实现、调试、性能修复</em></span></li>
+          <li><span>发布记录</span><span class="value"><code>docs/qoder-sites.md</code><em>project / site / release / operation ID</em></span></li>
         </ul>
-        <p class="fineprint">以上占位项在正式提交前替换为真实信息。</p>
+        <p class="fineprint">验证日志：<a href="https://github.com/jiayalei225-svg/powercontext/blob/2026-competition-ecosystem/qoder/docs/verification-log.txt" target="_blank" rel="noopener">docs/verification-log.txt</a>（14/14 PASS）。</p>
       </div>
     </section>
   </main>
@@ -349,7 +401,7 @@ export MSYS_NO_PATHCONV=1</code>
   <footer class="footer">
     <div class="wrap footer-inner">
       <p><span class="brand-name">PaperDesk</span> · 文献检索工作台</p>
-      <p>用 Qoder 开发 · seekdb + PowerContext 驱动 · 本地优先</p>
+      <p>Qoder Sites 发布 · seekdb + PowerContext 驱动 · 本地优先</p>
     </div>
   </footer>
 </body>

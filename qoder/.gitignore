@@ -1,4 +1,6 @@
 .venv/
+config/
+backend/data/
 data/seekdb/
 data/uploads/
 frontend/node_modules/

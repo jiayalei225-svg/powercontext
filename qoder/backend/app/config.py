@@ -31,9 +31,44 @@ def _bool(name: str, default: bool) -> bool:
     return raw.strip().lower() in {"1", "true", "yes", "on"}
 
 
+def _is_ascii_path(path: Path) -> bool:
+    try:
+        str(path).encode("ascii")
+        return True
+    except UnicodeEncodeError:
+        return False
+
+
+def _default_data_dir() -> Path:
+    """Where the embedded seekdb lives.
+
+    seekdb's native layer cannot open a database under a non-ASCII path, which
+    is easy to hit on Chinese Windows (``C:\\Users\\张三\\...`` or OneDrive's
+    ``文档`` folder).  Prefer the configured directory, but fall back to a safe
+    per-user location when its absolute path contains non-ASCII characters.
+    """
+    configured = os.environ.get("PAPERDESK_DATA_DIR", "").strip()
+    preferred = Path(configured).expanduser() if configured else ROOT / "data"
+    try:
+        preferred = preferred.resolve()
+    except OSError:
+        pass
+    if _is_ascii_path(preferred):
+        return preferred
+    base = Path(os.environ.get("LOCALAPPDATA") or Path.home())
+    fallback = base / "PaperDesk" / "data"
+    print(
+        f"[PaperDesk] data directory {preferred} contains non-ASCII characters; "
+        f"seekdb cannot open there. Using {fallback} instead. "
+        f"Set PAPERDESK_DATA_DIR to an ASCII-only path to override.",
+        flush=True,
+    )
+    return fallback
+
+
 @dataclass
 class Settings:
-    data_dir: Path = field(default_factory=lambda: Path(os.environ.get("PAPERDESK_DATA_DIR", ROOT / "data")))
+    data_dir: Path = field(default_factory=_default_data_dir)
     embedding_mode: str = field(default_factory=lambda: os.environ.get("EMBEDDING_MODE", "local").strip().lower())
     embedding_api_base: str = field(default_factory=lambda: os.environ.get("EMBEDDING_API_BASE", "").strip())
     embedding_api_key: str = field(default_factory=lambda: os.environ.get("EMBEDDING_API_KEY", "").strip())

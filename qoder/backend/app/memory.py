@@ -8,6 +8,7 @@ transcript. Every search is also journaled as progress memory.
 from __future__ import annotations
 
 import json
+import threading
 import time
 from typing import Any
 
@@ -18,32 +19,52 @@ from .config import settings
 PREF_MARK = "paperdesk.prefs.v1|"
 SEARCH_MARK = "paperdesk.search.v1|"
 
+# One pooled client: opening a fresh TCP connection to the local memory
+# service costs ~1.5 s on Windows, which used to dominate every search.
+_client: httpx.Client | None = None
+_client_lock = threading.Lock()
+
+_health_cache: tuple[float, bool] | None = None
+_prefs_cache: tuple[float, dict] | None = None
+_HEALTH_TTL = 5.0
+_PREFS_TTL = 10.0
+
 
 class MemoryError(RuntimeError):
     pass
 
 
+def _get_client() -> httpx.Client:
+    global _client
+    with _client_lock:
+        if _client is None or _client.is_closed:
+            _client = httpx.Client(timeout=settings.powercontext_timeout)
+        return _client
+
+
 def _call(path: str, payload: dict | None = None, method: str = "POST") -> Any:
     url = f"{settings.powercontext_url}{path}"
     try:
-        with httpx.Client(timeout=settings.powercontext_timeout) as client:
-            if payload is None:
-                response = client.request(method, url)
-            else:
-                response = client.request(method, url, json=payload)
-            response.raise_for_status()
-            return response.json()
+        response = _get_client().request(method, url, json=payload)
+        response.raise_for_status()
+        return response.json()
     except httpx.HTTPError as exc:
         raise MemoryError(f"PowerContext 不可用: {exc}") from exc
 
 
 def available() -> bool:
+    global _health_cache
     if not settings.memory_enabled:
         return False
+    now = time.monotonic()
+    if _health_cache and now - _health_cache[0] < _HEALTH_TTL:
+        return _health_cache[1]
     try:
         _call("/health/ready", method="GET")
+        _health_cache = (now, True)
         return True
     except MemoryError:
+        _health_cache = (now, False)
         return False
 
 
@@ -79,14 +100,20 @@ def _payload(entry: dict, mark: str) -> dict | None:
 
 
 def save_preferences(prefs: dict) -> dict:
+    global _prefs_cache
     payload = dict(prefs)
     payload["saved_at"] = time.time()
     entry = _remember("preference", PREF_MARK + json.dumps(payload, ensure_ascii=False), "用户在设置面板保存检索偏好")
+    _prefs_cache = (time.monotonic(), dict(prefs))
     record = (entry.get("records") or [{}])[0]
     return {"artifact": record.get("artifact"), "preferences": prefs}
 
 
 def load_preferences() -> dict:
+    global _prefs_cache
+    now = time.monotonic()
+    if _prefs_cache and now - _prefs_cache[0] < _PREFS_TTL:
+        return dict(_prefs_cache[1])
     best: dict | None = None
     for entry in _entries():
         payload = _payload(entry, PREF_MARK)
@@ -94,6 +121,7 @@ def load_preferences() -> dict:
             best = payload
     best = dict(best or {})
     best.pop("saved_at", None)
+    _prefs_cache = (now, dict(best))
     return best
 
 
