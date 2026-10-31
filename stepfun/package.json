@@ -1,0 +1,43 @@
+{
+  "name": "stepfun-edge-atlas",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "description": "Browser-local BGE embeddings + seekdb hybrid retrieval knowledge base",
+  "scripts": {
+    "predev": "node scripts/prepare-assets.mjs",
+    "dev": "concurrently -k -n web,api -c cyan,magenta \"vite\" \"node --watch server/index.mjs\"",
+    "prebuild": "node scripts/prepare-assets.mjs",
+    "build": "tsc --noEmit && vite build",
+    "start": "node server/index.mjs",
+    "preview": "npm run build && npm start",
+    "setup:model": "node scripts/download-model.mjs",
+    "quantize": "python scripts/quantize_model.py",
+    "benchmark": "node benchmark/run-benchmark.mjs",
+    "smoke": "node benchmark/smoke-test.mjs",
+    "test:fallback": "node benchmark/fallback-test.mjs",
+    "test:collection": "node benchmark/collection-test.mjs",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "4.3.2",
+    "compression": "^1.8.1",
+    "express": "^5.1.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "seekdb": "1.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "concurrently": "^9.2.1",
+    "playwright-core": "^1.58.2",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.5"
+  }
+}

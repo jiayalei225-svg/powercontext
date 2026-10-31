@@ -1,0 +1,32 @@
+# INT8 quantization record
+
+Environment
+- Python 3.12, onnx 1.23.2, onnxruntime 1.31.1
+- Script: `python scripts/quantize_model.py`
+- Method: ONNX Runtime `quantize_dynamic`, weight-only, QUInt8, per-channel, reduce_range=False
+
+Input / pinned artifact
+- FP32 ONNX: `Xenova/bge-small-zh-v1.5/onnx/model.onnx`, 94,851,877 bytes (90.46 MiB)
+- Pinned INT8 ONNX used by the app: `model_quantized.onnx`, 24,010,842 bytes (22.90 MiB)
+- Pinned SHA-256: `15b717c382bcb518ba457b93ea6850ede7f4f1cd8937454aa06972366cd19bcc`
+- Compression (ONNX only): 94,851,877 / 24,010,842 = 3.950x
+
+Independent reproduction (2026-10-31)
+- Reproduced INT8 ONNX: `model_quantized_custom.onnx`, 24,020,718 bytes (22.91 MiB)
+- Reproduction SHA-256: `e721f9bbae4f6122976d4aef33e39d84c53a43ac5af852b6f1c716e458bd2382`
+- Compression: 94,851,877 / 24,020,718 = 3.949x
+- Difference from pinned artifact: +9,876 bytes (+0.041%)
+- Sanity check on two synthetic BERT token batches: mean cosine similarity of CLS-pooled,
+  L2-normalized embeddings = 0.997808 (FP32 vs reproduced INT8)
+
+Bundle size used in the app (ONNX + tokenizer/config)
+- FP32: 95,292,210 bytes = 90.88 MiB
+- INT8: 24,451,175 bytes = 23.32 MiB
+- INT8 bundle compression: 3.897x
+- FP16 bundle: 47,937,760 bytes = 45.72 MiB (1.988x)
+
+End-to-end retrieval quality (20 queries, seekdb hybrid RRF, topK=5)
+- FP32: Recall@5 0.950, nDCG@5 0.8841, MRR@5 0.8917
+- INT8: Recall@5 0.950, nDCG@5 0.8779, MRR@5 0.8792
+- Delta INT8 vs FP32: Recall 0.0 pp, nDCG -0.69%, MRR -1.40%
+- FP16: Recall@5 0.950, nDCG@5 0.8841, MRR@5 0.8917 (identical ranking on this eval set)

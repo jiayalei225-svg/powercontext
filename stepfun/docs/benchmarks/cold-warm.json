@@ -1,0 +1,25 @@
+{
+  "measuredAt": "2026-10-31T09:44:43.582Z",
+  "baseUrl": "http://127.0.0.1:8788",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0",
+  "webgpuAdapter": "nvidia · blackwell",
+  "note": "ONNX payloads are served no-store (Chromium large-body disk-cache workaround); warm means a reload in the same browser session.",
+  "cold": {
+    "label": "cold",
+    "backend": "WEBGPU",
+    "precision": "FP16",
+    "shownLoadMs": "20.92 s",
+    "resources": [],
+    "inspector": "INFERENCE\nGPU\nWEBGPU\nnvidia · blackwell\nFP16\n45.7 MiB\n4 threads\nmodel\nbge-small-zh-v1.5\nrevision\n75c43b06\ncold load\n20.92 s\ncross-origin isolated\nyes\n计算发生在当前浏览器进程，无云端推理请求。",
+    "navigationToReadyMs": 27399
+  },
+  "warm": {
+    "label": "warm-in-session",
+    "backend": "WEBGPU",
+    "precision": "FP16",
+    "shownLoadMs": "17.91 s",
+    "resources": [],
+    "inspector": "INFERENCE\nGPU\nWEBGPU\nnvidia · blackwell\nFP16\n45.7 MiB\n4 threads\nmodel\nbge-small-zh-v1.5\nrevision\n75c43b06\ncold load\n17.91 s\ncross-origin isolated\nyes\n计算发生在当前浏览器进程，无云端推理请求。",
+    "navigationToReadyMs": 20843
+  }
+}
