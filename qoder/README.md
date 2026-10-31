@@ -1,5 +1,7 @@
 # PaperDesk · 文献检索工作台
 
+> 参赛提交说明（网站/仓库/UID/验证步骤/材料索引）见 [SUBMISSION.md](SUBMISSION.md)。
+
 一个本地优先的文献阅读台：把 PDF 丢进来，按你自己的习惯检索，命中结果能精确到**第几页的哪一段**。
 
 面向的场景很具体——读研、写综述、跟课题时，文献散在十几个文件夹里，文件名记不住，只记得"那篇讲图神经网络过平滑的"。通用搜索要么搜不到，要么给个整篇 PDF 让你自己翻。PaperDesk 做三件事：
@@ -98,6 +100,8 @@ data/
 - 首次启动需要联网下载约 90 MB 的向量模型（走镜像，国内可直连）
 - 不需要 Docker，不需要 MySQL，不需要单独部署 seekdb
 - 可选：Node.js 20+，仅在你想改前端时需要
+- 国内网络装依赖慢时，可先设置镜像再启动：
+  `$env:PIP_INDEX_URL="https://pypi.tuna.tsinghua.edu.cn/simple"`
 
 ### 方式一：一键启动（Windows PowerShell）
 
