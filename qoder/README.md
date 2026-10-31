@@ -279,6 +279,9 @@ PAPERDESK_MEMORY_ENABLED=true
 
 - **首次检索很慢**：模型在首次使用时加载。本项目已在 FastAPI 启动阶段预热，正常启动完成后第一次检索不再等待。
 - **`seekdb_open failed` / 日志文件被占用**：上一个 API 进程还没退。先确认并结束监听 8080 的 python 进程，再重启；不要直接删除正在被占用的 `data/seekdb/`。
+- **8080 / 8000 被占用**：API 端口用 `PAPERDESK_PORT` 改（例如 `$env:PAPERDESK_PORT=18080`），
+  PowerContext 端口在 `config/powercontext.env` 的 `POWERCONTEXT_SERVER_HTTP_PORT` 改，
+  同时把 `.env` 的 `POWERCONTEXT_URL` 指到新端口；`seed.py` / `verify.py` 用 `--api` 指到新端口。
 - **`{"detail":"There was an error parsing the body"}`（用 curl 发中文）**：Git Bash 的编码问题，用 Python `httpx` 或前端页面发请求即可。
 - **上传扫描版 PDF 报 422**：当前不做 OCR，只接受带文本层的文件。
 - **界面显示"记忆未连接"**：PowerContext 没起或地址不对。检索本身不受影响。

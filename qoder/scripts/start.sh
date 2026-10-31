@@ -36,8 +36,9 @@ for _ in $(seq 1 60); do
   sleep 1
 done
 
+PORT="${PAPERDESK_PORT:-8080}"
 echo ""
-echo "  PaperDesk   ->  http://127.0.0.1:8080"
+echo "  PaperDesk   ->  http://127.0.0.1:${PORT}"
 echo "  PowerContext->  http://127.0.0.1:8000  (PID $PC_PID)"
 echo "  首次使用请另开终端执行：.venv/bin/python scripts/seed.py"
 echo ""

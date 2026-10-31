@@ -77,6 +77,7 @@ class Settings:
     powercontext_url: str = field(default_factory=lambda: os.environ.get("POWERCONTEXT_URL", "http://127.0.0.1:8000").rstrip("/"))
     powercontext_timeout: float = field(default_factory=lambda: float(os.environ.get("POWERCONTEXT_TIMEOUT", "5")))
     memory_enabled: bool = field(default_factory=lambda: _bool("PAPERDESK_MEMORY_ENABLED", True))
+    port: int = field(default_factory=lambda: int(os.environ.get("PAPERDESK_PORT", "8080")))
 
     @property
     def upload_dir(self) -> Path:

@@ -43,8 +43,9 @@ for ($i = 0; $i -lt 60; $i++) {
     } catch { Start-Sleep -Seconds 1 }
 }
 
+$port = if ($env:PAPERDESK_PORT) { $env:PAPERDESK_PORT } else { "8080" }
 Write-Host ""
-Write-Host "  PaperDesk  ->  http://127.0.0.1:8080"
+Write-Host "  PaperDesk  ->  http://127.0.0.1:$port"
 Write-Host "  PowerContext->  http://127.0.0.1:8000  (PID $($pc.Id))"
 Write-Host "  首次使用请另开窗口执行：.\.venv\Scripts\python.exe scripts\seed.py"
 Write-Host ""
