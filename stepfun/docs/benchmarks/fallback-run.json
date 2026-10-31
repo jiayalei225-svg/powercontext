@@ -1,0 +1,9 @@
+{
+  "backend": "WASM",
+  "precision": "FP16",
+  "inspector": "INFERENCE\nCPU\nWASM\nWebAssembly (CPU)\nFP16\n45.7 MiB\n4 threads\nmodel\nbge-small-zh-v1.5\nrevision\n75c43b06\nmodel init\n1.73 s\ncross-origin isolated\nyes\nnavigator.gpu 存在，但 requestAdapter() 返回空适配器",
+  "gpu": {
+    "present": true,
+    "adapter": false
+  }
+}

@@ -1,0 +1,3270 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-31T09:42:53.033Z",
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0",
+    "hardwareConcurrency": 32,
+    "deviceMemory": 16,
+    "crossOriginIsolated": true,
+    "language": "zh-CN",
+    "webgpu": true,
+    "gpuAdapter": "nvidia · blackwell"
+  },
+  "dataset": {
+    "documents": 27,
+    "chunks": 54,
+    "queries": 20,
+    "source": "data/sample-corpus.json + data/eval/queries.json"
+  },
+  "results": [
+    {
+      "id": "fp32-wasm",
+      "label": "FP32 · WASM 基线",
+      "backend": "wasm",
+      "precision": "fp32",
+      "engine": {
+        "backend": "wasm",
+        "precision": "fp32",
+        "device": "wasm",
+        "deviceLabel": "WebAssembly (CPU)",
+        "fallbackReason": null,
+        "loadMs": 7288,
+        "tokenizerMs": 38,
+        "modelMs": 7251,
+        "modelFile": "model.onnx",
+        "modelBytes": 0,
+        "dtype": "fp32",
+        "requestedBackend": "wasm",
+        "requestedPrecision": "fp32",
+        "crossOriginIsolated": true,
+        "threads": 4
+      },
+      "modelBytes": 95292210,
+      "compression": 1,
+      "collection": {
+        "documents": 27,
+        "chunks": 54
+      },
+      "ingestion": {
+        "chunkMs": 61.5,
+        "embedMs": 24319.8,
+        "writeMs": 4333.8,
+        "refreshMs": 4333.8,
+        "roundTripMs": 4477.6,
+        "verified": true,
+        "chunks": 54
+      },
+      "latency": {
+        "queryEmbedP50": 78.8,
+        "queryEmbedP95": 94.8,
+        "searchP50": 72.5,
+        "searchP95": 94.7,
+        "e2eP50": 150.1,
+        "e2eP95": 178.5
+      },
+      "quality": {
+        "hybrid": {
+          "queries": 20,
+          "recall5": 0.95,
+          "ndcg5": 0.8840790148145551,
+          "mrr5": 0.8916666666666668,
+          "perQuery": [
+            {
+              "id": "q01",
+              "top": [
+                "web-worker",
+                "webgpu-wasm",
+                "bge-model",
+                "seekdb-overview",
+                "wasm-threads"
+              ],
+              "relevant": [
+                "webgpu-wasm",
+                "onnx-runtime-web"
+              ],
+              "recall": 0.5,
+              "ndcg": 0.38685280723454163,
+              "mrr": 0.5
+            },
+            {
+              "id": "q02",
+              "top": [
+                "bge-model",
+                "int8-quantization",
+                "chunking",
+                "fulltext-ik",
+                "benchmark-method"
+              ],
+              "relevant": [
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q03",
+              "top": [
+                "seekdb-overview",
+                "hybrid-rrf",
+                "dense-vs-sparse",
+                "normalization",
+                "retrieval-metrics"
+              ],
+              "relevant": [
+                "hybrid-rrf",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q04",
+              "top": [
+                "refresh-index",
+                "hnsw",
+                "incremental-import",
+                "metadata-filters",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "refresh-index",
+                "incremental-import"
+              ],
+              "recall": 1,
+              "ndcg": 0.9197207891481876,
+              "mrr": 1
+            },
+            {
+              "id": "q05",
+              "top": [
+                "fp16",
+                "retrieval-metrics",
+                "int8-quantization",
+                "chunk-dedupe",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "retrieval-metrics"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q06",
+              "top": [
+                "chunking",
+                "chunk-dedupe",
+                "benchmark-method",
+                "batching",
+                "attention"
+              ],
+              "relevant": [
+                "chunking"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q07",
+              "top": [
+                "web-worker",
+                "batching",
+                "privacy",
+                "bge-model",
+                "int8-quantization"
+              ],
+              "relevant": [
+                "web-worker"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q08",
+              "top": [
+                "normalization",
+                "bge-model",
+                "int8-quantization",
+                "transformers-js",
+                "attention"
+              ],
+              "relevant": [
+                "normalization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q09",
+              "top": [
+                "hnsw",
+                "dense-vs-sparse",
+                "attention",
+                "fp16",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q10",
+              "top": [
+                "fulltext-ik",
+                "seekdb-overview",
+                "bge-model",
+                "batching",
+                "dense-vs-sparse"
+              ],
+              "relevant": [
+                "fulltext-ik"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q11",
+              "top": [
+                "deployment",
+                "seekdb-overview",
+                "privacy",
+                "seekdb-js",
+                "wasm-threads"
+              ],
+              "relevant": [
+                "deployment",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q12",
+              "top": [
+                "fp16",
+                "int8-quantization",
+                "attention",
+                "benchmark-method",
+                "hnsw"
+              ],
+              "relevant": [
+                "fp16",
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q13",
+              "top": [
+                "transformers-js",
+                "model-cache",
+                "wasm-threads",
+                "privacy",
+                "seekdb-overview"
+              ],
+              "relevant": [
+                "transformers-js"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q14",
+              "top": [
+                "model-cache",
+                "onnx-runtime-web",
+                "benchmark-method",
+                "fp16",
+                "transformers-js"
+              ],
+              "relevant": [
+                "model-cache"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q15",
+              "top": [
+                "metadata-filters",
+                "incremental-import",
+                "privacy",
+                "seekdb-overview",
+                "hnsw"
+              ],
+              "relevant": [
+                "privacy"
+              ],
+              "recall": 1,
+              "ndcg": 0.5,
+              "mrr": 0.3333333333333333
+            },
+            {
+              "id": "q16",
+              "top": [
+                "batching",
+                "hnsw",
+                "refresh-index",
+                "onnx-runtime-web",
+                "chunking"
+              ],
+              "relevant": [
+                "batching",
+                "benchmark-method"
+              ],
+              "recall": 0.5,
+              "ndcg": 0.6131471927654584,
+              "mrr": 1
+            },
+            {
+              "id": "q17",
+              "top": [
+                "hnsw",
+                "refresh-index",
+                "seekdb-js",
+                "seekdb-overview",
+                "bge-model"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q18",
+              "top": [
+                "metadata-filters",
+                "seekdb-js",
+                "dense-vs-sparse",
+                "hybrid-rrf",
+                "refresh-index"
+              ],
+              "relevant": [
+                "metadata-filters"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q19",
+              "top": [
+                "benchmark-method",
+                "privacy",
+                "retrieval-metrics",
+                "bge-model",
+                "attention"
+              ],
+              "relevant": [
+                "benchmark-method"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q20",
+              "top": [
+                "dense-vs-sparse",
+                "hybrid-rrf",
+                "fulltext-ik",
+                "hnsw",
+                "retrieval-metrics"
+              ],
+              "relevant": [
+                "dense-vs-sparse",
+                "hybrid-rrf"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            }
+          ]
+        },
+        "vector": {
+          "queries": 20,
+          "recall5": 0.925,
+          "ndcg5": 0.8187503349954188,
+          "mrr5": 0.8,
+          "perQuery": [
+            {
+              "id": "q01",
+              "top": [
+                "refresh-index",
+                "web-worker",
+                "wasm-threads",
+                "benchmark-method",
+                "privacy"
+              ],
+              "relevant": [
+                "webgpu-wasm",
+                "onnx-runtime-web"
+              ],
+              "recall": 0,
+              "ndcg": 0,
+              "mrr": 0
+            },
+            {
+              "id": "q02",
+              "top": [
+                "bge-model",
+                "int8-quantization",
+                "benchmark-method",
+                "chunking",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q03",
+              "top": [
+                "seekdb-overview",
+                "hybrid-rrf",
+                "fulltext-ik",
+                "normalization",
+                "dense-vs-sparse"
+              ],
+              "relevant": [
+                "hybrid-rrf",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q04",
+              "top": [
+                "refresh-index",
+                "incremental-import",
+                "hnsw",
+                "dense-vs-sparse",
+                "seekdb-js"
+              ],
+              "relevant": [
+                "refresh-index",
+                "incremental-import"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q05",
+              "top": [
+                "retrieval-metrics",
+                "fp16",
+                "fulltext-ik",
+                "hybrid-rrf",
+                "attention"
+              ],
+              "relevant": [
+                "retrieval-metrics"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q06",
+              "top": [
+                "chunking",
+                "chunk-dedupe",
+                "benchmark-method",
+                "incremental-import",
+                "wasm-threads"
+              ],
+              "relevant": [
+                "chunking"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q07",
+              "top": [
+                "batching",
+                "privacy",
+                "web-worker",
+                "attention",
+                "bge-model"
+              ],
+              "relevant": [
+                "web-worker"
+              ],
+              "recall": 1,
+              "ndcg": 0.5,
+              "mrr": 0.3333333333333333
+            },
+            {
+              "id": "q08",
+              "top": [
+                "normalization",
+                "bge-model",
+                "int8-quantization",
+                "transformers-js",
+                "attention"
+              ],
+              "relevant": [
+                "normalization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q09",
+              "top": [
+                "refresh-index",
+                "dense-vs-sparse",
+                "hnsw",
+                "attention",
+                "fp16"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 0.5,
+              "mrr": 0.3333333333333333
+            },
+            {
+              "id": "q10",
+              "top": [
+                "fulltext-ik",
+                "chunking",
+                "bge-model",
+                "wasm-threads",
+                "chunk-dedupe"
+              ],
+              "relevant": [
+                "fulltext-ik"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q11",
+              "top": [
+                "deployment",
+                "seekdb-overview",
+                "seekdb-js",
+                "wasm-threads",
+                "onnx-runtime-web"
+              ],
+              "relevant": [
+                "deployment",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q12",
+              "top": [
+                "fp16",
+                "int8-quantization",
+                "attention",
+                "hnsw",
+                "bge-model"
+              ],
+              "relevant": [
+                "fp16",
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q13",
+              "top": [
+                "model-cache",
+                "transformers-js",
+                "wasm-threads",
+                "seekdb-js",
+                "benchmark-method"
+              ],
+              "relevant": [
+                "transformers-js"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q14",
+              "top": [
+                "model-cache",
+                "wasm-threads",
+                "benchmark-method",
+                "transformers-js",
+                "fp16"
+              ],
+              "relevant": [
+                "model-cache"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q15",
+              "top": [
+                "metadata-filters",
+                "incremental-import",
+                "privacy",
+                "seekdb-overview",
+                "chunk-dedupe"
+              ],
+              "relevant": [
+                "privacy"
+              ],
+              "recall": 1,
+              "ndcg": 0.5,
+              "mrr": 0.3333333333333333
+            },
+            {
+              "id": "q16",
+              "top": [
+                "batching",
+                "hnsw",
+                "bge-model",
+                "chunking",
+                "onnx-runtime-web"
+              ],
+              "relevant": [
+                "batching",
+                "benchmark-method"
+              ],
+              "recall": 0.5,
+              "ndcg": 0.6131471927654584,
+              "mrr": 1
+            },
+            {
+              "id": "q17",
+              "top": [
+                "hnsw",
+                "seekdb-overview",
+                "refresh-index",
+                "normalization",
+                "seekdb-js"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q18",
+              "top": [
+                "metadata-filters",
+                "seekdb-js",
+                "chunk-dedupe",
+                "normalization",
+                "retrieval-metrics"
+              ],
+              "relevant": [
+                "metadata-filters"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q19",
+              "top": [
+                "benchmark-method",
+                "retrieval-metrics",
+                "privacy",
+                "fp16",
+                "int8-quantization"
+              ],
+              "relevant": [
+                "benchmark-method"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q20",
+              "top": [
+                "dense-vs-sparse",
+                "hybrid-rrf",
+                "fulltext-ik",
+                "retrieval-metrics",
+                "wasm-threads"
+              ],
+              "relevant": [
+                "dense-vs-sparse",
+                "hybrid-rrf"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            }
+          ]
+        },
+        "fulltext": {
+          "queries": 20,
+          "recall5": 0.975,
+          "ndcg5": 0.8711453493052405,
+          "mrr5": 0.85,
+          "perQuery": [
+            {
+              "id": "q01",
+              "top": [
+                "web-worker",
+                "webgpu-wasm",
+                "seekdb-overview",
+                "bge-model",
+                "fp16"
+              ],
+              "relevant": [
+                "webgpu-wasm",
+                "onnx-runtime-web"
+              ],
+              "recall": 0.5,
+              "ndcg": 0.38685280723454163,
+              "mrr": 0.5
+            },
+            {
+              "id": "q02",
+              "top": [
+                "int8-quantization",
+                "bge-model",
+                "chunking",
+                "attention",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q03",
+              "top": [
+                "hybrid-rrf",
+                "seekdb-overview",
+                "dense-vs-sparse",
+                "chunk-dedupe",
+                "retrieval-metrics"
+              ],
+              "relevant": [
+                "hybrid-rrf",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q04",
+              "top": [
+                "hnsw",
+                "refresh-index",
+                "incremental-import",
+                "metadata-filters",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "refresh-index",
+                "incremental-import"
+              ],
+              "recall": 1,
+              "ndcg": 0.6934264036172708,
+              "mrr": 0.5
+            },
+            {
+              "id": "q05",
+              "top": [
+                "fp16",
+                "int8-quantization",
+                "chunk-dedupe",
+                "retrieval-metrics",
+                "seekdb-overview"
+              ],
+              "relevant": [
+                "retrieval-metrics"
+              ],
+              "recall": 1,
+              "ndcg": 0.43067655807339306,
+              "mrr": 0.25
+            },
+            {
+              "id": "q06",
+              "top": [
+                "chunking",
+                "bge-model",
+                "attention",
+                "batching",
+                "chunk-dedupe"
+              ],
+              "relevant": [
+                "chunking"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q07",
+              "top": [
+                "web-worker",
+                "onnx-runtime-web",
+                "batching",
+                "privacy",
+                "webgpu-wasm"
+              ],
+              "relevant": [
+                "web-worker"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q08",
+              "top": [
+                "normalization",
+                "bge-model",
+                "transformers-js",
+                "int8-quantization",
+                "refresh-index"
+              ],
+              "relevant": [
+                "normalization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q09",
+              "top": [
+                "hnsw",
+                "seekdb-js",
+                "dense-vs-sparse",
+                "int8-quantization",
+                "hybrid-rrf"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q10",
+              "top": [
+                "fulltext-ik",
+                "seekdb-js",
+                "seekdb-overview",
+                "wasm-threads",
+                "batching"
+              ],
+              "relevant": [
+                "fulltext-ik"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q11",
+              "top": [
+                "deployment",
+                "seekdb-overview",
+                "privacy",
+                "attention",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "deployment",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q12",
+              "top": [
+                "fp16",
+                "int8-quantization",
+                "benchmark-method",
+                "retrieval-metrics",
+                "webgpu-wasm"
+              ],
+              "relevant": [
+                "fp16",
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q13",
+              "top": [
+                "transformers-js",
+                "privacy",
+                "model-cache",
+                "wasm-threads",
+                "onnx-runtime-web"
+              ],
+              "relevant": [
+                "transformers-js"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q14",
+              "top": [
+                "model-cache",
+                "onnx-runtime-web",
+                "benchmark-method",
+                "fp16",
+                "attention"
+              ],
+              "relevant": [
+                "model-cache"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q15",
+              "top": [
+                "incremental-import",
+                "metadata-filters",
+                "hnsw",
+                "privacy",
+                "chunking"
+              ],
+              "relevant": [
+                "privacy"
+              ],
+              "recall": 1,
+              "ndcg": 0.43067655807339306,
+              "mrr": 0.25
+            },
+            {
+              "id": "q16",
+              "top": [
+                "batching",
+                "refresh-index",
+                "hnsw",
+                "retrieval-metrics",
+                "benchmark-method"
+              ],
+              "relevant": [
+                "batching",
+                "benchmark-method"
+              ],
+              "recall": 1,
+              "ndcg": 0.8503449055347546,
+              "mrr": 1
+            },
+            {
+              "id": "q17",
+              "top": [
+                "hnsw",
+                "seekdb-js",
+                "normalization",
+                "refresh-index",
+                "bge-model"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q18",
+              "top": [
+                "metadata-filters",
+                "seekdb-overview",
+                "privacy",
+                "seekdb-js",
+                "batching"
+              ],
+              "relevant": [
+                "metadata-filters"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q19",
+              "top": [
+                "seekdb-overview",
+                "benchmark-method",
+                "seekdb-js",
+                "privacy",
+                "bge-model"
+              ],
+              "relevant": [
+                "benchmark-method"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q20",
+              "top": [
+                "dense-vs-sparse",
+                "hybrid-rrf",
+                "fulltext-ik",
+                "wasm-threads",
+                "hnsw"
+              ],
+              "relevant": [
+                "dense-vs-sparse",
+                "hybrid-rrf"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            }
+          ]
+        }
+      },
+      "batches": [
+        {
+          "batchSize": 1,
+          "texts": 36,
+          "totalMs": 18022.4,
+          "textsPerSecond": 2,
+          "runs": 2
+        },
+        {
+          "batchSize": 8,
+          "texts": 36,
+          "totalMs": 19390.2,
+          "textsPerSecond": 1.86,
+          "runs": 2
+        },
+        {
+          "batchSize": 16,
+          "texts": 36,
+          "totalMs": 18868.4,
+          "textsPerSecond": 1.91,
+          "runs": 2
+        },
+        {
+          "batchSize": 32,
+          "texts": 36,
+          "totalMs": 19690.3,
+          "textsPerSecond": 1.83,
+          "runs": 2
+        }
+      ]
+    },
+    {
+      "id": "q8-wasm",
+      "label": "INT8 · WASM",
+      "backend": "wasm",
+      "precision": "q8",
+      "engine": {
+        "backend": "wasm",
+        "precision": "q8",
+        "device": "wasm",
+        "deviceLabel": "WebAssembly (CPU)",
+        "fallbackReason": null,
+        "loadMs": 9796,
+        "tokenizerMs": 190,
+        "modelMs": 9605,
+        "modelFile": "model_quantized.onnx",
+        "modelBytes": 0,
+        "dtype": "q8",
+        "requestedBackend": "wasm",
+        "requestedPrecision": "q8",
+        "crossOriginIsolated": true,
+        "threads": 4
+      },
+      "modelBytes": 24451175,
+      "compression": 3.897,
+      "collection": {
+        "documents": 27,
+        "chunks": 54
+      },
+      "ingestion": {
+        "chunkMs": 255.2,
+        "embedMs": 23760.3,
+        "writeMs": 5861.2,
+        "refreshMs": 5861.2,
+        "roundTripMs": 6052,
+        "verified": true,
+        "chunks": 54
+      },
+      "latency": {
+        "queryEmbedP50": 78.5,
+        "queryEmbedP95": 99.5,
+        "searchP50": 103.5,
+        "searchP95": 128.6,
+        "e2eP50": 185.1,
+        "e2eP95": 217.9
+      },
+      "quality": {
+        "hybrid": {
+          "queries": 20,
+          "recall5": 0.95,
+          "ndcg5": 0.8779397805814575,
+          "mrr5": 0.8791666666666668,
+          "perQuery": [
+            {
+              "id": "q01",
+              "top": [
+                "web-worker",
+                "bge-model",
+                "seekdb-overview",
+                "webgpu-wasm",
+                "wasm-threads"
+              ],
+              "relevant": [
+                "webgpu-wasm",
+                "onnx-runtime-web"
+              ],
+              "recall": 0.5,
+              "ndcg": 0.2640681225725909,
+              "mrr": 0.25
+            },
+            {
+              "id": "q02",
+              "top": [
+                "bge-model",
+                "int8-quantization",
+                "chunking",
+                "fulltext-ik",
+                "benchmark-method"
+              ],
+              "relevant": [
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q03",
+              "top": [
+                "seekdb-overview",
+                "hybrid-rrf",
+                "dense-vs-sparse",
+                "retrieval-metrics",
+                "normalization"
+              ],
+              "relevant": [
+                "hybrid-rrf",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q04",
+              "top": [
+                "refresh-index",
+                "hnsw",
+                "incremental-import",
+                "metadata-filters",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "refresh-index",
+                "incremental-import"
+              ],
+              "recall": 1,
+              "ndcg": 0.9197207891481876,
+              "mrr": 1
+            },
+            {
+              "id": "q05",
+              "top": [
+                "fp16",
+                "retrieval-metrics",
+                "int8-quantization",
+                "fulltext-ik",
+                "chunk-dedupe"
+              ],
+              "relevant": [
+                "retrieval-metrics"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q06",
+              "top": [
+                "chunking",
+                "chunk-dedupe",
+                "benchmark-method",
+                "batching",
+                "attention"
+              ],
+              "relevant": [
+                "chunking"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q07",
+              "top": [
+                "web-worker",
+                "batching",
+                "privacy",
+                "bge-model",
+                "int8-quantization"
+              ],
+              "relevant": [
+                "web-worker"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q08",
+              "top": [
+                "normalization",
+                "bge-model",
+                "int8-quantization",
+                "transformers-js",
+                "attention"
+              ],
+              "relevant": [
+                "normalization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q09",
+              "top": [
+                "hnsw",
+                "dense-vs-sparse",
+                "attention",
+                "fulltext-ik",
+                "fp16"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q10",
+              "top": [
+                "fulltext-ik",
+                "seekdb-overview",
+                "dense-vs-sparse",
+                "bge-model",
+                "attention"
+              ],
+              "relevant": [
+                "fulltext-ik"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q11",
+              "top": [
+                "deployment",
+                "seekdb-overview",
+                "privacy",
+                "seekdb-js",
+                "wasm-threads"
+              ],
+              "relevant": [
+                "deployment",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q12",
+              "top": [
+                "fp16",
+                "int8-quantization",
+                "attention",
+                "benchmark-method",
+                "wasm-threads"
+              ],
+              "relevant": [
+                "fp16",
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q13",
+              "top": [
+                "transformers-js",
+                "model-cache",
+                "wasm-threads",
+                "privacy",
+                "seekdb-overview"
+              ],
+              "relevant": [
+                "transformers-js"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q14",
+              "top": [
+                "model-cache",
+                "benchmark-method",
+                "onnx-runtime-web",
+                "fp16",
+                "transformers-js"
+              ],
+              "relevant": [
+                "model-cache"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q15",
+              "top": [
+                "metadata-filters",
+                "incremental-import",
+                "privacy",
+                "seekdb-overview",
+                "hnsw"
+              ],
+              "relevant": [
+                "privacy"
+              ],
+              "recall": 1,
+              "ndcg": 0.5,
+              "mrr": 0.3333333333333333
+            },
+            {
+              "id": "q16",
+              "top": [
+                "batching",
+                "hnsw",
+                "refresh-index",
+                "onnx-runtime-web",
+                "chunking"
+              ],
+              "relevant": [
+                "batching",
+                "benchmark-method"
+              ],
+              "recall": 0.5,
+              "ndcg": 0.6131471927654584,
+              "mrr": 1
+            },
+            {
+              "id": "q17",
+              "top": [
+                "hnsw",
+                "refresh-index",
+                "seekdb-js",
+                "seekdb-overview",
+                "bge-model"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q18",
+              "top": [
+                "metadata-filters",
+                "seekdb-js",
+                "dense-vs-sparse",
+                "seekdb-overview",
+                "hybrid-rrf"
+              ],
+              "relevant": [
+                "metadata-filters"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q19",
+              "top": [
+                "benchmark-method",
+                "privacy",
+                "retrieval-metrics",
+                "bge-model",
+                "attention"
+              ],
+              "relevant": [
+                "benchmark-method"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q20",
+              "top": [
+                "dense-vs-sparse",
+                "hybrid-rrf",
+                "fulltext-ik",
+                "retrieval-metrics",
+                "benchmark-method"
+              ],
+              "relevant": [
+                "dense-vs-sparse",
+                "hybrid-rrf"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            }
+          ]
+        },
+        "vector": {
+          "queries": 20,
+          "recall5": 0.925,
+          "ndcg5": 0.8028293498099739,
+          "mrr5": 0.7833333333333333,
+          "perQuery": [
+            {
+              "id": "q01",
+              "top": [
+                "refresh-index",
+                "web-worker",
+                "wasm-threads",
+                "benchmark-method",
+                "hnsw"
+              ],
+              "relevant": [
+                "webgpu-wasm",
+                "onnx-runtime-web"
+              ],
+              "recall": 0,
+              "ndcg": 0,
+              "mrr": 0
+            },
+            {
+              "id": "q02",
+              "top": [
+                "bge-model",
+                "int8-quantization",
+                "fulltext-ik",
+                "benchmark-method",
+                "chunking"
+              ],
+              "relevant": [
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q03",
+              "top": [
+                "seekdb-overview",
+                "fulltext-ik",
+                "hybrid-rrf",
+                "dense-vs-sparse",
+                "normalization"
+              ],
+              "relevant": [
+                "hybrid-rrf",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 0.9197207891481876,
+              "mrr": 1
+            },
+            {
+              "id": "q04",
+              "top": [
+                "refresh-index",
+                "incremental-import",
+                "hnsw",
+                "seekdb-js",
+                "dense-vs-sparse"
+              ],
+              "relevant": [
+                "refresh-index",
+                "incremental-import"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q05",
+              "top": [
+                "retrieval-metrics",
+                "fulltext-ik",
+                "fp16",
+                "hybrid-rrf",
+                "attention"
+              ],
+              "relevant": [
+                "retrieval-metrics"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q06",
+              "top": [
+                "chunking",
+                "chunk-dedupe",
+                "benchmark-method",
+                "wasm-threads",
+                "incremental-import"
+              ],
+              "relevant": [
+                "chunking"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q07",
+              "top": [
+                "batching",
+                "web-worker",
+                "attention",
+                "bge-model",
+                "privacy"
+              ],
+              "relevant": [
+                "web-worker"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q08",
+              "top": [
+                "normalization",
+                "bge-model",
+                "int8-quantization",
+                "attention",
+                "transformers-js"
+              ],
+              "relevant": [
+                "normalization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q09",
+              "top": [
+                "refresh-index",
+                "dense-vs-sparse",
+                "hnsw",
+                "attention",
+                "web-worker"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 0.5,
+              "mrr": 0.3333333333333333
+            },
+            {
+              "id": "q10",
+              "top": [
+                "fulltext-ik",
+                "chunking",
+                "bge-model",
+                "chunk-dedupe",
+                "wasm-threads"
+              ],
+              "relevant": [
+                "fulltext-ik"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q11",
+              "top": [
+                "deployment",
+                "seekdb-overview",
+                "seekdb-js",
+                "wasm-threads",
+                "privacy"
+              ],
+              "relevant": [
+                "deployment",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q12",
+              "top": [
+                "int8-quantization",
+                "fp16",
+                "attention",
+                "wasm-threads",
+                "hnsw"
+              ],
+              "relevant": [
+                "fp16",
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q13",
+              "top": [
+                "model-cache",
+                "transformers-js",
+                "wasm-threads",
+                "seekdb-js",
+                "benchmark-method"
+              ],
+              "relevant": [
+                "transformers-js"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q14",
+              "top": [
+                "model-cache",
+                "wasm-threads",
+                "benchmark-method",
+                "transformers-js",
+                "fp16"
+              ],
+              "relevant": [
+                "model-cache"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q15",
+              "top": [
+                "metadata-filters",
+                "incremental-import",
+                "privacy",
+                "seekdb-overview",
+                "chunking"
+              ],
+              "relevant": [
+                "privacy"
+              ],
+              "recall": 1,
+              "ndcg": 0.5,
+              "mrr": 0.3333333333333333
+            },
+            {
+              "id": "q16",
+              "top": [
+                "batching",
+                "hnsw",
+                "bge-model",
+                "chunking",
+                "refresh-index"
+              ],
+              "relevant": [
+                "batching",
+                "benchmark-method"
+              ],
+              "recall": 0.5,
+              "ndcg": 0.6131471927654584,
+              "mrr": 1
+            },
+            {
+              "id": "q17",
+              "top": [
+                "seekdb-overview",
+                "hnsw",
+                "refresh-index",
+                "normalization",
+                "bge-model"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q18",
+              "top": [
+                "metadata-filters",
+                "seekdb-js",
+                "chunk-dedupe",
+                "normalization",
+                "retrieval-metrics"
+              ],
+              "relevant": [
+                "metadata-filters"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q19",
+              "top": [
+                "benchmark-method",
+                "retrieval-metrics",
+                "privacy",
+                "dense-vs-sparse",
+                "fp16"
+              ],
+              "relevant": [
+                "benchmark-method"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q20",
+              "top": [
+                "dense-vs-sparse",
+                "hybrid-rrf",
+                "fulltext-ik",
+                "retrieval-metrics",
+                "wasm-threads"
+              ],
+              "relevant": [
+                "dense-vs-sparse",
+                "hybrid-rrf"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            }
+          ]
+        },
+        "fulltext": {
+          "queries": 20,
+          "recall5": 0.975,
+          "ndcg5": 0.8711453493052405,
+          "mrr5": 0.85,
+          "perQuery": [
+            {
+              "id": "q01",
+              "top": [
+                "web-worker",
+                "webgpu-wasm",
+                "seekdb-overview",
+                "bge-model",
+                "fp16"
+              ],
+              "relevant": [
+                "webgpu-wasm",
+                "onnx-runtime-web"
+              ],
+              "recall": 0.5,
+              "ndcg": 0.38685280723454163,
+              "mrr": 0.5
+            },
+            {
+              "id": "q02",
+              "top": [
+                "int8-quantization",
+                "bge-model",
+                "chunking",
+                "attention",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q03",
+              "top": [
+                "hybrid-rrf",
+                "seekdb-overview",
+                "dense-vs-sparse",
+                "chunk-dedupe",
+                "retrieval-metrics"
+              ],
+              "relevant": [
+                "hybrid-rrf",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q04",
+              "top": [
+                "hnsw",
+                "refresh-index",
+                "incremental-import",
+                "metadata-filters",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "refresh-index",
+                "incremental-import"
+              ],
+              "recall": 1,
+              "ndcg": 0.6934264036172708,
+              "mrr": 0.5
+            },
+            {
+              "id": "q05",
+              "top": [
+                "fp16",
+                "int8-quantization",
+                "chunk-dedupe",
+                "retrieval-metrics",
+                "seekdb-overview"
+              ],
+              "relevant": [
+                "retrieval-metrics"
+              ],
+              "recall": 1,
+              "ndcg": 0.43067655807339306,
+              "mrr": 0.25
+            },
+            {
+              "id": "q06",
+              "top": [
+                "chunking",
+                "bge-model",
+                "attention",
+                "batching",
+                "chunk-dedupe"
+              ],
+              "relevant": [
+                "chunking"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q07",
+              "top": [
+                "web-worker",
+                "onnx-runtime-web",
+                "batching",
+                "privacy",
+                "webgpu-wasm"
+              ],
+              "relevant": [
+                "web-worker"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q08",
+              "top": [
+                "normalization",
+                "bge-model",
+                "transformers-js",
+                "int8-quantization",
+                "refresh-index"
+              ],
+              "relevant": [
+                "normalization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q09",
+              "top": [
+                "hnsw",
+                "seekdb-js",
+                "dense-vs-sparse",
+                "int8-quantization",
+                "hybrid-rrf"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q10",
+              "top": [
+                "fulltext-ik",
+                "seekdb-js",
+                "seekdb-overview",
+                "wasm-threads",
+                "batching"
+              ],
+              "relevant": [
+                "fulltext-ik"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q11",
+              "top": [
+                "deployment",
+                "seekdb-overview",
+                "privacy",
+                "attention",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "deployment",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q12",
+              "top": [
+                "fp16",
+                "int8-quantization",
+                "benchmark-method",
+                "retrieval-metrics",
+                "webgpu-wasm"
+              ],
+              "relevant": [
+                "fp16",
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q13",
+              "top": [
+                "transformers-js",
+                "privacy",
+                "model-cache",
+                "wasm-threads",
+                "onnx-runtime-web"
+              ],
+              "relevant": [
+                "transformers-js"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q14",
+              "top": [
+                "model-cache",
+                "onnx-runtime-web",
+                "benchmark-method",
+                "fp16",
+                "attention"
+              ],
+              "relevant": [
+                "model-cache"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q15",
+              "top": [
+                "incremental-import",
+                "metadata-filters",
+                "hnsw",
+                "privacy",
+                "chunking"
+              ],
+              "relevant": [
+                "privacy"
+              ],
+              "recall": 1,
+              "ndcg": 0.43067655807339306,
+              "mrr": 0.25
+            },
+            {
+              "id": "q16",
+              "top": [
+                "batching",
+                "refresh-index",
+                "hnsw",
+                "retrieval-metrics",
+                "benchmark-method"
+              ],
+              "relevant": [
+                "batching",
+                "benchmark-method"
+              ],
+              "recall": 1,
+              "ndcg": 0.8503449055347546,
+              "mrr": 1
+            },
+            {
+              "id": "q17",
+              "top": [
+                "hnsw",
+                "seekdb-js",
+                "normalization",
+                "refresh-index",
+                "bge-model"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q18",
+              "top": [
+                "metadata-filters",
+                "seekdb-overview",
+                "privacy",
+                "seekdb-js",
+                "batching"
+              ],
+              "relevant": [
+                "metadata-filters"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q19",
+              "top": [
+                "seekdb-overview",
+                "benchmark-method",
+                "seekdb-js",
+                "privacy",
+                "bge-model"
+              ],
+              "relevant": [
+                "benchmark-method"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q20",
+              "top": [
+                "dense-vs-sparse",
+                "hybrid-rrf",
+                "fulltext-ik",
+                "wasm-threads",
+                "hnsw"
+              ],
+              "relevant": [
+                "dense-vs-sparse",
+                "hybrid-rrf"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            }
+          ]
+        }
+      },
+      "batches": [
+        {
+          "batchSize": 1,
+          "texts": 36,
+          "totalMs": 11538.2,
+          "textsPerSecond": 3.12,
+          "runs": 2
+        },
+        {
+          "batchSize": 8,
+          "texts": 36,
+          "totalMs": 16211,
+          "textsPerSecond": 2.22,
+          "runs": 2
+        },
+        {
+          "batchSize": 16,
+          "texts": 36,
+          "totalMs": 15934.5,
+          "textsPerSecond": 2.26,
+          "runs": 2
+        },
+        {
+          "batchSize": 32,
+          "texts": 36,
+          "totalMs": 11989.4,
+          "textsPerSecond": 3,
+          "runs": 2
+        }
+      ]
+    },
+    {
+      "id": "fp16-webgpu",
+      "label": "FP16 · WebGPU",
+      "backend": "webgpu",
+      "precision": "fp16",
+      "engine": {
+        "backend": "webgpu",
+        "precision": "fp16",
+        "device": "webgpu",
+        "deviceLabel": "nvidia · blackwell",
+        "fallbackReason": null,
+        "loadMs": 14398,
+        "tokenizerMs": 174,
+        "modelMs": 14225,
+        "modelFile": "model_fp16.onnx",
+        "modelBytes": 0,
+        "dtype": "fp16",
+        "requestedBackend": "webgpu",
+        "requestedPrecision": "fp16",
+        "crossOriginIsolated": true,
+        "threads": 4
+      },
+      "modelBytes": 47937760,
+      "compression": 1.988,
+      "collection": {
+        "documents": 27,
+        "chunks": 54
+      },
+      "ingestion": {
+        "chunkMs": 330,
+        "embedMs": 5969,
+        "writeMs": 57042,
+        "refreshMs": 57042,
+        "roundTripMs": 57314.5,
+        "verified": true,
+        "chunks": 54
+      },
+      "latency": {
+        "queryEmbedP50": 78.6,
+        "queryEmbedP95": 91.8,
+        "searchP50": 112.2,
+        "searchP95": 167.4,
+        "e2eP50": 190.9,
+        "e2eP95": 251.9
+      },
+      "quality": {
+        "hybrid": {
+          "queries": 20,
+          "recall5": 0.95,
+          "ndcg5": 0.8840790148145551,
+          "mrr5": 0.8916666666666668,
+          "perQuery": [
+            {
+              "id": "q01",
+              "top": [
+                "web-worker",
+                "webgpu-wasm",
+                "bge-model",
+                "seekdb-overview",
+                "wasm-threads"
+              ],
+              "relevant": [
+                "webgpu-wasm",
+                "onnx-runtime-web"
+              ],
+              "recall": 0.5,
+              "ndcg": 0.38685280723454163,
+              "mrr": 0.5
+            },
+            {
+              "id": "q02",
+              "top": [
+                "bge-model",
+                "int8-quantization",
+                "chunking",
+                "fulltext-ik",
+                "benchmark-method"
+              ],
+              "relevant": [
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q03",
+              "top": [
+                "seekdb-overview",
+                "hybrid-rrf",
+                "dense-vs-sparse",
+                "normalization",
+                "retrieval-metrics"
+              ],
+              "relevant": [
+                "hybrid-rrf",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q04",
+              "top": [
+                "refresh-index",
+                "hnsw",
+                "incremental-import",
+                "metadata-filters",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "refresh-index",
+                "incremental-import"
+              ],
+              "recall": 1,
+              "ndcg": 0.9197207891481876,
+              "mrr": 1
+            },
+            {
+              "id": "q05",
+              "top": [
+                "fp16",
+                "retrieval-metrics",
+                "int8-quantization",
+                "chunk-dedupe",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "retrieval-metrics"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q06",
+              "top": [
+                "chunking",
+                "chunk-dedupe",
+                "benchmark-method",
+                "batching",
+                "bge-model"
+              ],
+              "relevant": [
+                "chunking"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q07",
+              "top": [
+                "web-worker",
+                "batching",
+                "privacy",
+                "bge-model",
+                "int8-quantization"
+              ],
+              "relevant": [
+                "web-worker"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q08",
+              "top": [
+                "normalization",
+                "bge-model",
+                "int8-quantization",
+                "transformers-js",
+                "attention"
+              ],
+              "relevant": [
+                "normalization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q09",
+              "top": [
+                "hnsw",
+                "dense-vs-sparse",
+                "attention",
+                "fp16",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q10",
+              "top": [
+                "fulltext-ik",
+                "seekdb-overview",
+                "bge-model",
+                "batching",
+                "dense-vs-sparse"
+              ],
+              "relevant": [
+                "fulltext-ik"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q11",
+              "top": [
+                "deployment",
+                "seekdb-overview",
+                "privacy",
+                "seekdb-js",
+                "wasm-threads"
+              ],
+              "relevant": [
+                "deployment",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q12",
+              "top": [
+                "fp16",
+                "int8-quantization",
+                "attention",
+                "benchmark-method",
+                "hnsw"
+              ],
+              "relevant": [
+                "fp16",
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q13",
+              "top": [
+                "transformers-js",
+                "model-cache",
+                "wasm-threads",
+                "privacy",
+                "seekdb-overview"
+              ],
+              "relevant": [
+                "transformers-js"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q14",
+              "top": [
+                "model-cache",
+                "onnx-runtime-web",
+                "benchmark-method",
+                "fp16",
+                "transformers-js"
+              ],
+              "relevant": [
+                "model-cache"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q15",
+              "top": [
+                "metadata-filters",
+                "incremental-import",
+                "privacy",
+                "seekdb-overview",
+                "hnsw"
+              ],
+              "relevant": [
+                "privacy"
+              ],
+              "recall": 1,
+              "ndcg": 0.5,
+              "mrr": 0.3333333333333333
+            },
+            {
+              "id": "q16",
+              "top": [
+                "batching",
+                "hnsw",
+                "refresh-index",
+                "onnx-runtime-web",
+                "chunking"
+              ],
+              "relevant": [
+                "batching",
+                "benchmark-method"
+              ],
+              "recall": 0.5,
+              "ndcg": 0.6131471927654584,
+              "mrr": 1
+            },
+            {
+              "id": "q17",
+              "top": [
+                "hnsw",
+                "refresh-index",
+                "seekdb-js",
+                "seekdb-overview",
+                "bge-model"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q18",
+              "top": [
+                "metadata-filters",
+                "seekdb-js",
+                "dense-vs-sparse",
+                "refresh-index",
+                "seekdb-overview"
+              ],
+              "relevant": [
+                "metadata-filters"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q19",
+              "top": [
+                "benchmark-method",
+                "privacy",
+                "retrieval-metrics",
+                "bge-model",
+                "attention"
+              ],
+              "relevant": [
+                "benchmark-method"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q20",
+              "top": [
+                "dense-vs-sparse",
+                "hybrid-rrf",
+                "fulltext-ik",
+                "hnsw",
+                "retrieval-metrics"
+              ],
+              "relevant": [
+                "dense-vs-sparse",
+                "hybrid-rrf"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            }
+          ]
+        },
+        "vector": {
+          "queries": 20,
+          "recall5": 0.925,
+          "ndcg5": 0.8187503349954188,
+          "mrr5": 0.8,
+          "perQuery": [
+            {
+              "id": "q01",
+              "top": [
+                "refresh-index",
+                "web-worker",
+                "wasm-threads",
+                "benchmark-method",
+                "privacy"
+              ],
+              "relevant": [
+                "webgpu-wasm",
+                "onnx-runtime-web"
+              ],
+              "recall": 0,
+              "ndcg": 0,
+              "mrr": 0
+            },
+            {
+              "id": "q02",
+              "top": [
+                "bge-model",
+                "int8-quantization",
+                "benchmark-method",
+                "chunking",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q03",
+              "top": [
+                "seekdb-overview",
+                "hybrid-rrf",
+                "fulltext-ik",
+                "normalization",
+                "dense-vs-sparse"
+              ],
+              "relevant": [
+                "hybrid-rrf",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q04",
+              "top": [
+                "refresh-index",
+                "incremental-import",
+                "hnsw",
+                "dense-vs-sparse",
+                "seekdb-js"
+              ],
+              "relevant": [
+                "refresh-index",
+                "incremental-import"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q05",
+              "top": [
+                "retrieval-metrics",
+                "fp16",
+                "fulltext-ik",
+                "hybrid-rrf",
+                "attention"
+              ],
+              "relevant": [
+                "retrieval-metrics"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q06",
+              "top": [
+                "chunking",
+                "chunk-dedupe",
+                "benchmark-method",
+                "incremental-import",
+                "wasm-threads"
+              ],
+              "relevant": [
+                "chunking"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q07",
+              "top": [
+                "batching",
+                "privacy",
+                "web-worker",
+                "attention",
+                "bge-model"
+              ],
+              "relevant": [
+                "web-worker"
+              ],
+              "recall": 1,
+              "ndcg": 0.5,
+              "mrr": 0.3333333333333333
+            },
+            {
+              "id": "q08",
+              "top": [
+                "normalization",
+                "bge-model",
+                "int8-quantization",
+                "transformers-js",
+                "attention"
+              ],
+              "relevant": [
+                "normalization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q09",
+              "top": [
+                "refresh-index",
+                "dense-vs-sparse",
+                "hnsw",
+                "attention",
+                "fp16"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 0.5,
+              "mrr": 0.3333333333333333
+            },
+            {
+              "id": "q10",
+              "top": [
+                "fulltext-ik",
+                "chunking",
+                "bge-model",
+                "wasm-threads",
+                "chunk-dedupe"
+              ],
+              "relevant": [
+                "fulltext-ik"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q11",
+              "top": [
+                "deployment",
+                "seekdb-overview",
+                "seekdb-js",
+                "wasm-threads",
+                "onnx-runtime-web"
+              ],
+              "relevant": [
+                "deployment",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q12",
+              "top": [
+                "fp16",
+                "int8-quantization",
+                "attention",
+                "hnsw",
+                "bge-model"
+              ],
+              "relevant": [
+                "fp16",
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q13",
+              "top": [
+                "model-cache",
+                "transformers-js",
+                "wasm-threads",
+                "seekdb-js",
+                "benchmark-method"
+              ],
+              "relevant": [
+                "transformers-js"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q14",
+              "top": [
+                "model-cache",
+                "wasm-threads",
+                "benchmark-method",
+                "transformers-js",
+                "fp16"
+              ],
+              "relevant": [
+                "model-cache"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q15",
+              "top": [
+                "metadata-filters",
+                "incremental-import",
+                "privacy",
+                "seekdb-overview",
+                "chunk-dedupe"
+              ],
+              "relevant": [
+                "privacy"
+              ],
+              "recall": 1,
+              "ndcg": 0.5,
+              "mrr": 0.3333333333333333
+            },
+            {
+              "id": "q16",
+              "top": [
+                "batching",
+                "hnsw",
+                "bge-model",
+                "chunking",
+                "onnx-runtime-web"
+              ],
+              "relevant": [
+                "batching",
+                "benchmark-method"
+              ],
+              "recall": 0.5,
+              "ndcg": 0.6131471927654584,
+              "mrr": 1
+            },
+            {
+              "id": "q17",
+              "top": [
+                "hnsw",
+                "seekdb-overview",
+                "refresh-index",
+                "normalization",
+                "seekdb-js"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q18",
+              "top": [
+                "metadata-filters",
+                "seekdb-js",
+                "chunk-dedupe",
+                "dense-vs-sparse",
+                "retrieval-metrics"
+              ],
+              "relevant": [
+                "metadata-filters"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q19",
+              "top": [
+                "benchmark-method",
+                "retrieval-metrics",
+                "privacy",
+                "fp16",
+                "int8-quantization"
+              ],
+              "relevant": [
+                "benchmark-method"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q20",
+              "top": [
+                "dense-vs-sparse",
+                "hybrid-rrf",
+                "fulltext-ik",
+                "retrieval-metrics",
+                "wasm-threads"
+              ],
+              "relevant": [
+                "dense-vs-sparse",
+                "hybrid-rrf"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            }
+          ]
+        },
+        "fulltext": {
+          "queries": 20,
+          "recall5": 0.975,
+          "ndcg5": 0.8711453493052405,
+          "mrr5": 0.85,
+          "perQuery": [
+            {
+              "id": "q01",
+              "top": [
+                "web-worker",
+                "webgpu-wasm",
+                "seekdb-overview",
+                "bge-model",
+                "fp16"
+              ],
+              "relevant": [
+                "webgpu-wasm",
+                "onnx-runtime-web"
+              ],
+              "recall": 0.5,
+              "ndcg": 0.38685280723454163,
+              "mrr": 0.5
+            },
+            {
+              "id": "q02",
+              "top": [
+                "int8-quantization",
+                "bge-model",
+                "chunking",
+                "attention",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q03",
+              "top": [
+                "hybrid-rrf",
+                "seekdb-overview",
+                "dense-vs-sparse",
+                "chunk-dedupe",
+                "retrieval-metrics"
+              ],
+              "relevant": [
+                "hybrid-rrf",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q04",
+              "top": [
+                "hnsw",
+                "refresh-index",
+                "incremental-import",
+                "metadata-filters",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "refresh-index",
+                "incremental-import"
+              ],
+              "recall": 1,
+              "ndcg": 0.6934264036172708,
+              "mrr": 0.5
+            },
+            {
+              "id": "q05",
+              "top": [
+                "fp16",
+                "int8-quantization",
+                "chunk-dedupe",
+                "retrieval-metrics",
+                "seekdb-overview"
+              ],
+              "relevant": [
+                "retrieval-metrics"
+              ],
+              "recall": 1,
+              "ndcg": 0.43067655807339306,
+              "mrr": 0.25
+            },
+            {
+              "id": "q06",
+              "top": [
+                "chunking",
+                "bge-model",
+                "attention",
+                "batching",
+                "chunk-dedupe"
+              ],
+              "relevant": [
+                "chunking"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q07",
+              "top": [
+                "web-worker",
+                "onnx-runtime-web",
+                "batching",
+                "privacy",
+                "webgpu-wasm"
+              ],
+              "relevant": [
+                "web-worker"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q08",
+              "top": [
+                "normalization",
+                "bge-model",
+                "transformers-js",
+                "int8-quantization",
+                "refresh-index"
+              ],
+              "relevant": [
+                "normalization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q09",
+              "top": [
+                "hnsw",
+                "seekdb-js",
+                "dense-vs-sparse",
+                "int8-quantization",
+                "hybrid-rrf"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q10",
+              "top": [
+                "fulltext-ik",
+                "seekdb-js",
+                "seekdb-overview",
+                "wasm-threads",
+                "batching"
+              ],
+              "relevant": [
+                "fulltext-ik"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q11",
+              "top": [
+                "deployment",
+                "seekdb-overview",
+                "privacy",
+                "attention",
+                "fulltext-ik"
+              ],
+              "relevant": [
+                "deployment",
+                "seekdb-overview"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q12",
+              "top": [
+                "fp16",
+                "int8-quantization",
+                "benchmark-method",
+                "retrieval-metrics",
+                "webgpu-wasm"
+              ],
+              "relevant": [
+                "fp16",
+                "int8-quantization"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q13",
+              "top": [
+                "transformers-js",
+                "privacy",
+                "model-cache",
+                "wasm-threads",
+                "onnx-runtime-web"
+              ],
+              "relevant": [
+                "transformers-js"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q14",
+              "top": [
+                "model-cache",
+                "onnx-runtime-web",
+                "benchmark-method",
+                "fp16",
+                "attention"
+              ],
+              "relevant": [
+                "model-cache"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q15",
+              "top": [
+                "incremental-import",
+                "metadata-filters",
+                "hnsw",
+                "privacy",
+                "chunking"
+              ],
+              "relevant": [
+                "privacy"
+              ],
+              "recall": 1,
+              "ndcg": 0.43067655807339306,
+              "mrr": 0.25
+            },
+            {
+              "id": "q16",
+              "top": [
+                "batching",
+                "refresh-index",
+                "hnsw",
+                "retrieval-metrics",
+                "benchmark-method"
+              ],
+              "relevant": [
+                "batching",
+                "benchmark-method"
+              ],
+              "recall": 1,
+              "ndcg": 0.8503449055347546,
+              "mrr": 1
+            },
+            {
+              "id": "q17",
+              "top": [
+                "hnsw",
+                "seekdb-js",
+                "normalization",
+                "refresh-index",
+                "bge-model"
+              ],
+              "relevant": [
+                "hnsw"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q18",
+              "top": [
+                "metadata-filters",
+                "seekdb-overview",
+                "privacy",
+                "seekdb-js",
+                "batching"
+              ],
+              "relevant": [
+                "metadata-filters"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            },
+            {
+              "id": "q19",
+              "top": [
+                "seekdb-overview",
+                "benchmark-method",
+                "seekdb-js",
+                "privacy",
+                "bge-model"
+              ],
+              "relevant": [
+                "benchmark-method"
+              ],
+              "recall": 1,
+              "ndcg": 0.6309297535714575,
+              "mrr": 0.5
+            },
+            {
+              "id": "q20",
+              "top": [
+                "dense-vs-sparse",
+                "hybrid-rrf",
+                "fulltext-ik",
+                "wasm-threads",
+                "hnsw"
+              ],
+              "relevant": [
+                "dense-vs-sparse",
+                "hybrid-rrf"
+              ],
+              "recall": 1,
+              "ndcg": 1,
+              "mrr": 1
+            }
+          ]
+        }
+      },
+      "batches": [
+        {
+          "batchSize": 1,
+          "texts": 36,
+          "totalMs": 2728.9,
+          "textsPerSecond": 13.19,
+          "runs": 2
+        },
+        {
+          "batchSize": 8,
+          "texts": 36,
+          "totalMs": 679.2,
+          "textsPerSecond": 53.01,
+          "runs": 2
+        },
+        {
+          "batchSize": 16,
+          "texts": 36,
+          "totalMs": 507.8,
+          "textsPerSecond": 70.89,
+          "runs": 2
+        },
+        {
+          "batchSize": 32,
+          "texts": 36,
+          "totalMs": 723.6,
+          "textsPerSecond": 49.75,
+          "runs": 2
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0",
+  "hardwareConcurrency": 32,
+  "deviceMemory": 16,
+  "crossOriginIsolated": true,
+  "language": "zh-CN",
+  "webgpu": true,
+  "gpuAdapter": "nvidia · blackwell"
+}

@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.env
+seekdb-data/
+public/models/
+public/ort/
+benchmark/results/
+benchmark/last-*.json
+.research/
+*.log
+.DS_Store
+Thumbs.db
+*.tsbuildinfo

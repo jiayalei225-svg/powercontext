@@ -1,0 +1,4 @@
+config,backend,precision,model_mib,compression,load_ms,doc_embed_ms_54_chunks,batch16_texts_per_s,query_embed_p50_ms,seekdb_search_p50_ms,e2e_p50_ms,recall5,ndcg5,mrr5,vector_recall5,fulltext_recall5
+FP32 · WASM 基线,wasm,fp32,90.88,1,7288,24319.8,1.91,78.8,72.5,150.1,0.9500,0.8841,0.8917,0.9250,0.9750
+INT8 · WASM,wasm,q8,23.32,3.897,9796,23760.3,2.26,78.5,103.5,185.1,0.9500,0.8779,0.8792,0.9250,0.9750
+FP16 · WebGPU,webgpu,fp16,45.72,1.988,14398,5969,70.89,78.6,112.2,190.9,0.9500,0.8841,0.8917,0.9250,0.9750

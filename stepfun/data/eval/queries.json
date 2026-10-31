@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "name": "Edge Atlas 检索评测集",
+  "description": "20 条中文查询，覆盖语义改写、精确术语与参数名。qrels 为文档级二值标注。",
+  "topK": 5,
+  "queries": [
+    {
+      "id": "q01",
+      "query": "浏览器不支持 WebGPU 时，应用怎样继续完成向量检索？",
+      "relevant": [
+        "webgpu-wasm",
+        "onnx-runtime-web"
+      ]
+    },
+    {
+      "id": "q02",
+      "query": "怎样把 95MB 的中文 BERT 模型压缩到 24MB 左右？",
+      "relevant": [
+        "int8-quantization"
+      ]
+    },
+    {
+      "id": "q03",
+      "query": "seekdb 如何把关键词和语义两路结果融合排序？",
+      "relevant": [
+        "hybrid-rrf",
+        "seekdb-overview"
+      ]
+    },
+    {
+      "id": "q04",
+      "query": "新导入的文档写入后，怎样确保立刻能被向量索引检索到？",
+      "relevant": [
+        "refresh-index",
+        "incremental-import"
+      ]
+    },
+    {
+      "id": "q05",
+      "query": "评估检索排序质量时 nDCG 和 MRR 有什么区别？",
+      "relevant": [
+        "retrieval-metrics"
+      ]
+    },
+    {
+      "id": "q06",
+      "query": "长文档如何切块才能避免超过模型 512 token 限制？",
+      "relevant": [
+        "chunking"
+      ]
+    },
+    {
+      "id": "q07",
+      "query": "把推理放到 Web Worker 有什么好处？",
+      "relevant": [
+        "web-worker"
+      ]
+    },
+    {
+      "id": "q08",
+      "query": "余弦相似度计算前为什么要做 L2 归一化？",
+      "relevant": [
+        "normalization"
+      ]
+    },
+    {
+      "id": "q09",
+      "query": "HNSW 的 ef_search 参数如何影响召回率与延迟？",
+      "relevant": [
+        "hnsw"
+      ]
+    },
+    {
+      "id": "q10",
+      "query": "IK 分词器适合处理哪类文本，它有哪些模式？",
+      "relevant": [
+        "fulltext-ik"
+      ]
+    },
+    {
+      "id": "q11",
+      "query": "seekdb 可以怎样部署，必须单独启动服务器吗？",
+      "relevant": [
+        "deployment",
+        "seekdb-overview"
+      ]
+    },
+    {
+      "id": "q12",
+      "query": "FP16 和 INT8 量化分别在什么硬件上更有优势？",
+      "relevant": [
+        "fp16",
+        "int8-quantization"
+      ]
+    },
+    {
+      "id": "q13",
+      "query": "Transformers.js 怎样从本地目录加载 ONNX 模型？",
+      "relevant": [
+        "transformers-js"
+      ]
+    },
+    {
+      "id": "q14",
+      "query": "首次加载模型为什么比第二次加载慢很多？",
+      "relevant": [
+        "model-cache"
+      ]
+    },
+    {
+      "id": "q15",
+      "query": "个人知识库怎样保证文档内容不离开本机？",
+      "relevant": [
+        "privacy"
+      ]
+    },
+    {
+      "id": "q16",
+      "query": "批量 embedding 的 batch size 越大吞吐越高吗？",
+      "relevant": [
+        "batching",
+        "benchmark-method"
+      ]
+    },
+    {
+      "id": "q17",
+      "query": "seekdb 的向量索引有哪些 HNSW 变体，适合什么场景？",
+      "relevant": [
+        "hnsw"
+      ]
+    },
+    {
+      "id": "q18",
+      "query": "如何用元数据过滤把检索限制在某个集合内？",
+      "relevant": [
+        "metadata-filters"
+      ]
+    },
+    {
+      "id": "q19",
+      "query": "评测端侧检索需要固定哪些实验条件，如何计时？",
+      "relevant": [
+        "benchmark-method"
+      ]
+    },
+    {
+      "id": "q20",
+      "query": "稠密检索和关键词检索各自有什么优缺点？",
+      "relevant": [
+        "dense-vs-sparse",
+        "hybrid-rrf"
+      ]
+    }
+  ]
+}

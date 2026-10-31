@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>Edge Atlas · 一页技术说明</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #0b0d0b; }
+  body {
+    color: #f1eee4;
+    font-family: "Microsoft YaHei UI", "Noto Sans SC", "Segoe UI", sans-serif;
+    font-size: 8.8pt;
+    line-height: 1.65;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    background:
+      radial-gradient(ellipse 60% 35% at 78% 0%, rgba(217,255,106,.10), transparent 70%),
+      #0b0d0b;
+  }
+  .page {
+    width: 210mm;
+    height: 297mm;
+    padding: 10mm 11mm 9mm;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .mono { font-family: "Cascadia Mono", Consolas, monospace; letter-spacing: .03em; }
+  .eyebrow { font-family: "Cascadia Mono", Consolas, monospace; font-size: 6pt; letter-spacing: .15em; text-transform: uppercase; color: #8e968d; }
+  header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; border-bottom: 1px solid #394439; padding-bottom: 7px; }
+  .brand { display: flex; align-items: center; gap: 8px; }
+  .mark { width: 25px; height: 25px; border: 1px solid #d9ff6a; color: #d9ff6a; display: grid; place-items: center; font-family: "Cascadia Mono", monospace; font-size: 6.5pt; }
+  h1 { font-size: 21pt; line-height: 1.02; letter-spacing: -.025em; margin: 5px 0 2px; font-weight: 600; }
+  .sub { color: #939c91; font-size: 7.2pt; margin: 0; }
+  .meta { text-align: right; color: #939c91; font-size: 6.3pt; line-height: 1.55; }
+  .meta strong { color: #d9ff6a; font-weight: 500; }
+  .grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 0 16px; margin-top: 8px; }
+  section { break-inside: avoid; margin-bottom: 9px; }
+  h2 { font-size: 9.1pt; margin: 0 0 4px; color: #d9ff6a; font-weight: 500; letter-spacing: .02em; }
+  h2 span { color: #6f796f; font-family: "Cascadia Mono", monospace; font-size: 5.8pt; font-weight: 400; margin-left: 4px; letter-spacing: .08em; }
+  p { margin: 0 0 3px; color: #c6c9c0; }
+  ul { margin: 0; padding-left: 11px; color: #c6c9c0; }
+  li { margin-bottom: 3px; }
+  b, strong { color: #f1eee4; font-weight: 600; }
+  .accent { color: #d9ff6a; }
+  .small { color: #7f887e; font-size: 6.4pt; }
+  code { font-family: "Cascadia Mono", Consolas, monospace; font-size: 6.2pt; color: #d9ff6a; background: rgba(217,255,106,.07); padding: 0 2px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 4px; font-size: 7.15pt; }
+  th { text-align: left; color: #8e968d; font-family: "Cascadia Mono", monospace; font-size: 5.6pt; font-weight: 400; letter-spacing: .04em; border-bottom: 1px solid #394439; padding: 3px 4px; white-space: nowrap; }
+  td { padding: 3.2px 4px; border-bottom: 1px solid #222a22; color: #d6d3c7; vertical-align: top; }
+  td.num { font-family: "Cascadia Mono", monospace; font-size: 6.45pt; }
+  .best { color: #d9ff6a; font-weight: 600; }
+  .table-note { font-size: 5.9pt; color: #7f887e; margin-top: 3px; }
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 4px; }
+  .fact { border: 1px solid #2f382f; padding: 4px 5px; background: rgba(255,255,255,.015); }
+  .fact .k { font-family: "Cascadia Mono", monospace; font-size: 5.4pt; color: #7f887e; display: block; }
+  .fact .v { font-size: 7.4pt; color: #f1eee4; font-weight: 600; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+  .scope { border-left: 1px solid #d9ff6a; padding-left: 7px; margin-top: 3px; }
+  footer { margin-top: auto; border-top: 1px solid #2f382f; padding-top: 5px; display: flex; justify-content: space-between; gap: 12px; color: #6f796f; font-size: 5.9pt; }
+  .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: #2f382f; border: 1px solid #2f382f; margin-top: 7px; }
+  .flow-step { background: #111611; padding: 7px 8px; display: flex; flex-direction: column; gap: 1px; }
+  .flow-step .no { font-family: "Cascadia Mono", monospace; color: #d9ff6a; font-size: 6pt; letter-spacing: .08em; }
+  .flow-step b { font-size: 8.2pt; font-weight: 600; color: #f1eee4; }
+  .flow-step small { font-size: 6.2pt; color: #7f887e; line-height: 1.35; }
+  .flow-caption { display: flex; justify-content: space-between; margin-top: 4px; color: #6f796f; font-size: 6pt; }
+  .footer-mark { color: #d9ff6a; }
+  .kicker { display: flex; align-items: center; gap: 5px; }
+  .dot { width: 4px; height: 4px; border-radius: 50%; background: #d9ff6a; display: inline-block; }
+  .hero-line { height: 2px; width: 38px; background: #d9ff6a; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div>
+      <div class="eyebrow kicker"><span class="dot"></span> STEPFUN COMPETITION · EDGE ATLAS</div>
+      <h1>本地向量化，数据库内混合检索。</h1>
+      <p class="sub">浏览器端 BGE 推理 + seekdb HNSW/IK + RRF · 一页技术说明</p>
+    </div>
+    <div class="meta">
+      <div><strong>INFERENCE</strong> browser / worker</div>
+      <div><strong>MODEL</strong> bge-small-zh-v1.5</div>
+      <div><strong>DB</strong> seekdb 1.4 · server mode</div>
+    </div>
+  </header>
+
+  <div class="grid">
+    <div>
+      <section>
+        <h2>1. 模型与量化 <span>MODEL</span></h2>
+        <p>模型：<b>BAAI/bge-small-zh-v1.5</b>（4 层 BERT，hidden 512，max 512 token，MIT）；ONNX 版 <code>Xenova/bge-small-zh-v1.5</code> @ <code>75c43b06</code>。CLS pooling + L2 normalize；query 侧加官方检索 instruction，文档侧不加。</p>
+        <p>量化：ONNX Runtime <b>dynamic quantization</b>，weight-only、QUInt8、per-channel；独立复现 artifact 24,020,718 B，与提交件相差 0.041%，合成输入 cosine 0.9978。另提供 FP16 权重。</p>
+        <div class="facts">
+          <div class="fact"><span class="k">FP32 BUNDLE</span><span class="v">90.88 MiB</span></div>
+          <div class="fact"><span class="k">FP16 / INT8</span><span class="v">45.72 / 23.32 MiB</span></div>
+          <div class="fact"><span class="k">INT8 压缩</span><span class="v">3.90×</span></div>
+        </div>
+        <p class="small" style="margin-top:4px">质量：FP32 nDCG@5 0.884 → INT8 0.878（−0.69%）；Recall@5 均为 0.950；FP16 与 FP32 排名一致。评测集 20 queries / 27 docs / topK=5。</p>
+      </section>
+
+      <section>
+        <h2>2. 端侧运行与降级 <span>RUNTIME</span></h2>
+        <p>Transformers.js 4.3.2 + ONNX Runtime Web，全部在 Dedicated Worker 内完成；<code>allowRemoteModels=false</code>，同源加载 ONNX 与 ORT wasm。</p>
+        <p>自动探测 <code>navigator.gpu</code> / <code>requestAdapter()</code>：成功则 <b>WebGPU + FP16</b>；无 adapter、无 <code>navigator.gpu</code> 或会话失败则自动重建 <b>WASM</b> session，保留已有 collection 的 FP16 精度，并显示实际后端、精度、device 与降级原因。</p>
+        <p class="small">WASM 4 threads（COOP/COEP）；无 GPU 实测 HUD <span class="accent">WASM / FP16</span>，adapter 返回 null 的提示可见，检索继续。</p>
+      </section>
+
+      <section>
+        <h2>3. seekdb 数据层 <span>STORAGE</span></h2>
+        <p>每个知识库独立 collection：<b>HNSW(512, cosine, M=16, efC=200, efS=100)</b> + <b>IK smart</b> 全文索引；<code>embeddingFunction=null</code>，向量仅在浏览器生成。块保存原文、向量与 docId/title/chunkIndex/charStart/precision 元数据；注册表保存集合标题与计数。</p>
+        <p>检索：<code>collection.hybridSearch({ query:{whereDocument:{$contains:...}}, knn:{queryEmbeddings:[...]}, rank:{rrf:{rankWindowSize:40, rankConstant:60}} })</code>。两路召回、过滤、RRF 融合均由 seekdb <b>DBMS_HYBRID_SEARCH</b> 完成，客户端只按 docId 聚合。</p>
+        <p>写入：16 块/批 <code>add</code>，同 docId 先删旧块；完成后 <code>refresh_index()</code>，用新块自身向量做 topK 自查询验证，失败重试并清理；注册表同步更新。增量导入、替换和集合切换后的结果均按当前 collection 隔离。</p>
+      </section>
+    </div>
+
+    <div>
+      <section>
+        <h2>4. 性能与质量实测 <span>RESULTS</span></h2>
+        <table>
+          <thead>
+            <tr><th>配置</th><th>Bundle</th><th>54 块向量化</th><th>batch16</th><th>查询编码 p50</th><th>DB 检索 p50</th><th>E2E p50</th><th>Recall@5</th><th>nDCG@5</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>FP32 · WASM</td><td class="num">90.88 MiB</td><td class="num">24.32 s</td><td class="num">1.91/s</td><td class="num">78.8 ms</td><td class="num">72.5 ms</td><td class="num">150.1 ms</td><td class="num">0.950</td><td class="num">0.884</td></tr>
+            <tr><td>INT8 · WASM</td><td class="num">23.32 MiB</td><td class="num">23.76 s</td><td class="num">2.26/s</td><td class="num">78.5 ms</td><td class="num">103.5 ms</td><td class="num">185.1 ms</td><td class="num">0.950</td><td class="num">0.878</td></tr>
+            <tr><td>FP16 · WebGPU</td><td class="num">45.72 MiB</td><td class="num">5.97 s</td><td class="num best">70.89/s</td><td class="num">78.6 ms</td><td class="num">112.2 ms</td><td class="num">190.9 ms</td><td class="num">0.950</td><td class="num">0.884</td></tr>
+          </tbody>
+        </table>
+        <p class="table-note">同设备、同语料、同 query 集、同 seekdb 索引；p50 为 20 条 query 的中位数；batch 吞吐为 36 个固定块、预热后两轮中位数。设备：Ryzen 9 8940HX / RTX 5060 Laptop / Edge 156 headless / 16GB。</p>
+        <ul style="margin-top:4px">
+          <li><b>WebGPU 的 batch 16 吞吐为 WASM 的 31×</b>（70.89 vs 2.26 texts/s），batch 32 反而回落到 49.75/s，默认工作点选 16。</li>
+          <li>INT8 的主要收益是体积（3.90×）和加载；本机 ORT Web WASM 的单条吞吐没有优势，报告保留事实，不把“更小”写成“更快”。</li>
+          <li>单条查询编码约 78 ms，端到端 150–191 ms；WebGPU 的收益集中在文档批处理，而非单条 kernel launch。</li>
+          <li>冷/热初始化（同会话重载）：20.92 s → 17.91 s；ONNX 以 no-store 提供，规避 Chromium 大 body 的 <code>ERR_CACHE_WRITE_FAILURE</code>，热启动收益来自连接与浏览器内部缓存。</li>
+          <li>混合检索 vs 单路（FP32）：Hybrid / Vector Recall@5 = 0.950 / 0.925，nDCG@5 = 0.884 / 0.819；RRF 兼顾召回与排序。</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>5. 状态、刷新与可复现 <span>STATE</span></h2>
+        <div class="two">
+          <ul>
+            <li>集合注册表持久化标题、文档数、块数、最近导入时间；切换只查询当前 collection。</li>
+            <li>增量导入按 docId 替换；失败清理新块；刷新后自查询验证可检索。</li>
+          </ul>
+          <ul>
+            <li><code>npm install</code> → <code>npm run setup:model</code> → <code>docker compose up -d seekdb</code> → <code>npm run build && npm start</code>。</li>
+            <li>示例语料、20 条 qrels、原始 JSON/CSV、逐条指标与截图均在仓库 <code>docs/</code>。</li>
+          </ul>
+        </div>
+        <div class="scope">
+          <p class="small"><b>边界</b>：单用户本地演示，无公网鉴权；seekdb 使用 server 模式；推理 API 零云端调用；向量/原文/检索均通过 seekdb，不使用客户端内存或回放。</p>
+        </div>
+      </section>
+
+      <section style="margin-bottom:0">
+        <h2>6. 复现命令 <span>REPRO</span></h2>
+        <p class="mono small" style="line-height:1.65">npm run smoke&nbsp;&nbsp;·&nbsp;&nbsp;npm run test:fallback&nbsp;&nbsp;·&nbsp;&nbsp;npm run test:collection&nbsp;&nbsp;·&nbsp;&nbsp;npm run benchmark</p>
+        <div class="hero-line"></div>
+        <p class="small" style="margin-top:5px">源码、README、技术说明、测试日志与评测原始数据均在提交的 <code>stepfun/</code> 目录。</p>
+      </section>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step"><span class="no">01 / CHUNK</span><b>400 token</b><small>60 overlap · 原文直接切片，不 decode</small></div>
+    <div class="flow-step"><span class="no">02 / EMBED</span><b>BGE · 512d</b><small>Worker · WebGPU FP16 / WASM INT8</small></div>
+    <div class="flow-step"><span class="no">03 / WRITE</span><b>seekdb</b><small>16 chunks / batch · refresh_index</small></div>
+    <div class="flow-step"><span class="no">04 / RETRIEVE</span><b>Hybrid</b><small>HNSW + IK · RRF(k=60) in DB</small></div>
+    <div class="flow-step"><span class="no">05 / VERIFY</span><b>Self-query</b><small>新块向量 topK 命中 = 可检索</small></div>
+  </div>
+  <div class="flow-caption">
+    <span>完整数据流：Browser Worker → same-origin HTTP → seekdb</span>
+    <span>No cloud inference · no server-side embedding · no replay</span>
+  </div>
+
+  <footer>
+    <span>EDGE ATLAS · 阶跃星辰端侧检索赛题</span>
+    <span><span class="footer-mark">●</span> local inference / seekdb hybrid retrieval / 2026</span>
+  </footer>
+</div>
+</body>
+</html>
