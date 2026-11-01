@@ -14,8 +14,10 @@ from fastapi.staticfiles import StaticFiles
 from .api.coach import router as coach_router
 from .api.embeddings import router as embeddings_router
 from .api.health import router as health_router
+from .api.review import router as review_router
 from .api.study import router as study_router
 from .config import settings
+from .ingest import knowledge
 from .seekdb import db
 
 
@@ -23,6 +25,10 @@ from .seekdb import db
 async def lifespan(_: FastAPI):
     settings.prepare()
     db.init_schema()
+    try:
+        knowledge.rebuild(session_id="startup")
+    except Exception as exc:  # derived data; never block the app from starting
+        print(f"[knowledge] rebuild failed: {type(exc).__name__}: {exc}")
     yield
 
 
@@ -31,6 +37,7 @@ app.include_router(health_router)
 app.include_router(embeddings_router)
 app.include_router(study_router)
 app.include_router(coach_router)
+app.include_router(review_router)
 app.mount("/static", StaticFiles(directory=str(settings.web_dir)), name="static")
 
 

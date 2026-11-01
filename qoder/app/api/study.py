@@ -11,7 +11,7 @@ from fastapi import APIRouter, File, Form, HTTPException, Query, UploadFile
 from pydantic import BaseModel, Field
 
 from ..config import settings
-from ..ingest import pipeline
+from ..ingest import knowledge, pipeline
 from ..retrieval import hybrid
 from ..seekdb import db, repo
 
@@ -127,6 +127,7 @@ def api_delete_document(doc_id: str) -> dict:
     def run() -> dict:
         db.collection().delete(where={"doc_id": doc_id})
         repo.delete_document_row(doc_id)
+        knowledge.rebuild(session_id="delete")
         return {"deleted": doc_id}
 
     return _guard(run)

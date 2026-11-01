@@ -9,6 +9,9 @@ const state = {
   traces: 0,
   lastQuestion: "",
   lastAsk: null,
+  review: null,
+  quiz: null,
+  quizSession: "",
   busy: false,
 };
 
@@ -148,6 +151,7 @@ function renderAskStats(stats) {
   $("#ask-stats").innerHTML = `
     <div><strong>${stats.documents ?? 0}</strong>文档</div>
     <div><strong>${stats.chunks ?? 0}</strong>chunks</div>
+    <div><strong id="ask-due">${state.review?.stats?.due ?? "—"}</strong>今日待复习</div>
   `;
 }
 
@@ -496,7 +500,7 @@ function setDrawer(open) {
 
 async function loadTraces() {
   try {
-    const data = await api(`/api/traces?session_id=${encodeURIComponent(state.sessionId)}&limit=80`);
+    const data = await api(`/api/traces?limit=80`);
     const traces = data.traces || [];
     state.traces = traces.length;
     $("#trace-count").textContent = traces.length;
@@ -528,11 +532,233 @@ async function loadTraces() {
   }
 }
 
-/* ---------------- review (filled in S4) ---------------- */
+/* ---------------- review + practice ---------------- */
+
+function percent(value) {
+  return value == null ? "—" : `${Math.round(value * 100)}%`;
+}
+
+function masteryClass(value) {
+  if (value == null) return "is-new";
+  if (value < 0.45) return "is-weak";
+  if (value < 0.7) return "is-mid";
+  return "is-strong";
+}
 
 async function loadReview() {
+  try {
+    const data = await api(`/api/review/today?limit=10&session_id=${encodeURIComponent(state.sessionId)}`);
+    state.review = data;
+    renderReview(data);
+  } catch (error) {
+    $("#review-list").innerHTML = `<div class="memory-error">复习队列加载失败：${escapeHtml(error.message)}</div>`;
+    $("#review-empty").hidden = true;
+  }
+}
+
+function renderReview(data) {
+  const stats = data.stats || {};
+  const due = stats.due ?? 0;
+  const askDue = $("#ask-due");
+  if (askDue) askDue.textContent = due;
+  const badge = $("#review-badge");
+  if (badge) {
+    badge.textContent = due;
+    badge.hidden = !due;
+  }
+  $("#review-stats").innerHTML = `
+    <div class="stat-card"><div class="stat-value">${stats.due ?? 0}</div><div class="stat-label">今日待复习</div></div>
+    <div class="stat-card"><div class="stat-value">${stats.new ?? 0}</div><div class="stat-label">未练习知识点</div></div>
+    <div class="stat-card"><div class="stat-value">${percent(stats.average)}</div><div class="stat-label">平均掌握度 · 薄弱 ${stats.weak ?? 0}</div></div>
+    <div class="stat-card"><div class="stat-value">${stats.answered_today ?? 0}</div><div class="stat-label">今日已答 · 正确 ${stats.correct_today ?? 0}</div></div>
+  `;
+
+  const queue = data.queue || [];
+  const list = $("#review-list");
   const empty = $("#review-empty");
-  if (!empty) return;
+  if (!queue.length) {
+    list.innerHTML = "";
+    empty.hidden = false;
+    return;
+  }
+  empty.hidden = true;
+  list.innerHTML = queue.map((row) => {
+    const value = row.score;
+    return `
+      <article class="review-row">
+        <div class="review-main">
+          <div class="review-top">
+            <span class="subject-tag">${escapeHtml(row.subject)}</span>
+            <span class="review-state ${row.state === "new" ? "is-new" : "is-due"}">${row.state === "new" ? "未练习" : "到期"}</span>
+            <span class="mono">${escapeHtml(row.kp_id)}</span>
+          </div>
+          <p class="review-name">${escapeHtml(row.name)}</p>
+          <p class="review-section">${escapeHtml(row.section)}</p>
+        </div>
+        <div class="review-side">
+          <div class="review-score-row">
+            <span class="review-side-label">掌握度</span>
+            <span class="review-score">${percent(value)}</span>
+          </div>
+          <div class="mastery-bar"><div class="mastery-fill ${masteryClass(value)}" style="width:${value == null ? 0 : Math.max(3, Math.round(value * 100))}%"></div></div>
+          <span class="review-next">${escapeHtml(row.next_review_label)}</span>
+          <span class="review-chunks">${row.chunk_count} chunks</span>
+        </div>
+      </article>
+    `;
+  }).join("");
+}
+
+function updateQuizProgress() {
+  if (!state.quiz) return;
+  const total = state.quiz.data.questions.length;
+  const answered = Object.keys(state.quiz.answers).length;
+  $("#quiz-progress").textContent = `已答 ${answered} / ${total}`;
+}
+
+function renderQuiz() {
+  const questions = state.quiz.data.questions;
+  const uniquePoints = new Set(questions.map((item) => item.kp_id)).size;
+  $("#quiz-title").textContent = questions.length >= 20 ? "20 题模拟" : "今日练习";
+  $("#quiz-hint").textContent = `共 ${questions.length} 题，覆盖 ${uniquePoints} 个知识点；题目由 seekdb 原文自动生成，提交后展示出处与解释。`;
+  $("#quiz-progress").textContent = `已答 0 / ${questions.length}`;
+  $("#quiz-body").innerHTML = questions.map((question, index) => `
+    <article class="quiz-item" data-qid="${escapeHtml(question.question_id)}">
+      <div class="quiz-index">${index + 1}</div>
+      <div class="quiz-content">
+        <p class="quiz-prompt">${escapeHtml(question.prompt).replace(/\n/g, "<br>")}</p>
+        <div class="quiz-options">
+          ${question.options.map((option, optionIndex) => `
+            <label class="quiz-option">
+              <input type="radio" name="q-${escapeHtml(question.question_id)}" value="${escapeHtml(option)}" data-qid="${escapeHtml(question.question_id)}">
+              <span class="quiz-letter">${String.fromCharCode(65 + optionIndex)}</span>
+              <span class="quiz-option-text">${escapeHtml(option)}</span>
+            </label>
+          `).join("")}
+        </div>
+        <p class="quiz-source-hint">${question.question_type === "excerpt_to_kp" ? "原文归属题" : "原文匹配题"} · ${escapeHtml(question.subject)}</p>
+      </div>
+    </article>
+  `).join("");
+  $("#quiz-result").hidden = true;
+}
+
+async function openQuiz(limit) {
+  const button = $(limit >= 20 ? "#quiz-sim" : "#quiz-start");
+  const original = button.textContent;
+  button.disabled = true;
+  button.textContent = "生成中…";
+  try {
+    const session = state.sessionId;
+    const data = await api("/api/quiz/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ limit, session_id: session }),
+    });
+    if (!data.questions.length) {
+      toast("没有生成题目：资料库还没有可用的章节");
+      return;
+    }
+    state.quizSession = session;
+    state.quiz = { data, answers: {}, submitted: false };
+    $("#quiz-note").value = "";
+    $("#quiz-submit").disabled = false;
+    $("#quiz-submit").textContent = "提交并更新掌握度";
+    renderQuiz();
+    $("#quiz-panel").hidden = false;
+    $("#quiz-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (error) {
+    toast(`生成练习失败：${error.message}`);
+  } finally {
+    button.disabled = false;
+    button.textContent = original;
+  }
+}
+
+function closeQuiz() {
+  $("#quiz-panel").hidden = true;
+  state.quiz = null;
+}
+
+async function submitQuiz(event) {
+  event.preventDefault();
+  if (!state.quiz || state.quiz.submitted) return;
+  const answers = Object.entries(state.quiz.answers).map(([questionId, chosen]) => ({
+    question_id: questionId,
+    chosen,
+  }));
+  if (!answers.length) {
+    toast("先选至少一道题的答案");
+    return;
+  }
+  const button = $("#quiz-submit");
+  button.disabled = true;
+  button.textContent = "判分中…";
+  try {
+    const data = await api("/api/quiz/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        session_id: state.quizSession,
+        note: $("#quiz-note").value.trim(),
+        answers,
+      }),
+    });
+    state.quiz.submitted = true;
+    renderQuizResult(data);
+    $$("#quiz-body input").forEach((input) => (input.disabled = true));
+    button.textContent = "已提交";
+    toast(`已完成 ${data.score.total} 题，正确 ${data.score.correct} 题`);
+    await loadReview();
+    await loadMemory();
+    await loadTraces();
+  } catch (error) {
+    toast(`提交失败：${error.message}`);
+    button.disabled = false;
+    button.textContent = "提交并更新掌握度";
+  }
+}
+
+function renderQuizResult(data) {
+  const container = $("#quiz-result");
+  container.hidden = false;
+  const score = data.score || {};
+  const results = data.results || [];
+  const memories = data.memories || [];
+  container.innerHTML = `
+    <div class="quiz-score">
+      <div><strong>${score.correct ?? 0} / ${score.total ?? 0}</strong><span>正确率 ${percent(score.accuracy)}</span></div>
+      <span class="quiz-memory-state ${data.memory_error ? "is-bad" : "is-ok"}">
+        ${data.memory_error ? `PowerContext 写入异常：${escapeHtml(data.memory_error)}` : `已写入 ${memories.length} 条 PowerContext 记忆`}
+      </span>
+    </div>
+    <div class="quiz-result-list">
+      ${results.map((item) => `
+        <article class="quiz-result-row ${item.correct ? "is-correct" : "is-wrong"}">
+          <div class="quiz-result-head">
+            <span class="quiz-result-badge">${item.correct ? "答对" : "答错"}</span>
+            <strong>${escapeHtml(item.kp_name)}</strong>
+            <span class="mono">掌握度 ${percent(item.mastery_before)} → ${percent(item.mastery_after)}</span>
+          </div>
+          <p class="quiz-result-question">${escapeHtml(item.prompt).replace(/\n/g, "<br>")}</p>
+          <p class="quiz-result-answer">你的答案：${escapeHtml(item.chosen || "未作答")}</p>
+          <p class="quiz-result-answer is-correct-answer">正确答案：${escapeHtml(item.answer)}</p>
+          <p class="quiz-result-explain">${escapeHtml(item.explanation)}</p>
+          <p class="quiz-result-next">下次复习：${escapeHtml(item.next_review_label || formatDate(item.next_review_at))}</p>
+        </article>
+      `).join("")}
+    </div>
+    ${memories.length ? `
+      <div class="quiz-memories">
+        <h3>本轮写入 PowerContext 的记忆</h3>
+        <ul>
+          ${memories.map((memory) => `
+            <li><span class="kind-badge ${escapeHtml(memory.kind)}">${escapeHtml(kindLabel(memory.kind))}</span>${escapeHtml(memory.text)}</li>
+          `).join("")}
+        </ul>
+      </div>
+    ` : ""}
+  `;
 }
 
 /* ---------------- demo mode ---------------- */
@@ -557,6 +783,7 @@ const DEMO_ROUNDS = [
 
 async function runDemo() {
   const button = $("#demo-btn");
+  const originalSession = state.sessionId;
   button.disabled = true;
   button.textContent = "演示中…";
   try {
@@ -609,6 +836,7 @@ async function runDemo() {
   } catch (error) {
     toast(`演示失败：${error.message}`);
   } finally {
+    state.sessionId = originalSession;
     button.disabled = false;
     button.textContent = "演示模式";
   }
@@ -653,6 +881,21 @@ function bindEvents() {
   $("#closeout-submit").addEventListener("click", submitCloseout);
 
   $("#memory-refresh").addEventListener("click", loadMemory);
+
+  $("#quiz-start").addEventListener("click", () => openQuiz(5));
+  $("#quiz-sim").addEventListener("click", () => openQuiz(20));
+  $("#review-refresh").addEventListener("click", loadReview);
+  $("#quiz-close").addEventListener("click", closeQuiz);
+  $("#quiz-form").addEventListener("submit", submitQuiz);
+  $("#quiz-body").addEventListener("change", (event) => {
+    const input = event.target.closest("input[type=radio]");
+    if (!input || !state.quiz) return;
+    state.quiz.answers[input.dataset.qid] = input.value;
+    $$(".quiz-option", input.closest(".quiz-item")).forEach((label) => {
+      label.classList.toggle("is-selected", label.contains(input));
+    });
+    updateQuizProgress();
+  });
 
   $("#trace-toggle").addEventListener("click", () => setDrawer(!$("#trace-drawer").classList.contains("is-open")));
   $("#trace-close").addEventListener("click", () => setDrawer(false));
@@ -727,6 +970,7 @@ async function boot() {
   bindEvents();
   await loadHealth();
   await loadDocuments();
+  await loadReview();
   await loadTraces();
 }
 

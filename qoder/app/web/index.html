@@ -17,7 +17,7 @@
       </span>
     </a>
     <nav class="nav" aria-label="主导航">
-      <button class="nav-item" data-page="review">今日复习</button>
+      <button class="nav-item" data-page="review">今日复习<span class="nav-badge" id="review-badge" hidden>0</span></button>
       <button class="nav-item is-active" data-page="ask">问答</button>
       <button class="nav-item" data-page="library">资料库</button>
     </nav>
@@ -38,14 +38,58 @@
         <div>
           <p class="eyebrow">Today</p>
           <h1>今日复习</h1>
-          <p class="lede">按掌握度和遗忘曲线，决定今天先看什么。</p>
+          <p class="lede">掌握度由每次练习实时更新，SM-2 决定下一次该在什么时候回看。题目全部来自 seekdb 里的真实原文。</p>
         </div>
       </div>
-      <div class="empty-state" id="review-empty">
-        <p class="empty-title">复习调度正在接入</p>
-        <p>掌握度、SM-2 间隔和「今天该复习」列表会在 S4 完成后出现在这里。现在可以先去「问答」检索资料，或到「资料库」导入文档。</p>
-        <button class="primary-btn" data-page="ask">去问答</button>
-      </div>
+
+      <div class="stat-row small" id="review-stats"></div>
+
+      <section class="review-card">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">SM-2 queue</p>
+            <h2>今天该复习</h2>
+            <p class="section-hint">未练习的知识点会排在前面；答错后 30 分钟重新进入队列，答对则按 1 天、3 天、间隔 × ease 递增。</p>
+          </div>
+          <div class="review-actions">
+            <button class="primary-btn" id="quiz-start">开始 5 题</button>
+            <button class="ghost-btn" id="quiz-sim">20 题模拟</button>
+            <button class="ghost-btn small" id="review-refresh">刷新</button>
+          </div>
+        </div>
+        <div class="review-list" id="review-list"></div>
+        <div class="empty-state compact" id="review-empty" hidden>
+          <p class="empty-title">还没有可复习的知识点</p>
+          <p>知识点来自文档章节。先在「资料库」导入示例资料或上传自己的 md / txt / pdf。</p>
+          <button class="primary-btn" data-page="library">去导入资料</button>
+        </div>
+      </section>
+
+      <section class="quiz-card" id="quiz-panel" hidden>
+        <div class="quiz-head">
+          <div>
+            <p class="eyebrow">Practice</p>
+            <h2 id="quiz-title">今日练习</h2>
+            <p class="section-hint" id="quiz-hint"></p>
+          </div>
+          <div class="quiz-head-actions">
+            <span class="quiz-progress" id="quiz-progress">已答 0 / 0</span>
+            <button class="icon-btn" id="quiz-close" aria-label="关闭练习">×</button>
+          </div>
+        </div>
+        <form id="quiz-form">
+          <div class="quiz-list" id="quiz-body"></div>
+          <label class="closeout-field quiz-note">
+            <span>本轮错因备注（可选；会写进 PowerContext 的 weakness 记忆）</span>
+            <textarea id="quiz-note" rows="2" maxlength="500" placeholder="例如：我总是只凭关键词选，没有回到定义句核对。"></textarea>
+          </label>
+          <div class="quiz-actions">
+            <button class="primary-btn" type="submit" id="quiz-submit">提交并更新掌握度</button>
+            <span class="answer-hint">提交后 seekdb 写入练习记录与掌握度，PowerContext 写入本轮进展和错因。</span>
+          </div>
+        </form>
+        <div class="quiz-result" id="quiz-result" hidden></div>
+      </section>
     </section>
 
     <section class="page is-active" data-page-panel="ask">

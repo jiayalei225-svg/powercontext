@@ -14,7 +14,7 @@ from pathlib import Path
 from ..config import settings
 from ..seekdb import db, repo
 from ..trace.models import LAYER_SEEKDB, TraceEvent
-from . import chunker, loaders
+from . import chunker, knowledge, loaders
 
 SUPPORTED = {".md", ".markdown", ".txt", ".text", ".pdf"}
 
@@ -132,6 +132,7 @@ def import_file(
         )
     collection.refresh_index()
     repo.upsert_document(doc)
+    knowledge.rebuild(session_id=session_id)
 
     event = TraceEvent(
         session_id=session_id,

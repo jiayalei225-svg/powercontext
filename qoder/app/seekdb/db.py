@@ -70,6 +70,14 @@ def execute(statement: str, params: tuple | list = ()) -> int:
         return cursor.rowcount
 
 
+def execute_many(statement: str, rows: list[tuple] | list[list]) -> int:
+    if not rows:
+        return 0
+    with sql() as cursor:
+        cursor.executemany(statement, rows)
+        return cursor.rowcount
+
+
 def query_all(statement: str, params: tuple | list = ()) -> list[dict]:
     with sql() as cursor:
         cursor.execute(statement, params)
@@ -163,10 +171,12 @@ def reset() -> None:
 
 def health() -> dict:
     docs = query_one("SELECT COUNT(*) AS n FROM study_documents") or {"n": 0}
+    points = query_one("SELECT COUNT(*) AS n FROM study_knowledge_points") or {"n": 0}
     chunks = collection().count()
     return {
         "embedded_path": str(settings.seekdb_path),
         "documents": int(docs["n"]),
         "chunks": int(chunks),
+        "knowledge_points": int(points["n"]),
         "collection": COLLECTION_NAME,
     }
