@@ -90,8 +90,9 @@
     - 站点移除“在线服务”式表述，改为明确的 Qoder Sites 项目介绍页；artifact、导出字节数与截图全部换成最终验收数据。
 
 12. **最终提交与重新发布**
-    - 本轮修复提交推送到 `2026-competition-ecosystem`，最终哈希以分支 HEAD 为准；
-    - 将站点重新打包、发布并验证 public 访问；
+    - 本轮修复提交 `e9b0e5efde77f7b48f3254bd8b519d337405c6dd` 已推送到 `2026-competition-ecosystem`，最终哈希以分支 HEAD 为准；
+    - 站点以准备操作 `59de7ede-1971-41d0-9aa2-e98b992fc84d`、发布操作 `01a19533-96f8-763b-8b87-5eb319971f28` 重新发布，状态 `published: true`、`committed: true`、`public`、`active`；
+    - 发布后线上首页 HTTP 200，包含 `24 / 24 PASS`、最终 artifact 与新增截图，静态资源均返回 200；
     - 发布后不暂停、不删除站点，评审结束前保持在线。
 
 ## 3. 关键问题与处理

@@ -12,7 +12,7 @@
 | 项目网站 | `https://paperdesk-4qzym26fsnz.qoder.zone` |
 | 网站可见性 | 任何人可访问（public） |
 
-本轮修复提交：`（推送后填写）`。最终提交以 `2026-competition-ecosystem` 分支 HEAD 为准。
+本轮修复提交：`e9b0e5efde77f7b48f3254bd8b519d337405c6dd`。最终提交以 `2026-competition-ecosystem` 分支 HEAD 为准。
 
 ## 一句话介绍
 
@@ -129,11 +129,13 @@ python scripts/accept.py --base http://127.0.0.1:8080
 | 站点 ID | `01a191be-accb-777c-927c-adb7a1c58023` |
 | 访问地址 | `https://paperdesk-4qzym26fsnz.qoder.zone` |
 | 访问模式 | public |
-| 本轮发布操作 | 见下方“本轮重新发布”记录 |
+| 本轮准备操作 | `59de7ede-1971-41d0-9aa2-e98b992fc84d` |
+| 本轮发布操作 | `01a19533-96f8-763b-8b87-5eb319971f28` |
+| 本轮发布时间 | 2026-11-01 11:39（UTC+8） |
 
 ### 本轮重新发布
 
-`（发布后填写 action ID、发布时间与验证结果）`
+发布状态为 `published: true`、`committed: true`、`lifecycle: active`、`access_mode: public`。发布后重新拉取线上首页（HTTP 200，82840 字节），确认包含 `24 / 24 PASS`、最终 artifact `art_6348613106ea4529a1c8745f10393a45`、`memory-artifacts.png` 与 `restart-readback.json`；`styles.css`、`main.js` 与新增截图均返回 HTTP 200。
 
 ## 安全与合规
 

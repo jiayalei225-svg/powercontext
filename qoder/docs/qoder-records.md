@@ -67,7 +67,8 @@
 | 项目 | 值 |
 | --- | --- |
 | 上轮实现提交 | `1131a2714ac648ab57574eacf33197dc51a1236d` |
-| 本轮修复提交 | 以 `2026-competition-ecosystem` 分支当前 HEAD 为准（提交说明含“readback audit”） |
+| 本轮修复提交 | `e9b0e5efde77f7b48f3254bd8b519d337405c6dd` |
+| 本轮准备 / 发布操作 | `59de7ede-1971-41d0-9aa2-e98b992fc84d` / `01a19533-96f8-763b-8b87-5eb319971f28` |
 | 站点地址 | `https://paperdesk-4qzym26fsnz.qoder.zone` |
 | Qoder Sites 项目 / 站点 | `01a191be-acc7-7d2d-8403-aae09c693514` / `01a191be-accb-777c-927c-adb7a1c58023` |
 | 公开状态 | `public`，HTTP 200 |
