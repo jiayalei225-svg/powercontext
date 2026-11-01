@@ -1,0 +1,15 @@
+{
+  "generated_at": "2026-11-01T11:32:40",
+  "powercontext": "http://127.0.0.1:18000",
+  "scope_id": "scp_2gs37bhwx70f9gqx00jr6z7c82",
+  "pages": 1,
+  "artifact": "art_6348613106ea4529a1c8745f10393a45",
+  "preferences": {
+    "year_from": 2024,
+    "venues": [
+      "ACL"
+    ],
+    "only_with_code": true,
+    "field": "检索增强生成"
+  }
+}

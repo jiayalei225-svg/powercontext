@@ -10,11 +10,15 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 
 from app import index, pdf  # noqa: E402
+from app.settings import settings  # noqa: E402
 
 
 def ingest(path: Path, force: bool) -> tuple[str, int, bool]:
     data = path.read_bytes()
     paper_id = pdf.digest(data)
+    target = settings.upload_dir / f"{paper_id}.pdf"
+    if not target.is_file():
+        target.write_bytes(data)
     if index.exists(paper_id) and not force:
         return paper_id, 0, True
     pages = pdf.read_pages(path)
@@ -41,7 +45,7 @@ def main() -> None:
     stats = index.stats()
     print("")
     print(f"集合 {stats['collection']}：{stats['papers']} 篇论文 / {stats['chunks']} 个片段 / 模型 {stats['embedding']}")
-    print(f"数据目录：{ROOT / 'data'}")
+    print(f"数据目录：{settings.data_dir}")
 
 
 if __name__ == "__main__":

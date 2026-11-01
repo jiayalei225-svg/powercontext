@@ -42,6 +42,23 @@ else
   echo "[4/5] PowerContext already running"
 fi
 
+# A ready server on 18000 may belong to a different PowerContext home. Refuse to
+# silently split memory across two databases.
+SCOPE_FILE="$ROOT/runtime/powercontext.scope"
+SCOPE=$(curl -sf http://127.0.0.1:18000/v1/scopes/default | "$PY" -c 'import json,sys; print(json.load(sys.stdin)["scope_id"])')
+if [ -f "$SCOPE_FILE" ]; then
+  EXPECTED=$(tr -d '[:space:]' < "$SCOPE_FILE")
+  if [ -n "$EXPECTED" ] && [ "$SCOPE" != "$EXPECTED" ]; then
+    echo "Port 18000 belongs to a different PowerContext scope ($SCOPE, expected $EXPECTED)." >&2
+    echo "Stop it or remove runtime/powercontext.scope before starting PaperDesk." >&2
+    exit 1
+  fi
+else
+  mkdir -p "$ROOT/runtime"
+  printf '%s' "$SCOPE" > "$SCOPE_FILE"
+fi
+echo "      memory scope $SCOPE"
+
 if [ "${1:-}" != "--skip-seed" ]; then
   echo "[5/5] loading demo corpus ..."
   "$PY" scripts/seed.py

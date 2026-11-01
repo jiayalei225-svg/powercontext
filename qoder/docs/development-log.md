@@ -65,9 +65,9 @@
 8. **样例压缩与最终验收**
    - 演示 PDF 使用 PyMuPDF 做字体子集化，单篇从约 9.4MB 降至 55-70KB，文本逐页比对一致；
    - 清空旧索引后重新导入，仍为 5 篇 / 26 片段；
-   - 11 个单元测试通过；
-   - 19 项端到端验收全部通过（`2026-11-01T10:14:56`）；
-   - 生成 `docs/verification/` 下的报告与检索响应。
+   - 15 个单元测试通过；
+   - 24 项端到端验收全部通过（`2026-11-01T11:32:41`）；
+   - 生成 `docs/verification/` 下的报告、直读响应与重启对照。
 
 9. **文档与网站**
    - 编写 README、架构、API、验收、Qoder 记录；
@@ -80,6 +80,20 @@
     - 保留 gaode / minimax / stepfun 目录，整体替换 `qoder/`；
     - 实现提交 `1131a2714ac648ab57574eacf33197dc51a1236d` 已推送到 `2026-competition-ecosystem`。
 
+11. **记忆读回审计与修复**
+    - 发现 PowerContext 的条目库存按 artifact 排列，不是按时间倒序；单页读取会在轨迹增长后漏掉最新偏好；
+    - 改为按 `kind` 过滤并沿 `next_cursor` 翻完所有页，再按 `saved_at` 选最新；
+    - 新增 `GET /api/preferences?fresh=1`，绕过 12 秒进程缓存；
+    - 验收脚本增加“绕过应用直读 PowerContext”和“完全重启后读回”，最终达到 24/24；
+    - `seed.py` 与重复上传都会保留原始 PDF，5/5 篇 `/file` 返回 `%PDF`；
+    - 启动脚本统一 `POWERCONTEXT_HOME=runtime/powercontext`，并校验 18000 端口属于同一 scope；
+    - 站点移除“在线服务”式表述，改为明确的 Qoder Sites 项目介绍页；artifact、导出字节数与截图全部换成最终验收数据。
+
+12. **最终提交与重新发布**
+    - 本轮修复提交推送到 `2026-competition-ecosystem`，最终哈希以分支 HEAD 为准；
+    - 将站点重新打包、发布并验证 public 访问；
+    - 发布后不暂停、不删除站点，评审结束前保持在线。
+
 ## 3. 关键问题与处理
 
 | 问题 | 处理 |
@@ -87,7 +101,11 @@
 | seekdb 无法打开含非 ASCII 字符的路径 | 启动时检测并回退到 `%LOCALAPPDATA%\PaperDesk\data-v2` |
 | `PaperMeta` 的 `field` 名称遮蔽 `dataclasses.field` | 引入 `dataclass_field` 别名 |
 | `resolve()` 返回三元组，旧调用按二元组解包 | 修正解包并返回模型后缀 |
-| PowerContext `entries/list` 默认 200 超过上限 100 | 客户端统一夹取到 100 |
+| PowerContext `atomic-memory/list` 条目按 artifact 排列，不是按时间倒序 | 按 `kind` 过滤并翻完所有页，按 `saved_at` 取最新偏好 |
+| 单页读取在轨迹增长后漏掉最新偏好 | 新增 `fresh=1` 强制回源，验收再直接查询 PowerContext 比对 artifact |
+| 样例 PDF 未复制到上传目录，详情没有“打开 PDF” | `seed.py` 与重复上传都保存 PDF，验收检查 5/5 篇 `%PDF` |
+| 手动启动与脚本使用不同 PowerContext 数据目录 | 统一 `POWERCONTEXT_HOME`，并校验 18000 端口 scope |
+| 验收结束后清空偏好，评审打开记忆页为空 | 验收先清除再写回最终四条偏好，报告记录 `final_artifact` |
 | 清空偏好后仍返回全空字段对象 | 序列化时丢弃空值，清除后读取为 `{}` |
 | 同一篇论文占据大量结果位 | 按 `paper_id` 限制每篇 2 段 |
 | 首次查询需要加载 ONNX 模型 | 启动后后台预热；文档标注首次查询可能较慢 |

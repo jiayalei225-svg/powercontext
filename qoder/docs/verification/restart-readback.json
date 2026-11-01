@@ -1,0 +1,63 @@
+{
+  "generated_at": "2026-11-01T11:34:44",
+  "scenario": "先停止 PowerContext 与 PaperDesk 后端，再以同一 POWERCONTEXT_HOME 和数据目录重新启动；不经过写入接口，直接读取偏好。",
+  "before": {
+    "at": "2026-11-01T11:34:01",
+    "scope_id": "scp_2gs37bhwx70f9gqx00jr6z7c82",
+    "preferences": {
+      "year_from": 2024,
+      "venues": [
+        "ACL"
+      ],
+      "only_with_code": true,
+      "field": "检索增强生成"
+    },
+    "artifact": "art_6348613106ea4529a1c8745f10393a45",
+    "api_preferences": {
+      "year_from": 2024,
+      "venues": [
+        "ACL"
+      ],
+      "only_with_code": true,
+      "field": "检索增强生成"
+    }
+  },
+  "after": {
+    "at": "2026-11-01T11:34:43",
+    "scope_id": "scp_2gs37bhwx70f9gqx00jr6z7c82",
+    "preferences": {
+      "year_from": 2024,
+      "venues": [
+        "ACL"
+      ],
+      "only_with_code": true,
+      "field": "检索增强生成"
+    },
+    "artifact": "art_6348613106ea4529a1c8745f10393a45",
+    "api_preferences": {
+      "year_from": 2024,
+      "venues": [
+        "ACL"
+      ],
+      "only_with_code": true,
+      "field": "检索增强生成"
+    },
+    "health": {
+      "status": "ok",
+      "version": "2.0.0",
+      "data_dir": "C:\\Users\\jyl25\\Documents\\Qoder\\2026-10-31\\5ae0bb21\\rebuild\\qoder\\data",
+      "index": {
+        "collection": "paper_chunks_v2_bge_zh",
+        "papers": 5,
+        "chunks": 26,
+        "embedding": "bge-small-zh-v1.5"
+      },
+      "memory": {
+        "connected": true,
+        "url": "http://127.0.0.1:18000",
+        "scope_id": "scp_2gs37bhwx70f9gqx00jr6z7c82"
+      }
+    }
+  },
+  "match": true
+}

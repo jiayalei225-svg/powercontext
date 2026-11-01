@@ -396,6 +396,20 @@ a {
   letter-spacing: 0.04em;
 }
 
+.hero-note {
+  margin: 20px 0 0;
+  padding: 11px 15px;
+  border-left: 2px solid var(--accent);
+  background: rgba(255, 250, 240, 0.7);
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.75;
+}
+
+.hero-note strong {
+  color: var(--ink);
+}
+
 .hero-visual {
   position: relative;
   min-width: 0;
@@ -964,6 +978,14 @@ a {
   color: #fff;
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+.proof-code {
+  margin-top: 26px;
+}
+
+.code-note .inline {
+  color: #e6b08a;
 }
 
 .gallery {

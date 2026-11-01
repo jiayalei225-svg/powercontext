@@ -1,8 +1,19 @@
 {
-  "generated_at": "2026-11-01T10:14:56",
+  "generated_at": "2026-11-01T11:32:41",
   "base": "http://127.0.0.1:18081",
-  "passed": 19,
+  "powercontext": "http://127.0.0.1:18000",
+  "passed": 24,
   "failed": 0,
+  "final_scope": "scp_2gs37bhwx70f9gqx00jr6z7c82",
+  "final_artifact": "art_6348613106ea4529a1c8745f10393a45",
+  "final_preferences": {
+    "year_from": 2024,
+    "venues": [
+      "ACL"
+    ],
+    "only_with_code": true,
+    "field": "检索增强生成"
+  },
   "steps": [
     {
       "name": "服务健康",
@@ -12,7 +23,7 @@
     {
       "name": "PowerContext 连接",
       "ok": true,
-      "detail": "scope=scp_2gs37bhwx70f9gqx00jr6z7c82"
+      "detail": "scope=scp_2gs37bhwx70f9gqx00jr6z7c82 url=http://127.0.0.1:18000"
     },
     {
       "name": "导入 01-adaptive-hybrid-retrieval.pdf",
@@ -45,6 +56,11 @@
       "detail": "5 篇"
     },
     {
+      "name": "原始 PDF 可读回",
+      "ok": true,
+      "detail": "5 篇 · pd2_5f45dd669e7765:ok, pd2_6db7a3cec91761:ok, pd2_67243d454d2a28:ok"
+    },
+    {
       "name": "论文详情",
       "ok": true,
       "detail": "检索增强生成中的记忆路由与证据筛选 返回 5 个片段"
@@ -52,7 +68,7 @@
     {
       "name": "混合检索召回",
       "ok": true,
-      "detail": "命中 6，策略=hybrid，1459ms"
+      "detail": "命中 6，策略=hybrid，210ms"
     },
     {
       "name": "搜索已写入记忆",
@@ -62,7 +78,17 @@
     {
       "name": "保存记忆偏好",
       "ok": true,
-      "detail": "artifact=art_fa6439afc29f496f81c313918af5eb5f revision=1"
+      "detail": "artifact=art_b2f8c5cf35564056b02b2e2a55d56b34 revision=1"
+    },
+    {
+      "name": "清缓存后从 PowerContext 读回",
+      "ok": true,
+      "detail": "{\"year_from\": 2024, \"venues\": [\"ACL\"], \"only_with_code\": true, \"field\": \"检索增强生成\"}"
+    },
+    {
+      "name": "绕过应用直接读 PowerContext",
+      "ok": true,
+      "detail": "scope=scp_2gs37bhwx70f9gqx00jr6z7c82 pages=1 artifact=art_b2f8c5cf35564056b02b2e2a55d56b34"
     },
     {
       "name": "记忆偏好自动应用",
@@ -80,14 +106,24 @@
       "detail": "{}"
     },
     {
+      "name": "重新保存并读回最终偏好",
+      "ok": true,
+      "detail": "artifact=art_6348613106ea4529a1c8745f10393a45 {\"year_from\": 2024, \"venues\": [\"ACL\"], \"only_with_code\": true, \"field\": \"检索增强生成\"}"
+    },
+    {
+      "name": "最终偏好与 artifact 可从 PowerContext 直读",
+      "ok": true,
+      "detail": "scope=scp_2gs37bhwx70f9gqx00jr6z7c82 pages=1 artifact=art_6348613106ea4529a1c8745f10393a45"
+    },
+    {
       "name": "导出 Markdown",
       "ok": true,
-      "detail": "4767 字节"
+      "detail": "2186 字节"
     },
     {
       "name": "导出 CSV",
       "ok": true,
-      "detail": "3982 字节"
+      "detail": "1648 字节"
     },
     {
       "name": "检索轨迹",
@@ -95,9 +131,9 @@
       "detail": "12 条"
     },
     {
-      "name": "记忆快照",
+      "name": "记忆快照保留偏好与轨迹",
       "ok": true,
-      "detail": "scope=scp_2gs37bhwx70f9gqx00jr6z7c82 traces=20"
+      "detail": "scope=scp_2gs37bhwx70f9gqx00jr6z7c82 prefs=4 traces=20 versions=20"
     }
   ]
 }

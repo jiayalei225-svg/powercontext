@@ -37,6 +37,12 @@ PaperDesk 把这三件事拆开处理：seekdb 负责“语义 + 字面 + 过滤
 
 ## 快速开始
 
+以下命令都在仓库根目录执行，先进入 `qoder/`：
+
+```bash
+cd qoder
+```
+
 ### Windows
 
 ```powershell
@@ -53,11 +59,11 @@ bash scripts/start.sh
 
 1. 创建 `.venv` 并安装依赖；
 2. 从 `.env.example` 生成 `.env`；
-3. 生成 PowerContext 配置并启动 `127.0.0.1:18000`；
-4. 幂等导入 5 篇演示 PDF；
+3. 生成 PowerContext 配置并启动 `127.0.0.1:18000`，记忆库固定在 `runtime/powercontext/`；
+4. 幂等导入 5 篇演示 PDF，并把原始 PDF 复制到 `data/uploads/`；
 5. 启动 PaperDesk。
 
-首次运行需要联网下载 `bge-small-zh-v1.5` ONNX 模型；之后可离线运行。若 8080 被占用，可指定端口：
+脚本会把当前 PowerContext scope 写入 `runtime/powercontext.scope`。如果 18000 端口已是另一个 scope 的服务，脚本会直接报错，而不是把记忆悄悄写到另一套数据库。首次运行需要联网下载 `bge-small-zh-v1.5` ONNX 模型；之后可离线运行。若 8080 被占用，可指定端口：
 
 ```powershell
 $env:PAPERDESK_PORT = "18081"
@@ -66,16 +72,40 @@ powershell -ExecutionPolicy Bypass -File scripts\start.ps1 -SkipSeed
 
 ### 手动启动
 
+先准备依赖与配置（Windows 用 `.venv\Scripts\Activate.ps1` 激活）：
+
 ```bash
+cd qoder
 python -m venv .venv
-. .venv/bin/activate            # Windows: .venv\Scripts\Activate.ps1
+. .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
+mkdir -p config runtime/powercontext
 powercontext config init --template --output config/powercontext.env
+```
+
+终端 A 启动 PowerContext。`POWERCONTEXT_HOME` 必须和脚本使用同一个目录，否则重启后会读到一套空的记忆库：
+
+```bash
+export POWERCONTEXT_HOME="$PWD/runtime/powercontext"
 powercontext server run --env-file config/powercontext.env --port 18000
+```
+
+Windows PowerShell：
+
+```powershell
+$env:POWERCONTEXT_HOME = "$PWD\runtime\powercontext"
+powercontext server run --env-file config\powercontext.env --port 18000
+```
+
+终端 B 导入语料并启动 PaperDesk：
+
+```bash
 python scripts/seed.py
 python backend/run.py
 ```
+
+如果 PowerContext 跑在别的端口，在终端 B 设置 `POWERCONTEXT_URL=http://127.0.0.1:<port>` 再启动后端。
 
 前端已构建产物在 `frontend/dist/`，后端会自动托管。修改前端后重新构建：
 
@@ -112,7 +142,25 @@ pytest
 python scripts/accept.py --base http://127.0.0.1:8080
 ```
 
-当前基线：**11 个单元测试全部通过**，**19 项端到端检查全部通过**。完整报告与样例见 [docs/verification.md](docs/verification.md)。
+当前基线：**15 个单元测试全部通过**，**24 项端到端检查全部通过**。完整报告与样例见 [docs/verification.md](docs/verification.md)。
+
+`accept.py` 不会在结尾清空偏好：它会先验证“清除”，再写入最终的四条偏好，并分别通过应用接口和 PowerContext 原始接口读回。最终 artifact 记录在 `docs/verification/report.json` 的 `final_artifact`；完全重启后的对照见 `docs/verification/restart-readback.json`。运行结束后打开记忆页，可以直接看到刚写入的偏好，不会出现“验收完成后记忆是空的”。
+
+## 记忆读回与复用
+
+PowerContext 的条目列表是 artifact 顺序，不是按时间倒序；只读第一页会在轨迹积累后漏掉最新偏好。PaperDesk 的实现是：
+
+1. 读取时按 `kind=preference` 过滤，并沿 `next_cursor` 遍历全部页；
+2. `GET /api/preferences?fresh=1` 绕过 12 秒进程缓存，强制从 PowerContext 重新读取；
+3. `scripts/accept.py` 还会直接查询 PowerContext 的 `/v1/atomic-memory/list`，比对 artifact ID 与偏好内容，并在完全重启后再核对一次；
+4. 下一次检索通过 `recall.plan` 逐字段合并偏好，并验证结果确实满足年份、会议、方向与开源条件。
+
+复现：
+
+```bash
+curl "http://127.0.0.1:8080/api/preferences?fresh=1"
+python scripts/accept.py --base http://127.0.0.1:8080
+```
 
 演示语料（全部为原创示例 PDF）：
 
@@ -176,6 +224,8 @@ qoder/
 
 ## 已知限制
 
+- 项目网站是 Qoder Sites 上可公开访问的**项目介绍页**，不是在线版应用。Qoder Sites 只提供静态托管与 Edge Function，无法运行 Python、seekdb 本地引擎和 PowerContext 服务；完整应用请按“快速开始”在本机启动。
+- 网站上的截图、artifact ID 与验收数字均来自本机真实运行，不把静态页面标成在线服务。
 - 演示语料为 5 篇原创示例论文，用于复现检索与记忆链路，不代表真实文献综述。
 - 本地 BGE 模型首次加载需要数秒；之后单次查询通常在数百毫秒。
 - PowerContext 未启动时，检索与索引仍可用，但偏好与轨迹功能会自动降级。

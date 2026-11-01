@@ -63,8 +63,11 @@
           <ul class="hero-chips" aria-label="核心技术">
             <li>seekdb hybrid_search</li>
             <li>PowerContext memory</li>
-            <li>本地优先 · 无云依赖</li>
+            <li>项目介绍页 · 应用本地运行</li>
           </ul>
+          <p class="hero-note">
+            <strong>说明</strong> 本站是 Qoder Sites 项目介绍页，不运行在线后端。完整检索与记忆应用请按页面底部的命令在本机启动；截图与 artifact 均来自真实运行。
+          </p>
         </div>
 
         <div class="hero-visual reveal">
@@ -72,13 +75,13 @@
             <div class="shot-bar">
               <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
               <span class="shot-url">127.0.0.1:8080/#/search</span>
-              <span class="shot-live"><i></i> live</span>
+              <span class="shot-live" title="本机真实运行截图"><i></i> 录制</span>
             </div>
             <img src="assets/results.png" alt="PaperDesk 检索结果界面：命中 10 个相关段落，左侧为检索计划，右侧为带页码和代码链接的原文片段" />
           </div>
           <div class="float-card float-a">
             <span class="mono">RRF</span>
-            <strong>124 ms</strong>
+            <strong>200 ms</strong>
             <em>向量 + 全文，一次调用</em>
           </div>
           <div class="float-card float-b">
@@ -93,11 +96,11 @@
         <div class="wrap metrics reveal">
           <div><strong>5</strong><span>篇原创演示论文</span></div>
           <div><strong>26</strong><span>个语义片段</span></div>
-          <div><strong>19<small>/19</small></strong><span>端到端验收通过</span></div>
-          <div><strong>11</strong><span>个单元测试</span></div>
+          <div><strong>24<small>/24</small></strong><span>端到端验收通过</span></div>
+          <div><strong>15</strong><span>个单元测试</span></div>
           <div class="metric-note">
             <i class="dot"></i>
-            <span>PowerContext 已连接 · 检索轨迹实时写入</span>
+            <span>验收时 PowerContext 已连接 · 偏好与轨迹真实写入</span>
           </div>
         </div>
       </section>
@@ -216,7 +219,7 @@ result = collection.hybrid_search(
           </figure>
           <figure class="shot-card reveal">
             <div class="shot-frame">
-              <div class="shot-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="shot-url">/#/search</span><span class="shot-live"><i></i> live</span></div>
+              <div class="shot-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="shot-url">/#/search</span><span class="shot-live" title="本机真实运行截图"><i></i> 录制</span></div>
               <img src="assets/memory-applied.png" alt="检索计划显示四条记忆偏好已自动应用，结果只包含 2024 年以后、ACL、检索增强生成、带开源代码的论文" />
             </div>
             <figcaption><span class="mono">02 / RECALL</span> 下一次检索不填条件，计划面板自动列出四条「记忆偏好」并应用到结果。</figcaption>
@@ -226,8 +229,8 @@ result = collection.hybrid_search(
         <div class="memory-facts">
           <div class="fact reveal">
             <span class="mono">ARTIFACT</span>
-            <code>art_672b745c33194117b3c4996f7d6a3cfa</code>
-            <p>真实保存响应中的 artifact ID；同一份偏好可追溯 revision。</p>
+            <code>art_6348613106ea4529a1c8745f10393a45</code>
+            <p>最终验收保存的四字段偏好 artifact；清缓存、绕过应用直读、完全重启后都仍是它。</p>
           </div>
           <div class="fact reveal">
             <span class="mono">PRIORITY</span>
@@ -246,18 +249,46 @@ result = collection.hybrid_search(
         <header class="section-head reveal">
           <p class="eyebrow"><span>04</span> 真实运行</p>
           <h2>不是效果图，是可复现的运行结果</h2>
-          <p class="section-lede">5 篇原创演示 PDF、26 个片段、11 个单元测试、19 项端到端验收，全部在本机真实执行。</p>
+          <p class="section-lede">5 篇原创演示 PDF、26 个片段、15 个单元测试、24 项端到端验收，全部在本机真实执行。</p>
         </header>
 
         <div class="proof-banner reveal">
-          <div class="score"><strong>19<small>/19</small></strong><span>端到端验收</span></div>
-          <div class="score"><strong>11</strong><span>单元测试</span></div>
+          <div class="score"><strong>24<small>/24</small></strong><span>端到端验收</span></div>
+          <div class="score"><strong>15</strong><span>单元测试</span></div>
           <div class="score"><strong>6</strong><span>验收召回片段</span></div>
           <div class="score"><strong>2</strong><span>导出格式</span></div>
           <div class="proof-links">
             <a href="https://github.com/jiayalei225-svg/powercontext/blob/2026-competition-ecosystem/qoder/docs/verification.md" target="_blank" rel="noreferrer">验收记录 ↗</a>
             <a href="https://github.com/jiayalei225-svg/powercontext/blob/2026-competition-ecosystem/qoder/docs/verification/report.json" target="_blank" rel="noreferrer">原始报告 ↗</a>
+            <a href="https://github.com/jiayalei225-svg/powercontext/blob/2026-competition-ecosystem/qoder/docs/verification/restart-readback.json" target="_blank" rel="noreferrer">重启读回 ↗</a>
           </div>
+        </div>
+
+        <div class="code-card proof-code reveal">
+          <div class="code-head">
+            <span class="mono">最终验收 · 记忆与数据回读</span>
+            <span class="tag">24 / 24 PASS</span>
+          </div>
+          <pre><code><span class="c"># 1. 保存四条偏好</span>
+PUT /api/preferences
+{"year_from": 2024, "venues": ["ACL"], "only_with_code": true, "field": "检索增强生成"}
+→ {"artifact": "art_6348613106ea4529a1c8745f10393a45", "revision": 1}
+
+<span class="c"># 2. 清掉应用内 12s 缓存，再读一次</span>
+GET /api/preferences?fresh=true
+→ {"year_from": 2024, "venues": ["ACL"], "only_with_code": true, "field": "检索增强生成"}
+
+<span class="c"># 3. 绕过 PaperDesk，直接分页读取 PowerContext</span>
+POST /v1/atomic-memory/list  {"kind": "preference", "limit": 100, "cursor": ...}
+→ 同一 artifact · 同一组四字段 · pages=1
+
+<span class="c"># 4. 停止并重启 PowerContext 与 PaperDesk，不经过写入接口</span>
+→ 同一 artifact · 同一组四字段</code></pre>
+          <p class="code-note">
+            PowerContext 的条目库存按 artifact 排列而不是按时间倒序；客户端必须翻完所有页、按 kind 过滤并取最新 saved_at，才能稳定读回。原始响应见
+            <a class="inline" href="https://github.com/jiayalei225-svg/powercontext/blob/2026-competition-ecosystem/qoder/docs/verification/powercontext-readback.json" target="_blank" rel="noreferrer">powercontext-readback.json</a> 与
+            <a class="inline" href="https://github.com/jiayalei225-svg/powercontext/blob/2026-competition-ecosystem/qoder/docs/verification/restart-readback.json" target="_blank" rel="noreferrer">restart-readback.json</a>。
+          </p>
         </div>
 
         <div class="gallery">
@@ -282,6 +313,13 @@ result = collection.hybrid_search(
             </div>
             <figcaption><span class="mono">LIBRARY</span> 拖拽上传、重复检测、查看详情与删除。</figcaption>
           </figure>
+          <figure class="shot-card wide reveal">
+            <div class="shot-frame">
+              <div class="shot-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="shot-url">/#/memory · 偏好版本</span></div>
+              <img src="assets/memory-artifacts.png" alt="记忆页的偏好版本列表：最新一条为 2024 年后 / ACL / 仅开源 / 检索增强生成，artifact art_634861...，rev 1；下方是检索轨迹" />
+            </div>
+            <figcaption><span class="mono">READBACK</span> 偏好版本与检索轨迹同时留在 PowerContext；最新 artifact 与保存响应、验收报告一致。</figcaption>
+          </figure>
           <figure class="shot-card phone reveal">
             <div class="shot-frame">
               <img src="assets/mobile-results.png" alt="移动端检索结果界面" />
@@ -295,7 +333,7 @@ result = collection.hybrid_search(
             <ul>
               <li>桌面 1440px / 移动 390px，均取自真实运行</li>
               <li>结果片段保留页码、会议、年份与代码链接</li>
-              <li>PowerContext 连接状态在页头实时显示</li>
+              <li>PowerContext 连接状态在页头定时刷新</li>
             </ul>
           </aside>
         </div>
@@ -304,9 +342,13 @@ result = collection.hybrid_search(
           <div class="row head"><span>检查项</span><span>结果</span><span>证据</span></div>
           <div class="row"><span>混合检索召回</span><span class="ok">PASS</span><span>命中 6 段，strategy=hybrid</span></div>
           <div class="row"><span>记忆偏好自动应用</span><span class="ok">PASS</span><span>4 字段生效，notes=4，hits=2</span></div>
+          <div class="row"><span>清缓存后读回偏好</span><span class="ok">PASS</span><span>fresh=true 读回四条字段</span></div>
+          <div class="row"><span>绕过应用直读 PowerContext</span><span class="ok">PASS</span><span>同一 artifact art_6348… · pages=1</span></div>
+          <div class="row"><span>完全重启后读回</span><span class="ok">PASS</span><span>scope / 四字段 / artifact 全部不变</span></div>
+          <div class="row"><span>原始 PDF 可读回</span><span class="ok">PASS</span><span>5/5 篇 /file 返回 %PDF</span></div>
           <div class="row"><span>显式条件覆盖记忆</span><span class="ok">PASS</span><span>SIGIR / 2023 / 无代码</span></div>
           <div class="row"><span>清除记忆偏好</span><span class="ok">PASS</span><span>读取为 {}</span></div>
-          <div class="row"><span>Markdown / CSV 导出</span><span class="ok">PASS</span><span>4.7 KB / 3.9 KB，CSV 带 BOM</span></div>
+          <div class="row"><span>Markdown / CSV 导出</span><span class="ok">PASS</span><span>2.2 KB / 1.6 KB，CSV 带 BOM</span></div>
         </div>
       </section>
 
@@ -350,14 +392,18 @@ result = collection.hybrid_search(
         </header>
         <div class="run-grid">
           <div class="run-card reveal">
-            <div class="run-head"><span class="mono">WINDOWS</span><button class="copy" data-copy="powershell -ExecutionPolicy Bypass -File scripts\start.ps1">复制</button></div>
-            <pre><code>powershell -ExecutionPolicy Bypass ^
+            <div class="run-head"><span class="mono">WINDOWS</span><button class="copy" data-copy="cd qoder
+powershell -ExecutionPolicy Bypass -File scripts\start.ps1">复制</button></div>
+            <pre><code>cd qoder
+powershell -ExecutionPolicy Bypass ^
   -File scripts\start.ps1</code></pre>
             <p>打开 <code>http://127.0.0.1:8080</code></p>
           </div>
           <div class="run-card reveal">
-            <div class="run-head"><span class="mono">macOS / LINUX</span><button class="copy" data-copy="bash scripts/start.sh">复制</button></div>
-            <pre><code>bash scripts/start.sh</code></pre>
+            <div class="run-head"><span class="mono">macOS / LINUX</span><button class="copy" data-copy="cd qoder
+bash scripts/start.sh">复制</button></div>
+            <pre><code>cd qoder
+bash scripts/start.sh</code></pre>
             <p>打开 <code>http://127.0.0.1:8080</code></p>
           </div>
         </div>

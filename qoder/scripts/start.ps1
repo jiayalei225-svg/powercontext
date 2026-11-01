@@ -58,6 +58,25 @@ if (-not $ready) {
     Write-Host "[5/6] PowerContext already running on port 18000"
 }
 
+# A ready server on 18000 may belong to a different PowerContext home. Refuse to
+# silently split memory across two databases.
+$ScopeFile = Join-Path $Root "runtime\powercontext.scope"
+try {
+    $scope = (Invoke-RestMethod -Uri "http://127.0.0.1:18000/v1/scopes/default" -TimeoutSec 5).scope_id
+} catch {
+    throw "PowerContext is ready but /v1/scopes/default is unavailable"
+}
+if (Test-Path $ScopeFile) {
+    $expected = (Get-Content $ScopeFile -Raw).Trim()
+    if ($expected -and $scope -ne $expected) {
+        throw "Port 18000 belongs to a different PowerContext scope ($scope, expected $expected). Stop it or use a clean runtime/powercontext.scope."
+    }
+} else {
+    New-Item -ItemType Directory -Force -Path (Split-Path $ScopeFile) | Out-Null
+    Set-Content -Path $ScopeFile -Value $scope -NoNewline
+}
+Write-Host "      memory scope $scope"
+
 if (-not $SkipSeed) {
     Write-Host "[6/6] loading demo corpus (idempotent) ..."
     & $VenvPython scripts\seed.py

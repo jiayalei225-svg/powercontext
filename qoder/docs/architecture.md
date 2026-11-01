@@ -110,8 +110,9 @@ paperdesk2/trace/v1|{"query":"...","filters":{...},"hits":6,"at":1760000000}
 
 - `kind=preference`：保存用户偏好，文本带 `saved_at`，读取时选最新版本。
 - `kind=progress`：每次检索一条，用于“最近检索轨迹”和任务复现。
-- 所有条目都来自 `POST /v1/memory/remember`；读取使用 `POST /v1/memory/entries/list`（上限 100 条）。
-- 保存响应中的 `artifact.artifact_id` 与 `artifact.revision` 会在界面展示，便于确认记忆确实落盘。
+- 所有条目都来自 `POST /v1/memory/remember`；读取使用 `POST /v1/atomic-memory/list`。
+- 条目库存按 artifact 排列，不是按时间倒序；客户端按 `kind` 过滤，沿 `next_cursor` 翻完所有页，再按 `saved_at` 选最新偏好。单页读取会在轨迹积累后漏掉最新版本。
+- 保存响应中的 `artifact.artifact_id` 与 `artifact.revision` 会在界面展示，便于确认记忆确实落盘；`GET /api/preferences?fresh=1` 绕过 12 秒缓存回源读取。
 
 ### 合并规则
 

@@ -101,11 +101,12 @@ async def upload_paper(file: UploadFile = File(...)) -> dict:
         raise HTTPException(status_code=400, detail="只接受 PDF 文件")
 
     paper_id = pdf.digest(data)
+    target = settings.upload_dir / f"{paper_id}.pdf"
+    if not target.is_file():
+        target.write_bytes(data)
     if index.exists(paper_id):
         return {"duplicate": True, "added": 0, "paper": index.paper(paper_id)}
 
-    target = settings.upload_dir / f"{paper_id}.pdf"
-    target.write_bytes(data)
     filename = Path(file.filename or "paper.pdf").name
     try:
         pages = pdf.read_pages(target)
@@ -201,12 +202,12 @@ def history(limit: int = 12) -> dict:
 
 
 @app.get("/api/preferences")
-def get_preferences() -> dict:
+def get_preferences(fresh: bool = False) -> dict:
     connected = memory.enabled()
     if not connected:
         return {"connected": False, "preferences": {}}
     try:
-        return {"connected": True, "preferences": memory.load_prefs()}
+        return {"connected": True, "preferences": memory.load_prefs(fresh=fresh)}
     except memory.MemoryError as exc:
         return {"connected": False, "preferences": {}, "error": str(exc)}
 

@@ -171,8 +171,11 @@ curl -X POST http://127.0.0.1:8080/api/search/export \
 
 ```http
 GET /api/preferences
+GET /api/preferences?fresh=1
 PUT /api/preferences
 ```
+
+`fresh=1` 绕过进程内 12 秒缓存，直接回源 PowerContext。服务端按 `kind=preference` 过滤，沿 `next_cursor` 翻完所有页，再按 `saved_at` 取最新版本；条目库存按 artifact 排列，不能假设第一页就是最新。
 
 保存：
 

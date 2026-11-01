@@ -12,7 +12,7 @@
 | 项目网站 | `https://paperdesk-4qzym26fsnz.qoder.zone` |
 | 网站可见性 | 任何人可访问（public） |
 
-最终提交 commit 以分支 HEAD 为准；实现提交为 `1131a2714ac648ab57574eacf33197dc51a1236d`，之后仅追加文档与站点记录。
+本轮修复提交：`（推送后填写）`。最终提交以 `2026-competition-ecosystem` 分支 HEAD 为准。
 
 ## 一句话介绍
 
@@ -40,62 +40,84 @@ seekdb 不是“可选演示”，而是论文片段的唯一存储与检索引�
   - `knn`：`bge-small-zh-v1.5` 向量召回；
   - `where`：年份、会议、方向、开源、单篇过滤；
   - `rank`：内置 RRF（`rank_window_size=60`，`rank_constant=60`）；
-- 上传、删除、统计、详情都直接读写 seekdb，没有第二套索引。
+- 上传、删除、统计、详情都直接读写 seekdb，没有第二套索引；
+- 原始 PDF 保存在 `data/uploads/`，论文详情页可直接打开，验收逐篇检查返回 `%PDF`。
 
-代码入口：`backend/app/index.py`。
+代码入口：`backend/app/index.py`、`backend/app/pdf.py`。
 
 ## PowerContext 的实际使用
 
 PowerContext 不是“记录一条日志”，而是偏好与轨迹的唯一持久层：
 
 - 保存偏好：`POST /v1/memory/remember`，`kind=preference`，文本带 `paperdesk2/prefs/v1|` 标记；
-- 读取偏好：遍历 `POST /v1/memory/entries/list`，取最新版本；
+- 读取偏好：`POST /v1/atomic-memory/list`，`kind=preference`，沿 `next_cursor` 翻完所有页，按 `saved_at` 取最新；
 - 每次检索：写入 `kind=progress`、`paperdesk2/trace/v1|` 标记的轨迹；
 - 记忆默认值在检索计划中逐字段合并，显式条件永远优先；
-- 界面显示 artifact ID 与 revision，证明偏好确实写入并能追溯。
+- 界面显示 artifact ID 与 revision，证明偏好确实写入并能追溯；
+- 完全停止并重启 PowerContext 与 PaperDesk 后，scope、四字段与 artifact 均保持不变。
 
 代码入口：`backend/app/memory.py`、`backend/app/recall.py`。
+
+### 读回证据
+
+- `GET /api/preferences?fresh=1`：绕过应用内 12 秒缓存，回源读取；
+- `scripts/accept.py`：绕过 PaperDesk，直接分页读取 PowerContext，并比对 artifact ID 与四字段；
+- `docs/verification/powercontext-readback.json`：直读响应；
+- `docs/verification/restart-readback.json`：完全重启前后的对照，`match=true`。
 
 ## 运行
 
 Windows：
 
 ```powershell
+cd qoder
 powershell -ExecutionPolicy Bypass -File scripts\start.ps1
 ```
 
 macOS / Linux：
 
 ```bash
+cd qoder
 bash scripts/start.sh
 ```
 
-默认地址 `http://127.0.0.1:8080`。首次运行会安装依赖、下载本地 BGE 模型、启动 PowerContext 并导入 5 篇演示 PDF。
+默认地址 `http://127.0.0.1:8080`。首次运行会安装依赖、下载本地 BGE 模型、启动 PowerContext 并导入 5 篇演示 PDF。脚本固定 `POWERCONTEXT_HOME=runtime/powercontext`，并检查 18000 端口是否属于同一 scope。
 
 ## 验证结果
 
 | 项目 | 结果 |
 | --- | --- |
-| 单元测试 | 11 passed |
-| 端到端验收 | 19 / 19 PASS |
+| 单元测试 | 15 passed |
+| 端到端验收 | 24 / 24 PASS |
 | 演示语料 | 5 篇 / 26 片段 |
 | 混合检索 | 6 个片段，`strategy=hybrid` |
-| 记忆偏好 | 保存 / 自动应用 / 显式覆盖 / 清除 全部通过 |
-| 导出 | Markdown + CSV（UTF-8 BOM） |
+| 记忆偏好 | 保存 / 清缓存读回 / 绕过应用直读 / 自动应用 / 显式覆盖 / 清除 / 完全重启读回 全部通过 |
+| 最终 artifact | `art_6348613106ea4529a1c8745f10393a45`（scope `scp_2gs37bhwx70f9gqx00jr6z7c82`） |
+| 导出 | Markdown 2186 字节 + CSV 1648 字节（UTF-8 BOM） |
 
 复现：
 
 ```bash
+cd qoder
 pytest
 python scripts/accept.py --base http://127.0.0.1:8080
 ```
 
 真实运行截图与报告见 `docs/verification/`。
 
+## 网站形态说明
+
+本站是 **Qoder Sites 上公开可访问的项目介绍页**，不是在线版应用：
+
+- 页面展示真实运行截图、架构、验收报告链接与复现命令；
+- Qoder Sites 当前为静态托管，无法运行 Python、seekdb 本地引擎和 PowerContext 服务；
+- 完整应用按 README 在本机启动，不依赖云服务与 API Key；
+- 站点不伪造“在线检索”或“在线记忆”，所有截图与 artifact 均来自本机真实运行。
+
 ## Qoder 开发
 
 - 主要开发工作在本 Qoder 会话完成，账号 UID 见上表；
-- 会话截图：`docs/assets/qoder-session-final.png`；
+- 会话截图：`site/web/assets/qoder-session-final.png`；
 - 开发记录：`docs/development-log.md`；
 - 代码、测试、验收、站点内容均在本会话内生成。
 
@@ -107,12 +129,11 @@ python scripts/accept.py --base http://127.0.0.1:8080
 | 站点 ID | `01a191be-accb-777c-927c-adb7a1c58023` |
 | 访问地址 | `https://paperdesk-4qzym26fsnz.qoder.zone` |
 | 访问模式 | public |
-| 发布状态 | `publication_completed`，`published=true`，`lifecycle=active` |
-| prepare action | `1071b22a-c44a-4d9e-a580-cdf785f7b5ae` |
-| artifact 校验操作 | `01a194f7-0744-733f-a366-081cb65f2ce9`（succeeded） |
-| 发布操作 | `01a194f7-3006-7bb3-8612-91bdda581481`（succeeded, committed） |
-| 发布时间 | 2026-11-01 10:36 |
-| 公开验证 | 首页、样式表与最新截图均返回 HTTP 200，页面包含最终发布内容 |
+| 本轮发布操作 | 见下方“本轮重新发布”记录 |
+
+### 本轮重新发布
+
+`（发布后填写 action ID、发布时间与验证结果）`
 
 ## 安全与合规
 
@@ -123,6 +144,7 @@ python scripts/accept.py --base http://127.0.0.1:8080
 
 ## 已知限制
 
+- 项目网站是项目介绍页，不是在线版应用；完整应用需本机启动；
 - 演示语料为 5 篇原创示例论文，用于复现链路；
 - 本地 ONNX 模型首次加载需要数秒；
 - 扫描版 PDF 需要外部 OCR；

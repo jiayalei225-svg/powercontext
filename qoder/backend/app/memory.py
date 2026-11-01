@@ -20,6 +20,8 @@ _health: tuple[float, bool] | None = None
 _prefs: tuple[float, dict] | None = None
 _HEALTH_TTL = 4.0
 _PREFS_TTL = 12.0
+_PAGE_SIZE = 100
+_MAX_PAGES = 500
 
 
 class MemoryError(RuntimeError):
@@ -74,10 +76,25 @@ def remember(kind: str, text: str, reason: str) -> dict:
     )
 
 
-def entries(limit: int = 100) -> list[dict]:
-    limit = max(1, min(limit, 100))
-    data = _call("/v1/memory/entries/list", {"scope_id": scope(), "limit": limit})
-    return data.get("entries", [])
+def entries(kind: str | None = None, limit: int = _PAGE_SIZE) -> list[dict]:
+    """Read every page. The inventory is artifact-ordered, not newest-first,
+    so the latest preference can live on any page once traces accumulate."""
+    limit = max(1, min(limit, _PAGE_SIZE))
+    found: list[dict] = []
+    cursor: str | None = None
+    for _ in range(_MAX_PAGES):
+        payload: dict = {"scope_id": scope(), "limit": limit}
+        if kind:
+            payload["kind"] = kind
+        if cursor:
+            payload["cursor"] = cursor
+        data = _call("/v1/atomic-memory/list", payload)
+        batch = data.get("items") or []
+        found.extend(batch)
+        cursor = data.get("next_cursor")
+        if not cursor or not batch:
+            return found
+    raise MemoryError("PowerContext 记忆条目过多，未能完整读取")
 
 
 def _decode(entry: dict, marker: str) -> dict | None:
@@ -124,14 +141,14 @@ def save_prefs(prefs: dict) -> dict:
     }
 
 
-def load_prefs() -> dict:
+def load_prefs(fresh: bool = False) -> dict:
     global _prefs
     now = time.monotonic()
-    if _prefs and now - _prefs[0] < _PREFS_TTL:
+    if not fresh and _prefs and now - _prefs[0] < _PREFS_TTL:
         return dict(_prefs[1])
-    prefs = _pick_prefs(entries())
+    prefs = _pick_prefs(entries(kind="preference"))
     _prefs = (now, dict(prefs))
-    return prefs
+    return dict(prefs)
 
 
 def trace(query: str, filters: dict, hits: int) -> None:
@@ -141,7 +158,7 @@ def trace(query: str, filters: dict, hits: int) -> None:
 
 def trail(limit: int = 12) -> list[dict]:
     found = []
-    for entry in entries():
+    for entry in entries(kind="progress"):
         payload = _decode(entry, TRACE_MARK)
         if payload is not None:
             payload["artifact"] = (entry.get("artifact") or {}).get("artifact_id")
@@ -151,6 +168,7 @@ def trail(limit: int = 12) -> list[dict]:
 
 
 def snapshot(limit: int = 20) -> dict:
+    global _prefs
     if not enabled():
         return {
             "connected": False,
@@ -159,34 +177,36 @@ def snapshot(limit: int = 20) -> dict:
             "searches": [],
             "memories": [],
         }
-    items = entries()
-    prefs = _pick_prefs(items)
+    pref_items = entries(kind="preference")
+    trace_items = entries(kind="progress")
+    prefs = _pick_prefs(pref_items)
+    _prefs = (time.monotonic(), dict(prefs))
     searches = []
     memories = []
-    for entry in items:
-        if (entry.get("text") or "").startswith(TRACE_MARK):
-            payload = _decode(entry, TRACE_MARK)
-            if payload is not None:
-                searches.append(payload)
-        elif (entry.get("text") or "").startswith(PREF_MARK):
-            payload = _decode(entry, PREF_MARK)
-            if payload is not None:
-                memories.append(
-                    {
-                        "artifact": (entry.get("artifact") or {}).get("artifact_id"),
-                        "revision": (entry.get("artifact") or {}).get("revision"),
-                        "kind": entry.get("kind"),
-                        "state": entry.get("state"),
-                        "saved_at": payload.get("saved_at"),
-                        "summary": "检索偏好 · " + _describe(payload),
-                    }
-                )
+    for entry in trace_items:
+        payload = _decode(entry, TRACE_MARK)
+        if payload is not None:
+            payload["artifact"] = (entry.get("artifact") or {}).get("artifact_id")
+            searches.append(payload)
+    for entry in pref_items:
+        payload = _decode(entry, PREF_MARK)
+        if payload is not None:
+            memories.append(
+                {
+                    "artifact": (entry.get("artifact") or {}).get("artifact_id"),
+                    "revision": (entry.get("artifact") or {}).get("revision"),
+                    "kind": entry.get("kind"),
+                    "state": entry.get("state"),
+                    "saved_at": payload.get("saved_at"),
+                    "summary": "检索偏好 · " + _describe(payload),
+                }
+            )
     searches.sort(key=lambda item: item.get("at", 0), reverse=True)
     memories.sort(key=lambda item: item.get("saved_at", 0), reverse=True)
     return {
         "connected": True,
         "scope_id": scope(),
-        "preferences": load_prefs(),
+        "preferences": dict(prefs),
         "searches": searches[:limit],
         "memories": memories[:limit],
     }
