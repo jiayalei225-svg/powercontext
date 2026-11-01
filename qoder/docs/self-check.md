@@ -6,11 +6,11 @@
 
 ## A. 仓库与分支
 
-- [ ] 当前分支是 `2026-competition-ecosystem`
+- [ ] 当前分支是提交分支 `2026-competition-studycoach`
 
 ```bash
 git branch --show-current
-# 期望：2026-competition-ecosystem
+# 期望：2026-competition-studycoach
 ```
 
 - [ ] 业务改动只发生在 `qoder/` 下

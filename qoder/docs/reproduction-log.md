@@ -4,7 +4,7 @@
 
 - 日期：2026-11-01
 - 版本：`0.6.0` / `S6`
-- 分支：`2026-competition-ecosystem`
+- 分支：`2026-competition-studycoach`（StudyCoach 提交分支；`2026-competition-ecosystem` 上保留的是 PaperDesk 2.0）
 - 环境：Windows 11 · Python 3.13 · 嵌入式 seekdb · PowerContext 1.4.1 · BGE-small-zh-v1.5（512 维）
 - 原始日志：[verify-clean-run.txt](samples/verify-clean-run.txt) · [evidence-clean-run.txt](samples/evidence-clean-run.txt)
 
