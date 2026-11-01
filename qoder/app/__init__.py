@@ -1,0 +1,1 @@
+"""StudyCoach application package."""

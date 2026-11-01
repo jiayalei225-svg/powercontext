@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StudyCoach · 个人学习与复习教练</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="mark">SC</div>
+      <div>
+        <h1>StudyCoach</h1>
+        <p>个人学习与复习教练</p>
+      </div>
+    </div>
+    <div id="status" class="status status--loading">正在连接后端…</div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">S1 · 骨架已就位</p>
+      <h2>资料找得到，复习有节奏，助手记得你。</h2>
+      <p class="lede">
+        面向学生与科研人员的本地学习工作台。原文按语义切块后可混合检索，
+        掌握度决定今天复习什么，学习偏好与错因跨会话保留。
+      </p>
+    </section>
+
+    <section class="grid" aria-label="核心模块">
+      <article class="card">
+        <span class="tag">S4</span>
+        <h3>今日复习</h3>
+        <p>按掌握度与遗忘曲线排出今天该复习的知识点，答错自动缩短间隔。</p>
+      </article>
+      <article class="card">
+        <span class="tag">S3</span>
+        <h3>问答</h3>
+        <p>回答带原文出处，点开可看段落；右侧技术轨迹展示本次检索与记忆。</p>
+      </article>
+      <article class="card">
+        <span class="tag">S2</span>
+        <h3>资料库</h3>
+        <p>导入讲义、笔记与论文，按标题层级切块，向量与全文同时建索引。</p>
+      </article>
+    </section>
+
+    <section class="split" aria-label="技术分工">
+      <div class="panel">
+        <p class="panel-kicker">seekdb</p>
+        <h3>知识与分数</h3>
+        <p>
+          原文分块、向量与全文索引、元数据过滤、练习记录与掌握度。
+          回答“哪段原文相关、我得了多少分”。
+        </p>
+      </div>
+      <div class="panel">
+        <p class="panel-kicker">PowerContext</p>
+        <h3>关于我的记忆</h3>
+        <p>
+          学习偏好、错因归因、会话摘要、计划与进展。
+          回答“我是谁、上次为什么错、接下来该做什么”。
+        </p>
+      </div>
+    </section>
+
+    <section class="note">
+      <h3>本阶段验证点</h3>
+      <p>
+        启动脚本、依赖、端口、静态页与数据模型定义。检索、记忆、调度将在后续阶段接入，
+        未接通的接口会在响应里明确标注，不会返回伪造数据。
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <span>StudyCoach v0.1.0 · S1</span>
+    <a href="/docs">API 文档</a>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

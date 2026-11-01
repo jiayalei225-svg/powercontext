@@ -1,0 +1,10 @@
+pyseekdb==1.4.0.post1
+pylibseekdb==1.4.0.post2
+powercontext[server]==1.4.1
+typer>=0.16
+inquirerpy>=0.3
+fastapi>=0.115
+uvicorn[standard]>=0.34
+pymupdf>=1.24
+python-multipart>=0.0.20
+httpx>=0.28

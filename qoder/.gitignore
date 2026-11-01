@@ -1,9 +1,18 @@
+# Python
 .venv/
-data/seekdb/
-data/uploads/
-frontend/node_modules/
 __pycache__/
-*.pyc
+*.py[cod]
+*.egg-info/
+
+# Local secrets and runtime state
 .env
-scratch/
 *.log
+
+# seekdb / model / upload runtime data (seed data stays tracked)
+data/seekdb/
+data/powercontext/
+data/models/
+data/uploads/
+
+# Node (only used by archived prior project)
+node_modules/
