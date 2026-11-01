@@ -45,7 +45,7 @@
     "health": {
       "status": "ok",
       "version": "2.0.0",
-      "data_dir": "C:\\Users\\jyl25\\Documents\\Qoder\\2026-10-31\\5ae0bb21\\rebuild\\qoder\\data",
+      "data_dir": "<repo>/qoder/data",
       "index": {
         "collection": "paper_chunks_v2_bge_zh",
         "papers": 5,
