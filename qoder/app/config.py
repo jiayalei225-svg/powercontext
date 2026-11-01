@@ -51,8 +51,8 @@ def _path(name: str, default: str) -> Path:
 @dataclass(frozen=True)
 class Settings:
     app_name: str = "StudyCoach"
-    version: str = "0.5.0"
-    stage: str = _text("APP_STAGE", "S5")
+    version: str = "0.6.0"
+    stage: str = _text("APP_STAGE", "S6")
 
     host: str = _text("APP_HOST", "127.0.0.1")
     port: int = _integer("APP_PORT", 8090)

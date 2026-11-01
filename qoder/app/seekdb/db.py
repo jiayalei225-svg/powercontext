@@ -100,7 +100,7 @@ def init_schema() -> None:
 def ensure_user(user_id: str) -> None:
     with sql() as cursor:
         cursor.execute(
-            "INSERT IGNORE INTO study_users (user_id, display_name, created_at) VALUES (%s, %s, NOW(6))",
+            "INSERT IGNORE INTO study_users (user_id, display_name, created_at) VALUES (%s, %s, UTC_TIMESTAMP(6))",
             (user_id, user_id),
         )
 

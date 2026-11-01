@@ -1,0 +1,36 @@
+name: studycoach
+
+# Optional container path. The primary, verified path is the embedded
+# start_windows.bat / start_macos.sh (no Docker needed). See README.
+services:
+  studycoach:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: studycoach:local
+    ports:
+      - "8090:8090"
+    environment:
+      APP_PORT: "8090"
+      USER_ID: local
+      POWERCONTEXT_URL: http://127.0.0.1:8010
+      POWERCONTEXT_EMBEDDING_BASE_URL: http://127.0.0.1:8090/v1
+      EMBEDDING_MODE: local
+      EMBEDDING_MODEL: bge-small-zh-v1.5
+      EMBEDDING_DIM: "512"
+      HF_ENDPOINT: https://hf-mirror.com
+      # Leave empty to use evidence-only answers, or supply an OpenAI-compatible LLM.
+      LLM_BASE_URL: ${LLM_BASE_URL:-}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_MODEL: ${LLM_MODEL:-}
+    volumes:
+      - studycoach-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8090/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+volumes:
+  studycoach-data:

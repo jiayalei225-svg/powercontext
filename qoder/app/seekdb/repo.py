@@ -86,7 +86,7 @@ def start_session(session_id: str, user_id: str, topic: str | None = None) -> No
     db.execute(
         """
         INSERT IGNORE INTO study_sessions (session_id, user_id, topic, started_at)
-        VALUES (%s, %s, %s, NOW(6))
+        VALUES (%s, %s, %s, UTC_TIMESTAMP(6))
         """,
         (session_id, user_id, topic),
     )
@@ -100,7 +100,7 @@ def set_session_topic(session_id: str, topic: str) -> None:
 
 
 def end_session(session_id: str) -> None:
-    db.execute("UPDATE study_sessions SET ended_at=NOW(6) WHERE session_id=%s", (session_id,))
+    db.execute("UPDATE study_sessions SET ended_at=UTC_TIMESTAMP(6) WHERE session_id=%s", (session_id,))
 
 
 def get_session(session_id: str) -> dict | None:
@@ -281,7 +281,7 @@ def review_queue(subject: str | None = None, limit: int = 20) -> list[dict]:
         FROM study_knowledge_points kp
         LEFT JOIN study_mastery m ON m.kp_id=kp.kp_id
         WHERE EXISTS (SELECT 1 FROM study_kp_chunks kc2 WHERE kc2.kp_id=kp.kp_id)
-          AND (m.kp_id IS NULL OR m.next_review_at IS NULL OR m.next_review_at <= NOW(6))
+          AND (m.kp_id IS NULL OR m.next_review_at IS NULL OR m.next_review_at <= UTC_TIMESTAMP(6))
           {clause}
         ORDER BY (m.kp_id IS NOT NULL) ASC,
                  COALESCE(m.score, 0.5) ASC,
@@ -305,7 +305,7 @@ def review_stats(subject: str | None = None) -> dict:
     """
     total = db.query_one(f"SELECT COUNT(*) AS n {base}", params) or {"n": 0}
     due = db.query_one(
-        f"SELECT COUNT(*) AS n {base} AND (m.kp_id IS NULL OR m.next_review_at IS NULL OR m.next_review_at <= NOW(6))",
+        f"SELECT COUNT(*) AS n {base} AND (m.kp_id IS NULL OR m.next_review_at IS NULL OR m.next_review_at <= UTC_TIMESTAMP(6))",
         params,
     ) or {"n": 0}
     new = db.query_one(f"SELECT COUNT(*) AS n {base} AND m.kp_id IS NULL", params) or {"n": 0}
@@ -319,7 +319,7 @@ def review_stats(subject: str | None = None) -> dict:
                COUNT(DISTINCT kp_id) AS points,
                COALESCE(SUM(is_correct), 0) AS correct
         FROM study_practice_records
-        WHERE created_at >= CURDATE()
+        WHERE created_at >= UTC_DATE()
         """
     ) or {"answers": 0, "points": 0, "correct": 0}
     return {

@@ -1,0 +1,8 @@
+.venv
+data
+archive
+docs
+**/__pycache__
+*.py[cod]
+*.log
+.env
