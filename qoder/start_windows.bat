@@ -20,7 +20,7 @@ if not exist ".env" (
 )
 
 echo [3/3] Starting http://127.0.0.1:8090
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8090
+python -m app.run
 goto :eof
 
 :error
