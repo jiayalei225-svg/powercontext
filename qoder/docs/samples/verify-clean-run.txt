@@ -1,0 +1,71 @@
+StudyCoach acceptance · http://127.0.0.1:8090
+
+[1. 健康检查]
+  PASS  应用返回 ok · stage=S6
+  PASS  seekdb 已连接
+  PASS  PowerContext ready
+  PASS  本地嵌入可用 · bge-small-zh-v1.5 · 512d
+
+[2. 导入种子资料（幂等）]
+  PASS  文档已入库 · 3 份 · 本次跳过 0
+  PASS  chunk 已建索引 · 27 chunks
+
+[3. 混合检索与引用契约]
+  PASS  返回检索结果 · 5 条 · hybrid · keywords=['正则化', '过拟合', '关系']
+  PASS  每条结果带引用字段 · chunk_id, doc_id, doc_title, section, page
+  PASS  检索写入 trace · tr_1bb9d62746d74b79
+        top1: 《我的手写复习笔记（扫描整理）》/ 2026-10-25 复盘：正则化与过拟合 / p0 / handwritten-notes::0002
+
+[4. 第一轮问答（seekdb + PowerContext 同时调用）]
+  PASS  回答模式明确 · evidence
+  PASS  回答引用了 seekdb 结果 · 5 条引用
+  PASS  有 seekdb trace
+  PASS  有记忆 trace
+  PASS  返回回答正文
+
+[5. 会话收尾写回记忆]
+  PASS  收尾写入记忆 · 本次新增 3 条 · ['profile', 'session_summary', 'weakness']
+  PASS  会话摘要存在
+  PASS  薄弱点存在
+  PASS  偏好存在
+  PASS  收尾轨迹覆盖两层 · {'seekdb': 8, 'powercontext': 8, 'app': 2}
+
+[6. 第二轮问答（跨会话记忆注入）]
+  PASS  注入了跨会话记忆 · 3 条 · ['profile', 'session_summary', 'weakness']
+  PASS  回答基于检索/记忆而非空话
+        first memory: [profile] 先给一句话结论，再配一个中文例子
+
+[7. 记忆列表]
+  PASS  记忆可列出 · 3 条 · ['profile', 'session_summary', 'weakness']
+  PASS  五种 kind 已定义
+
+[8. 今日复习队列]
+  PASS  队列非空 · 10 个 · due=27
+  PASS  统计含到期数
+  PASS  队列项带掌握度状态 · 1.1 线性相关与基 · new
+
+[9. 出题、判分与掌握度]
+  PASS  由原文生成题目 · 3 题 · {'queue': 3, 'new': 3, 'knowledge_points': 27}
+  PASS  题目提供选项
+  PASS  服务端完成判分 · 3 题
+  PASS  结果含掌握度与出处 · mastery 0.5 → 0.4
+  PASS  每题回链原文 chunk
+  PASS  练习进展写入 PowerContext · ['task_state', 'weakness']
+  PASS  答错写入错因记忆 · 错 2 题
+        wrong example: 「梯度下降」 next=30 分钟后
+  PASS  判分写入 seekdb trace · tr_0e2c9b69ba5e400d
+  PASS  今日已答计数增加 · answered_today=3
+
+[10. 学习计划写入与复用]
+  PASS  计划有正文 · 5 个知识点
+  PASS  计划写入 PowerContext · art_3bf1fc614b9740989cca09d11edf5af7
+  PASS  重复生成复用同一条 · art_3bf1fc614b9740989cca09d11edf5af7 == art_3bf1fc614b9740989cca09d11edf5af7
+
+[11. 技术轨迹分层]
+  PASS  有 seekdb 轨迹
+  PASS  有 PowerContext 轨迹
+  PASS  有应用轨迹 · ['app', 'powercontext', 'seekdb']
+
+============================================================
+ALL PASS · 问答、记忆、复习、计划与轨迹均已跑通
+会话：verify-20261101-120507-1 / verify-20261101-120507-2 / verify-20261101-120507-quiz / verify-20261101-120507-plan

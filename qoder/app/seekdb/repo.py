@@ -121,9 +121,14 @@ def session_evidence(session_id: str) -> dict:
     sections: list[str] = []
     titles: list[str] = []
     queries: list[str] = []
+    seen_queries: set[str] = set()
     for row in rows:
         query = (row.get("input_text") or "").strip()
-        if query and query not in queries:
+        # /api/search and /api/ask record the same question, differing only by
+        # terminal punctuation; dedupe on the normalized form.
+        key = query.rstrip("。？！?!；;，, ")
+        if key and key not in seen_queries:
+            seen_queries.add(key)
             queries.append(query)
         try:
             payload = json.loads(row.get("payload_json") or "{}")

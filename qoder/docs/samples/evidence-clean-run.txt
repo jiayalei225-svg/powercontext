@@ -1,0 +1,351 @@
+
+## seekdb · study_documents
+[
+  {
+    "doc_id": "handwritten-notes",
+    "title": "我的手写复习笔记（扫描整理）",
+    "subject": "学习笔记",
+    "chunk_count": 4,
+    "file_type": "md",
+    "imported_at": "2026-11-01 04:05:07"
+  },
+  {
+    "doc_id": "linear-algebra-lecture",
+    "title": "线性代数核心讲义",
+    "subject": "线性代数",
+    "chunk_count": 11,
+    "file_type": "md",
+    "imported_at": "2026-11-01 04:05:09"
+  },
+  {
+    "doc_id": "ml-lecture",
+    "title": "机器学习基础讲义",
+    "subject": "机器学习",
+    "chunk_count": 12,
+    "file_type": "md",
+    "imported_at": "2026-11-01 04:05:10"
+  }
+]
+
+## seekdb · study_chunks
+{
+  "chunks": 27
+}
+
+## seekdb · 知识点与掌握度
+[
+  {
+    "kp_id": "kp-115e0ec6a7d314ee",
+    "name": "梯度下降",
+    "subject": "学习笔记",
+    "score": 0.4,
+    "interval_days": 1,
+    "repetitions": 0,
+    "lapses": 1,
+    "next_review_at": "2026-11-01 04:35:13.667645"
+  },
+  {
+    "kp_id": "kp-269d226cd951f798",
+    "name": "正则化与过拟合",
+    "subject": "学习笔记",
+    "score": 0.4,
+    "interval_days": 1,
+    "repetitions": 0,
+    "lapses": 1,
+    "next_review_at": "2026-11-01 04:35:13.667645"
+  },
+  {
+    "kp_id": "kp-b9fd0ed3d615fe9f",
+    "name": "特征值与 PCA",
+    "subject": "学习笔记",
+    "score": 0.625,
+    "interval_days": 1,
+    "repetitions": 1,
+    "lapses": 0,
+    "next_review_at": "2026-11-02 04:05:13.667645"
+  },
+  {
+    "kp_id": "kp-1f7287018f1c4453",
+    "name": "错题摘录：偏差与数据切分",
+    "subject": "学习笔记",
+    "score": null,
+    "interval_days": null,
+    "repetitions": null,
+    "lapses": null,
+    "next_review_at": null
+  },
+  {
+    "kp_id": "kp-0255405c4880202b",
+    "name": "1.1 问题设定",
+    "subject": "机器学习",
+    "score": null,
+    "interval_days": null,
+    "repetitions": null,
+    "lapses": null,
+    "next_review_at": null
+  },
+  {
+    "kp_id": "kp-1062d7eddcfc08ec",
+    "name": "1.2 损失函数与经验风险",
+    "subject": "机器学习",
+    "score": null,
+    "interval_days": null,
+    "repetitions": null,
+    "lapses": null,
+    "next_review_at": null
+  },
+  {
+    "kp_id": "kp-8762032ef2f8d341",
+    "name": "2.1 批量梯度下降",
+    "subject": "机器学习",
+    "score": null,
+    "interval_days": null,
+    "repetitions": null,
+    "lapses": null,
+    "next_review_at": null
+  },
+  {
+    "kp_id": "kp-625e9aec9835264f",
+    "name": "2.2 随机梯度下降与小批量",
+    "subject": "机器学习",
+    "score": null,
+    "interval_days": null,
+    "repetitions": null,
+    "lapses": null,
+    "next_review_at": null
+  },
+  {
+    "kp_id": "kp-aa40032c392049f4",
+    "name": "2.3 学习率与动量",
+    "subject": "机器学习",
+    "score": null,
+    "interval_days": null,
+    "repetitions": null,
+    "lapses": null,
+    "next_review_at": null
+  },
+  {
+    "kp_id": "kp-d65dc7ac7e36ef31",
+    "name": "3.1 过拟合的表现",
+    "subject": "机器学习",
+    "score": null,
+    "interval_days": null,
+    "repetitions": null,
+    "lapses": null,
+    "next_review_at": null
+  },
+  {
+    "kp_id": "kp-40f3a854e8839222",
+    "name": "3.2 L1 与 L2 正则化",
+    "subject": "机器学习",
+    "score": null,
+    "interval_days": null,
+    "repetitions": null,
+    "lapses": null,
+    "next_review_at": null
+  },
+  {
+    "kp_id": "kp-63019aedfac33590",
+    "name": "3.3 Dropout 与数据增强",
+    "subject": "机器学习",
+    "score": null,
+    "interval_days": null,
+    "repetitions": null,
+    "lapses": null,
+    "next_review_at": null
+  }
+]
+
+## seekdb · 今日练习
+[
+  {
+    "record_id": "pr-5010f3b3814f4ac9",
+    "session_id": "verify-20261101-120507-quiz",
+    "kp_id": "kp-269d226cd951f798",
+    "is_correct": 0,
+    "answer_text": "错题一：把“偏差”当成“误差”。偏差是模型预测的期望与真实值的系统性差距，误差还包含方差和噪声。高偏差对应欠拟合，高方差对应过拟合。 错题二：交叉验证时打乱了时间序列，用未来数据预测过去。时间序列必须按时间切分，否则评估会过于乐观。…",
+    "created_at": "2026-11-01 04:05:13.667645"
+  },
+  {
+    "record_id": "pr-b9d1074900114b61",
+    "session_id": "verify-20261101-120507-quiz",
+    "kp_id": "kp-115e0ec6a7d314ee",
+    "is_correct": 0,
+    "answer_text": "正则化与过拟合",
+    "created_at": "2026-11-01 04:05:13.667645"
+  },
+  {
+    "record_id": "pr-d033b70931c14912",
+    "session_id": "verify-20261101-120507-quiz",
+    "kp_id": "kp-b9fd0ed3d615fe9f",
+    "is_correct": 1,
+    "answer_text": "特征值与 PCA",
+    "created_at": "2026-11-01 04:05:13.667645"
+  }
+]
+
+## seekdb · 最近轨迹
+[
+  {
+    "layer": "seekdb",
+    "operation": "build_plan",
+    "result_count": 5,
+    "summary": "复用已有 3 天计划（5 个知识点）",
+    "ts": "2026-11-01 04:05:14.213868"
+  },
+  {
+    "layer": "powercontext",
+    "operation": "list_memory",
+    "result_count": 1,
+    "summary": "列出 1 条记忆",
+    "ts": "2026-11-01 04:05:14.213360"
+  },
+  {
+    "layer": "seekdb",
+    "operation": "build_plan",
+    "result_count": 5,
+    "summary": "按复习队列生成 3 天计划（5 个知识点）",
+    "ts": "2026-11-01 04:05:14.191077"
+  },
+  {
+    "layer": "powercontext",
+    "operation": "remember:plan",
+    "result_count": 1,
+    "summary": "写入学习计划：未来 3 天的学习计划：先复习 「1.1 线性相关与基」（线性代数，未练习）、「1.1 问题设定」（机器学习，未练习）、「1.2 内积与正交」（线性代数，未练习）、「1.2 损失函数与经验风险」（机器学习，未练习）、「2.1 批量梯度下降」",
+    "ts": "2026-11-01 04:05:14.190296"
+  },
+  {
+    "layer": "powercontext",
+    "operation": "list_memory",
+    "result_count": 0,
+    "summary": "列出 0 条记忆",
+    "ts": "2026-11-01 04:05:14.090808"
+  },
+  {
+    "layer": "seekdb",
+    "operation": "review_today",
+    "result_count": 10,
+    "summary": "今日队列 24 个（新 24，薄弱 2）",
+    "ts": "2026-11-01 04:05:14.078295"
+  },
+  {
+    "layer": "powercontext",
+    "operation": "remember:weakness",
+    "result_count": 1,
+    "summary": "写入薄弱点与错因：本轮练习的错因自述：验收脚本：故意选择第一个选项，用来验证错题归因",
+    "ts": "2026-11-01 04:05:14.061961"
+  },
+  {
+    "layer": "powercontext",
+    "operation": "remember:weakness",
+    "result_count": 1,
+    "summary": "写入薄弱点与错因：在「正则化与过拟合」的练习中答错：我选了「错题一：把“偏差”当成“误差”。偏差是模型预测的期望与真实值的系统性差距，误差还包含方差…」，正确答案是「L1 和 L2 的区别我用一句话记：L1 会把不重要的权重直接变成 0，所以能做特征选择…」",
+    "ts": "2026-11-01 04:05:13.965601"
+  },
+  {
+    "layer": "powercontext",
+    "operation": "remember:weakness",
+    "result_count": 1,
+    "summary": "写入薄弱点与错因：在「梯度下降」的练习中答错：我选了「正则化与过拟合」，正确答案是「梯度下降」。下次先做概念辨析。",
+    "ts": "2026-11-01 04:05:13.871167"
+  },
+  {
+    "layer": "powercontext",
+    "operation": "remember:task_state",
+    "result_count": 1,
+    "summary": "写入任务进展：2026-11-01 完成 3 道练习：正确 1 道。需要回看：梯度下降、正则化与过拟合。",
+    "ts": "2026-11-01 04:05:13.777204"
+  },
+  {
+    "layer": "seekdb",
+    "operation": "quiz_submit",
+    "result_count": 1,
+    "summary": "提交 3 题：正确 1 题",
+    "ts": "2026-11-01 04:05:13.675460"
+  },
+  {
+    "layer": "seekdb",
+    "operation": "quiz_generate",
+    "result_count": 3,
+    "summary": "从 seekdb 原文生成 3 道题（3 个知识点）",
+    "ts": "2026-11-01 04:05:13.646416"
+  }
+]
+
+## seekdb · 轨迹分层计数
+[
+  {
+    "layer": "powercontext",
+    "n": 20
+  },
+  {
+    "layer": "seekdb",
+    "n": 16
+  },
+  {
+    "layer": "app",
+    "n": 3
+  }
+]
+
+## PowerContext · scope
+{
+  "scope_id": "scp_7b56cc19ky7f66g5g5kc7agn0y",
+  "kinds": {
+    "session_summary": 1,
+    "weakness": 4,
+    "task_state": 1,
+    "profile": 1,
+    "plan": 1
+  },
+  "entries": [
+    {
+      "artifact_id": "art_0f22bcb33cb34478bbef8703e7f77b50",
+      "kind": "session_summary",
+      "state": "active",
+      "text": "2026-11-01 围绕「正则化与过拟合」完成一轮学习。检索覆盖 「2026-10-25 复盘：正则化与过拟合」、「第三章 过拟合与正则化 / 3.2 L1 与 L2 正则化」、「第三章 过拟合与正则化 / 3.1 过拟合的表现」、「第二章 矩阵与线性变换 / 2.1 秩与零空间」，共 2 次 seekdb 检索。本轮提出的问题：正则化和过拟合是什么关系。学习者自述的卡点：L1 和 L2 的区别总是记反，权重衰减和早停的关系也没理清。下次建议先复习「2026-10-25 复盘：正则化与过拟合」，再做一次回忆式自测。"
+    },
+    {
+      "artifact_id": "art_135fd253899f4d5aaf3fb1d6f5a0c9c0",
+      "kind": "weakness",
+      "state": "active",
+      "text": "在「梯度下降」的练习中答错：我选了「正则化与过拟合」，正确答案是「梯度下降」。下次先做概念辨析。"
+    },
+    {
+      "artifact_id": "art_178db31f03194b5f8a9a0805c0cda0d2",
+      "kind": "task_state",
+      "state": "active",
+      "text": "2026-11-01 完成 3 道练习：正确 1 道。需要回看：梯度下降、正则化与过拟合。"
+    },
+    {
+      "artifact_id": "art_21d3e2c814434435b1203671634fbb40",
+      "kind": "profile",
+      "state": "active",
+      "text": "先给一句话结论，再配一个中文例子"
+    },
+    {
+      "artifact_id": "art_3bf1fc614b9740989cca09d11edf5af7",
+      "kind": "plan",
+      "state": "active",
+      "text": "未来 3 天的学习计划：先复习 「1.1 线性相关与基」（线性代数，未练习）、「1.1 问题设定」（机器学习，未练习）、「1.2 内积与正交」（线性代数，未练习）、「1.2 损失函数与经验风险」（机器学习，未练习）、「2.1 批量梯度下降」（机器学习，未练习）。每天约 20 分钟，先看原文再做自测；当前待复习 24 个知识点，完成后到「今日复习」提交练习，掌握度和下次复习时间会自动更新。"
+    },
+    {
+      "artifact_id": "art_4a746a8d4952462cbc5d0d42d668b624",
+      "kind": "weakness",
+      "state": "active",
+      "text": "在「正则化与过拟合」上，学习者自述还没搞清楚：L1 和 L2 的区别总是记反，权重衰减和早停的关系也没理清。下次回答先做概念辨析，再给一个具体例子。"
+    },
+    {
+      "artifact_id": "art_60767ff073584f2b96defcbc00164f9c",
+      "kind": "weakness",
+      "state": "active",
+      "text": "在「正则化与过拟合」的练习中答错：我选了「错题一：把“偏差”当成“误差”。偏差是模型预测的期望与真实值的系统性差距，误差还包含方差…」，正确答案是「L1 和 L2 的区别我用一句话记：L1 会把不重要的权重直接变成 0，所以能做特征选择…」。下次先做概念辨析。"
+    },
+    {
+      "artifact_id": "art_e98e69bd392a4d3b98d0a3d78636b39b",
+      "kind": "weakness",
+      "state": "active",
+      "text": "本轮练习的错因自述：验收脚本：故意选择第一个选项，用来验证错题归因"
+    }
+  ]
+}

@@ -338,3 +338,4 @@ curl -s http://127.0.0.1:8090/health | grep version   # 应为 0.6.0 / S6
 | 日期 | 版本 | 结果 |
 | --- | --- | --- |
 | 2026-11-01 | 0.6.0 / S6 | `scripts/verify.py` 11 步全部 PASS；3 文档 / 27 chunks；跨会话注入 10 条；判分 0.5 → 0.4；计划复用同一 artifact；三层轨迹齐全 |
+| 2026-11-01 | 0.6.0 / S6 | 干净数据复现：11 步全部 PASS；首轮收尾写入 3 条记忆，第二轮注入 3 条；due=27；原始日志见 [samples/verify-clean-run.txt](samples/verify-clean-run.txt) 与 [samples/evidence-clean-run.txt](samples/evidence-clean-run.txt) |

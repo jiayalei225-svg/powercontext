@@ -41,7 +41,7 @@ StudyCoach 把三件事接成一条闭环：**入库 → 混合检索 → 带记
 
 ## 已经能做什么
 
-S1–S6 已完成，所有页面均可交互：
+S1–S6 功能已完成，S7 干净环境复现已通过。所有页面均可交互：
 
 | 能力 | 实现 |
 | --- | --- |
@@ -383,6 +383,7 @@ qoder/
 ## 相关文档
 
 - [docs/verification.md](docs/verification.md)：验收步骤、API 命令、截图清单
-- [docs/qoder-dev-log.md](docs/qoder-dev-log.md)：S1–S6 开发过程与踩坑
+- [docs/reproduction-log.md](docs/reproduction-log.md)：S7 干净环境复现记录与原始证据
+- [docs/qoder-dev-log.md](docs/qoder-dev-log.md)：S1–S7 开发过程与踩坑
 - [docs/website-content.md](docs/website-content.md)：参赛网站文案与截图说明
 - [docs/self-check.md](docs/self-check.md)：提交前自检清单

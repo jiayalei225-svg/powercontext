@@ -214,4 +214,40 @@
 
 ### 对应提交
 
-`feat(qoder): S6 reliable startup, UTC scheduling and delivery docs`（提交后回填 hash）
+`feat(qoder): S6 reliable startup, UTC scheduling and delivery docs`（`0bf26520`）
+
+---
+
+## S7 · 干净环境复现与证据归档（2026-11-01）
+
+### 目标
+
+从空数据目录完整复现一次，确认交付不是依赖已有运行状态；把原始日志、风险与未验证项写清楚，准备提交。
+
+### 实际做了什么
+
+- 停止两个服务，删除 `data/seekdb`、`data/powercontext`、`data/uploads`，保留模型缓存。
+- 按 app → PowerContext 顺序启动，确认空库为 0 文档 / 0 chunk、PowerContext 为 `ready`。
+- 运行 `scripts/verify.py`：11 步全部 PASS；3 文档 / 27 chunks；首轮收尾 3 条记忆；第二轮注入 3 条；3 题判分 0.5 → 0.4；计划连续两次复用同一 artifact；三层轨迹齐全。
+- 运行 `scripts/evidence.py` 导出 seekdb 文档、掌握度、练习记录、轨迹与 PowerContext 原始条目。
+- 将本次真实日志入库：`docs/samples/verify-clean-run.txt`、`docs/samples/evidence-clean-run.txt`。
+- 新增 `docs/reproduction-log.md`：复现步骤、空库基线、验收结果、四项基本验收、五个评分风险与处理、未验证项。
+- 修复会话摘要的问题重复：`/api/search` 与 `/api/ask` 对同一问题只差句末标点，`session_evidence` 改为按去标点后的文本去重。
+
+### 遇到的问题与处理
+
+1. **干净环境的“注入条数”比演示时少**：第二轮只注入 3 条，而演示会话可注入 10 条。原因不是逻辑退化，而是记忆总量不同。处理：验收脚本只断言“注入条数 > 0”与 kind 存在，不写死条数；复现文档解释差异。
+2. **摘要里同一问题出现两次**：显式检索与问答各写一条 seekdb trace，文本只差句末问号。处理：去标点后去重，保留首次出现。
+3. **截图数字与干净复现不一致**：截图来自更长的演示会话（17 条记忆、10 道练习），干净复现是 8 条记忆、3 道练习。处理：文档明确说明以界面结构与日志为准，不把截图当数据快照。
+4. **Docker 与真实 LLM 无法在本机验证**：不伪造结果。处理：Docker 标注“未端到端验证”，LLM 标注“未配置真实 key，evidence 模式已验证”。
+
+### 验证结果
+
+- 空库启动正常，导入后 3 文档 / 27 chunks / 27 知识点。
+- `verify.py` 全绿，退出码 0；原始日志与证据日志已入库。
+- PowerContext 干净运行共 8 条记忆：`weakness` 4、`session_summary` 1、`profile` 1、`plan` 1、`task_state` 1。
+- 摘要问题去重生效：只剩一条“正则化和过拟合是什么关系”。
+
+### 对应提交
+
+`fix(qoder): S7 clean-room verification and session query dedupe`
