@@ -25,7 +25,7 @@
       <span class="status-pill" id="status-pill" title="后端与 seekdb 状态">
         <span class="status-dot"></span><span id="status-text">连接中</span>
       </span>
-      <button class="ghost-btn" id="demo-btn" title="导入种子资料并连续执行三次检索">演示模式</button>
+      <button class="ghost-btn" id="demo-btn" title="导入种子资料，连续执行三次带记忆的会话">演示模式</button>
       <button class="trace-btn" id="trace-toggle" aria-expanded="false">
         技术轨迹 <span class="trace-count" id="trace-count">0</span>
       </button>
@@ -53,7 +53,7 @@
         <div>
           <p class="eyebrow">Ask your own material</p>
           <h1>问你的资料，<br>而不是问搜索引擎</h1>
-          <p class="lede">一次查询同时走向量、全文和结构化过滤，每条结果都带原文出处。</p>
+          <p class="lede">问题先查 seekdb 资料，再读 PowerContext 里关于你的记忆；回答带原文出处，也会提到你上次卡在哪。</p>
         </div>
         <div class="ask-stats" id="ask-stats" aria-live="polite"></div>
       </div>
@@ -73,7 +73,7 @@
               <option value="">全部学科</option>
             </select>
           </label>
-          <button class="primary-btn" type="submit" id="search-btn">检索证据</button>
+          <button class="primary-btn" type="submit" id="search-btn">提问并回答</button>
         </div>
         <div class="chips" id="example-chips">
           <button type="button" class="chip" data-q="怎么防止模型过拟合？">怎么防止过拟合</button>
@@ -83,7 +83,45 @@
       </form>
 
       <div class="search-meta" id="search-meta" hidden></div>
-      <div class="answer-panel" id="answer-panel" hidden></div>
+      <div class="answer-panel" id="answer-panel" hidden>
+        <div class="answer-head">
+          <span class="answer-mode" id="answer-mode"></span>
+          <span class="answer-timing" id="answer-timing"></span>
+        </div>
+        <div class="answer-body" id="answer-body"></div>
+        <div class="injected" id="injected-memory" hidden>
+          <p class="injected-title">本轮从 PowerContext 注入的记忆</p>
+          <div class="memory-chips" id="injected-list"></div>
+        </div>
+        <div class="answer-actions">
+          <button class="ghost-btn small" id="closeout-open">结束本轮 · 写入记忆</button>
+          <span class="answer-hint">收尾会把本轮知识点、卡点和偏好写回 PowerContext</span>
+        </div>
+      </div>
+
+      <section class="closeout-card" id="closeout-card" hidden>
+        <div class="closeout-head">
+          <div>
+            <p class="eyebrow">Session close-out</p>
+            <h2>这一轮，哪里还没搞懂？</h2>
+          </div>
+          <button class="icon-btn" id="closeout-close" aria-label="关闭收尾表单">×</button>
+        </div>
+        <label class="closeout-field">
+          <span>卡点 / 错因（会写成 weakness 记忆）</span>
+          <textarea id="closeout-struggles" rows="3" placeholder="例如：L1 的稀疏解和 L2 的权重衰减总是记反"></textarea>
+        </label>
+        <label class="closeout-field">
+          <span>希望我以后怎么讲（会写成 profile 记忆，可留空）</span>
+          <input id="closeout-preference" maxlength="300" placeholder="例如：先给一句话结论，再配一个中文例子">
+        </label>
+        <div class="closeout-actions">
+          <button class="primary-btn" id="closeout-submit">结束本轮并写入记忆</button>
+          <button class="ghost-btn small" id="closeout-cancel">取消</button>
+        </div>
+        <div class="closeout-result" id="closeout-result" hidden></div>
+      </section>
+
       <div class="results" id="results"></div>
       <div class="empty-state" id="ask-empty">
         <p class="empty-title">还没有检索记录</p>
@@ -121,9 +159,27 @@
       </div>
 
       <div class="doc-list" id="doc-list"></div>
+
+      <section class="memory-section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">PowerContext</p>
+            <h2>我的记忆</h2>
+            <p class="section-hint">跨会话保存的偏好、薄弱点、会话摘要、计划和任务进展。问答时按语义召回后注入。</p>
+          </div>
+          <button class="ghost-btn small" id="memory-refresh">刷新记忆</button>
+        </div>
+        <div class="stat-row small" id="memory-stats"></div>
+        <div class="memory-list" id="memory-list"></div>
+        <div class="empty-state compact" id="memory-empty" hidden>
+          <p class="empty-title">还没有记忆</p>
+          <p>完成一次问答后点「结束本轮 · 写入记忆」，PowerContext 就会有一条跨会话记忆。</p>
+        </div>
+      </section>
+
       <div class="empty-state" id="library-empty">
         <p class="empty-title">资料库是空的</p>
-        <p>点击「导入示例资料」会写入两份讲义和一份手写笔记（共约 36 个 chunk），用于立即体验检索。</p>
+        <p>点击「导入示例资料」会写入两份讲义和一份手写笔记（共 27 个 chunk），用于立即体验检索。</p>
       </div>
     </section>
   </main>
@@ -139,7 +195,7 @@
         <button class="icon-btn" id="trace-close" aria-label="关闭技术轨迹">×</button>
       </div>
     </div>
-    <p class="trace-hint">每次 seekdb 检索与导入都会落一条 trace，含时间、输入、返回条数和关键摘要。</p>
+    <p class="trace-hint">每次 seekdb 检索、PowerContext 读写和回答都会落一条 trace，含时间、输入、返回条数和关键摘要。</p>
     <div class="trace-list" id="trace-list"></div>
   </aside>
   <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>

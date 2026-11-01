@@ -11,6 +11,8 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+from .api.coach import router as coach_router
+from .api.embeddings import router as embeddings_router
 from .api.health import router as health_router
 from .api.study import router as study_router
 from .config import settings
@@ -26,7 +28,9 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(title=settings.app_name, version=settings.version, lifespan=lifespan)
 app.include_router(health_router)
+app.include_router(embeddings_router)
 app.include_router(study_router)
+app.include_router(coach_router)
 app.mount("/static", StaticFiles(directory=str(settings.web_dir)), name="static")
 
 

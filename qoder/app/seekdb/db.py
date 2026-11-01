@@ -107,6 +107,23 @@ def _embedding_function() -> Any:
     )
 
 
+def embed_texts(texts: list[str]) -> list[list[float]]:
+    """Embed texts with the same local model seekdb uses.
+
+    PowerContext cannot run its own ONNX runtime, so StudyCoach exposes this
+    model through ``POST /v1/embeddings``. Sharing one function instance keeps
+    the memory index and the document index in the same vector space.
+    """
+    if not texts:
+        return []
+    with _lock:
+        if "embedding" not in _state:
+            settings.prepare()
+            _state["embedding"] = _embedding_function()
+        function = _state["embedding"]
+        return function(texts)
+
+
 def collection() -> Any:
     """The single hybrid collection, opened lazily."""
     with _lock:

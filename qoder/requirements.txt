@@ -7,4 +7,4 @@ pyseekdb==1.4.0.post1
 pylibseekdb==1.4.0.post2
 pypdf==6.18.1
 python-multipart==0.0.32
-powercontext[server]==1.4.1
+powercontext[server,cli]==1.4.1

@@ -82,6 +82,76 @@ def save_trace(event: Any) -> None:
     )
 
 
+def start_session(session_id: str, user_id: str, topic: str | None = None) -> None:
+    db.execute(
+        """
+        INSERT IGNORE INTO study_sessions (session_id, user_id, topic, started_at)
+        VALUES (%s, %s, %s, NOW(6))
+        """,
+        (session_id, user_id, topic),
+    )
+
+
+def set_session_topic(session_id: str, topic: str) -> None:
+    db.execute(
+        "UPDATE study_sessions SET topic=%s WHERE session_id=%s AND (topic IS NULL OR topic='')",
+        (topic[:255], session_id),
+    )
+
+
+def end_session(session_id: str) -> None:
+    db.execute("UPDATE study_sessions SET ended_at=NOW(6) WHERE session_id=%s", (session_id,))
+
+
+def get_session(session_id: str) -> dict | None:
+    row = db.query_one("SELECT * FROM study_sessions WHERE session_id=%s", (session_id,))
+    return iso(row) if row else None
+
+
+def session_evidence(session_id: str) -> dict:
+    """Aggregate seekdb trace payloads into topics for the session summary."""
+    rows = db.query_all(
+        """
+        SELECT input_text, payload_json FROM study_traces
+        WHERE session_id=%s AND layer='seekdb' AND operation LIKE 'search_%%'
+        ORDER BY ts ASC
+        """,
+        (session_id,),
+    )
+    sections: list[str] = []
+    titles: list[str] = []
+    queries: list[str] = []
+    for row in rows:
+        query = (row.get("input_text") or "").strip()
+        if query and query not in queries:
+            queries.append(query)
+        try:
+            payload = json.loads(row.get("payload_json") or "{}")
+        except ValueError:
+            continue
+        for hit in payload.get("hits", []):
+            section = hit.get("section")
+            title = hit.get("doc_title")
+            if section and section not in sections:
+                sections.append(section)
+            if title and title not in titles:
+                titles.append(title)
+    return {
+        "sections": sections[:8],
+        "doc_titles": titles[:6],
+        "queries": queries[:6],
+        "searches": len(rows),
+    }
+
+
+def trace_counts(session_id: str) -> dict:
+    rows = db.query_all(
+        "SELECT layer, COUNT(*) AS n FROM study_traces WHERE session_id=%s GROUP BY layer",
+        (session_id,),
+    )
+    return {row["layer"]: int(row["n"]) for row in rows}
+
+
 def list_traces(session_id: str | None = None, limit: int = 60) -> list[dict]:
     if session_id:
         rows = db.query_all(

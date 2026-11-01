@@ -51,8 +51,8 @@ def _path(name: str, default: str) -> Path:
 @dataclass(frozen=True)
 class Settings:
     app_name: str = "StudyCoach"
-    version: str = "0.2.0"
-    stage: str = _text("APP_STAGE", "S2")
+    version: str = "0.3.0"
+    stage: str = _text("APP_STAGE", "S3")
 
     host: str = _text("APP_HOST", "127.0.0.1")
     port: int = _integer("APP_PORT", 8090)
@@ -62,7 +62,7 @@ class Settings:
     seekdb_path: Path = _path("SEEKDB_PATH", "./data/seekdb")
     model_dir: Path = _path("MODEL_DIR", "./data/models")
 
-    powercontext_url: str = _text("POWERCONTEXT_URL", "http://127.0.0.1:8000").rstrip("/")
+    powercontext_url: str = _text("POWERCONTEXT_URL", "http://127.0.0.1:8010").rstrip("/")
     powercontext_scope_id: str = _text("POWERCONTEXT_SCOPE_ID", "")
 
     embedding_mode: str = _text("EMBEDDING_MODE", "local").lower()
@@ -78,6 +78,10 @@ class Settings:
     mastery_beta: float = _number("MASTERY_BETA", 0.20)
     decay_days: int = _integer("DECAY_DAYS", 14)
     decay_factor: float = _number("DECAY_FACTOR", 0.85)
+
+    llm_base_url: str = _text("LLM_BASE_URL", "").rstrip("/")
+    llm_api_key: str = _text("LLM_API_KEY", "")
+    llm_model: str = _text("LLM_MODEL", "")
 
     web_dir: Path = ROOT / "app" / "web"
 

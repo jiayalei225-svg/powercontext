@@ -1,21 +1,13 @@
-"""PowerContext memory kinds and the text envelope used around them.
+"""Memory kinds shared by the memory writer, the prompt builder and the UI.
 
-PowerContext stores free text with an arbitrary ``kind`` string, but its search
-API has no kind filter (only ``tag_filter``). To keep kind-aware recall honest,
-every memory written by this app starts with a one-line header:
-
-    [kind=weakness][subject=机器学习][topic=正则化][at=2026-10-30T21:04:00+08:00]
-    把 L1 与 L2 的稀疏性记反了，连续两次在同一个辨析题上出错。
-
-The header is machine-readable, the rest stays natural language, and the UI can
-show both. Recall fetches a wider semantic result and filters by kind locally.
+PowerContext stores an arbitrary ``kind`` string next to each memory and returns
+it on search, so kind filtering happens after recall in the application layer.
+The stored text stays plain natural language; the kind is never duplicated
+inside the text, which keeps embeddings and the prompt readable.
 """
 
 from __future__ import annotations
 
-import re
-from dataclasses import dataclass
-from datetime import datetime
 from enum import Enum
 
 
@@ -43,47 +35,10 @@ KIND_DESCRIPTIONS: dict[MemoryKind, str] = {
     MemoryKind.TASK_STATE: "资料导入、今日完成度等可变化的任务进展。",
 }
 
-_HEADER_PAIR = re.compile(r"\[([a-z_]+)=([^\]]*)\]")
-_HEADER_PREFIX = re.compile(r"^(?:\[[a-z_]+=[^\]]*\])+\s*")
 
-
-@dataclass(frozen=True)
-class MemoryRecord:
-    kind: MemoryKind | None
-    text: str
-    subject: str = ""
-    topic: str = ""
-    at: str = ""
-    raw: str = ""
-
-
-def build_memory_text(
-    kind: MemoryKind,
-    text: str,
-    *,
-    subject: str = "",
-    topic: str = "",
-    at: datetime | None = None,
-) -> str:
-    stamp = (at or datetime.now().astimezone()).isoformat(timespec="seconds")
-    header = f"[kind={kind.value}][subject={subject}][topic={topic}][at={stamp}]"
-    return f"{header}\n{text.strip()}"
-
-
-def parse_memory_text(raw: str) -> MemoryRecord:
-    first_line, _, body = raw.partition("\n")
-    pairs = dict(_HEADER_PAIR.findall(first_line)) if first_line.startswith("[") else {}
-    kind_value = pairs.get("kind", "")
+def normalize_kind(value: str) -> MemoryKind:
     try:
-        kind = MemoryKind(kind_value)
-    except ValueError:
-        kind = None
-    text = body.strip() if pairs else _HEADER_PREFIX.sub("", raw).strip()
-    return MemoryRecord(
-        kind=kind,
-        text=text,
-        subject=pairs.get("subject", ""),
-        topic=pairs.get("topic", ""),
-        at=pairs.get("at", ""),
-        raw=raw,
-    )
+        return MemoryKind(str(value))
+    except ValueError as error:
+        allowed = ", ".join(kind.value for kind in MemoryKind)
+        raise ValueError(f"unknown memory kind '{value}', expected one of: {allowed}") from error

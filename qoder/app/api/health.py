@@ -1,8 +1,8 @@
 """Health endpoint.
 
-Reports process health plus a real seekdb probe (document and chunk counts).
-PowerContext is reported as ``not_checked`` until the S3 client is wired in,
-rather than claiming an integration that has not been exercised.
+Reports process health plus real probes for seekdb and PowerContext. The
+PowerContext probe is its readiness endpoint, so the response cannot claim a
+memory layer that is not actually reachable.
 """
 
 from datetime import datetime, timezone
@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from fastapi import APIRouter
 
 from ..config import settings
+from ..memory import service as memory_service
 from ..seekdb import db
 
 router = APIRouter(tags=["system"])
@@ -37,12 +38,12 @@ def health() -> dict:
         },
         "integrations": {
             "seekdb": seekdb_state,
-            "powercontext": {"url": settings.powercontext_url, "probe": "not_checked_until_s3"},
+            "powercontext": memory_service.probe(),
             "embedding": {
                 "mode": settings.embedding_mode,
                 "model": settings.embedding_model,
                 "dimension": settings.embedding_dim,
             },
-            "llm": "optional_not_configured",
+            "llm": settings.llm_model or "evidence_only",
         },
     }

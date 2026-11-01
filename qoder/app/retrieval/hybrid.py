@@ -323,6 +323,8 @@ def search(
             {
                 "chunk_id": hit["chunk_id"],
                 "doc_id": hit["doc_id"],
+                "doc_title": hit["doc_title"],
+                "subject": hit["subject"],
                 "section": hit["section"],
                 "page": hit["page"],
                 "score": hit.get("raw_score"),
