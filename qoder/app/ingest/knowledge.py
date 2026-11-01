@@ -9,10 +9,13 @@ real source text and avoids maintaining a second, divergent knowledge graph.
 from __future__ import annotations
 
 import hashlib
+import re
 from datetime import datetime, timezone
 
 from ..seekdb import db, repo
 from ..trace.models import LAYER_SEEKDB, TraceEvent
+
+_DATE_PREFIX = re.compile(r"^\d{4}[-/.]\d{1,2}[-/.]\d{1,2}\s*(?:复盘|笔记|随记)?[：:]\s*")
 
 
 def _kp_id(subject: str, section: str) -> str:
@@ -21,7 +24,8 @@ def _kp_id(subject: str, section: str) -> str:
 
 
 def _label(section: str) -> str:
-    return (section.split(" / ")[-1] or section).strip()
+    label = (section.split(" / ")[-1] or section).strip()
+    return _DATE_PREFIX.sub("", label).strip() or label
 
 
 def _iter_metadata(batch: int = 200):

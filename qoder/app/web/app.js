@@ -609,6 +609,38 @@ function renderReview(data) {
   }).join("");
 }
 
+async function buildPlan() {
+  const button = $("#plan-btn");
+  const original = button.textContent;
+  button.disabled = true;
+  button.textContent = "生成中…";
+  try {
+    const data = await api("/api/review/plan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ session_id: state.sessionId, days: 3, limit: 5 }),
+    });
+    const output = $("#plan-output");
+    output.hidden = false;
+    output.innerHTML = `
+      <div class="plan-head">
+        <strong>未来 3 天计划</strong>
+        <span class="plan-badge">${data.reused ? "复用已有 PowerContext · plan" : "已写入 PowerContext · plan"}</span>
+      </div>
+      <p>${escapeHtml(data.plan)}</p>
+      <p class="plan-meta">${data.queue.length} 个知识点 · trace ${escapeHtml(data.trace_id)} · memory ${escapeHtml(data.memories?.[0]?.artifact_id || "—")}</p>
+    `;
+    toast(data.reused ? "计划已存在，直接复用" : "已生成 3 天计划并写入 PowerContext");
+    await loadMemory();
+    await loadTraces();
+  } catch (error) {
+    toast(`生成计划失败：${error.message}`);
+  } finally {
+    button.disabled = false;
+    button.textContent = original;
+  }
+}
+
 function updateQuizProgress() {
   if (!state.quiz) return;
   const total = state.quiz.data.questions.length;
@@ -885,6 +917,7 @@ function bindEvents() {
   $("#quiz-start").addEventListener("click", () => openQuiz(5));
   $("#quiz-sim").addEventListener("click", () => openQuiz(20));
   $("#review-refresh").addEventListener("click", loadReview);
+  $("#plan-btn").addEventListener("click", buildPlan);
   $("#quiz-close").addEventListener("click", closeQuiz);
   $("#quiz-form").addEventListener("submit", submitQuiz);
   $("#quiz-body").addEventListener("change", (event) => {

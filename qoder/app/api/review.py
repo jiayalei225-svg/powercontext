@@ -7,7 +7,7 @@ import re
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
-from ..scheduler import quiz, review
+from ..scheduler import plan, quiz, review
 from ..seekdb import repo
 
 router = APIRouter(prefix="/api", tags=["review"])
@@ -30,6 +30,12 @@ class SubmitRequest(BaseModel):
     session_id: str = "quiz"
     note: str = Field(default="", max_length=500)
     answers: list[AnswerItem] = Field(min_length=1, max_length=50)
+
+
+class PlanRequest(BaseModel):
+    session_id: str = "plan"
+    days: int = Field(default=3, ge=1, le=14)
+    limit: int = Field(default=5, ge=1, le=10)
 
 
 def _session(value: str) -> str:
@@ -78,4 +84,14 @@ def api_quiz_submit(request: SubmitRequest) -> dict:
         [item.model_dump() for item in request.answers],
         session_id=_session(request.session_id),
         note=request.note,
+    )
+
+
+@router.post("/review/plan")
+def api_review_plan(request: PlanRequest) -> dict:
+    return _guard(
+        plan.build,
+        days=request.days,
+        limit=request.limit,
+        session_id=_session(request.session_id),
     )
