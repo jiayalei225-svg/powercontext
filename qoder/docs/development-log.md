@@ -72,12 +72,13 @@
 9. **文档与网站**
    - 编写 README、架构、API、验收、Qoder 记录；
    - 重做 Qoder Sites 项目网站，使用本轮真实运行截图；
-   - 重新发布站点并验证公开访问。
+   - 通过 prepare action `1071b22a-c44a-4d9e-a580-cdf785f7b5ae` 打包，发布操作 `01a194f7-3006-7bb3-8612-91bdda581481` 完成；
+   - 公开地址 `https://paperdesk-4qzym26fsnz.qoder.zone`，首页与静态资源均返回 HTTP 200。
 
 10. **提交**
     - 以仅含 `qoder/.gitkeep` 的上游提交为基线重建分支历史；
     - 保留 gaode / minimax / stepfun 目录，整体替换 `qoder/`；
-    - 强制推送新的 `qoder/` 实现并记录最终 commit。
+    - 实现提交 `1131a2714ac648ab57574eacf33197dc51a1236d` 已推送到 `2026-competition-ecosystem`。
 
 ## 3. 关键问题与处理
 

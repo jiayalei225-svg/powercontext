@@ -12,7 +12,7 @@
 | 项目网站 | `https://paperdesk-4qzym26fsnz.qoder.zone` |
 | 网站可见性 | 任何人可访问（public） |
 
-最终提交 commit 以分支 HEAD 为准；提交时会在消息中给出完整 hash。
+最终提交 commit 以分支 HEAD 为准；实现提交为 `1131a2714ac648ab57574eacf33197dc51a1236d`，之后仅追加文档与站点记录。
 
 ## 一句话介绍
 
@@ -107,8 +107,12 @@ python scripts/accept.py --base http://127.0.0.1:8080
 | 站点 ID | `01a191be-accb-777c-927c-adb7a1c58023` |
 | 访问地址 | `https://paperdesk-4qzym26fsnz.qoder.zone` |
 | 访问模式 | public |
-
-发布记录与验证结果在最终提交前补充。
+| 发布状态 | `publication_completed`，`published=true`，`lifecycle=active` |
+| prepare action | `1071b22a-c44a-4d9e-a580-cdf785f7b5ae` |
+| artifact 校验操作 | `01a194f7-0744-733f-a366-081cb65f2ce9`（succeeded） |
+| 发布操作 | `01a194f7-3006-7bb3-8612-91bdda581481`（succeeded, committed） |
+| 发布时间 | 2026-11-01 10:36 |
+| 公开验证 | 首页、样式表与最新截图均返回 HTTP 200，页面包含最终发布内容 |
 
 ## 安全与合规
 
