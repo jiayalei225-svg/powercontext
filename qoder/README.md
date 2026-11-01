@@ -281,7 +281,7 @@ trace_id, session_id, ts, layer, operation, input_text, result_count, summary, p
 | `USER_ID` | `local` | 本地单用户 ID，也是 PowerContext scope 的一部分 |
 | `DATA_DIR` | `./data` | 运行时数据根目录 |
 | `SEEKDB_PATH` | `./data/seekdb` | 嵌入式 seekdb 数据目录 |
-| `MODEL_DIR` | `./data/models` | BGE ONNX 缓存 |
+| `MODEL_DIR` | `./data/models` | BGE ONNX 缓存根目录，实际文件在 `./data/models/bge-small-zh-v1.5/onnx/` |
 | `POWERCONTEXT_URL` | `http://127.0.0.1:8010` | 本项目专用 PowerContext |
 | `POWERCONTEXT_HOME` | `./data/powercontext` | PowerContext 数据目录（启动脚本读取） |
 | `POWERCONTEXT_SCOPE_ID` | 空 | 留空则自动查找/创建 scope |
@@ -305,7 +305,7 @@ trace_id, session_id, ts, layer, operation, input_text, result_count, summary, p
 ```
 data/seekdb/       嵌入式数据库
 data/powercontext/ PowerContext 数据
-data/models/       BGE ONNX 缓存
+data/models/       BGE ONNX 缓存（bge-small-zh-v1.5/onnx/ 下约 90 MB）
 data/uploads/      上传文件
 ```
 

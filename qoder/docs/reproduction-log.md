@@ -17,6 +17,7 @@
    ```bash
    rm -rf data/seekdb data/powercontext data/uploads
    ```
+   模型缓存在 `data/models/bge-small-zh-v1.5/onnx`，首次运行会自动下载约 90 MB。
 3. 先启动应用，等 `/health` 正常：
    ```bash
    python -m app.run

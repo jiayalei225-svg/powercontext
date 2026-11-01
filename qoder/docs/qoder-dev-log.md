@@ -240,6 +240,7 @@
 2. **摘要里同一问题出现两次**：显式检索与问答各写一条 seekdb trace，文本只差句末问号。处理：去标点后去重，保留首次出现。
 3. **截图数字与干净复现不一致**：截图来自更长的演示会话（17 条记忆、10 道练习），干净复现是 8 条记忆、3 道练习。处理：文档明确说明以界面结构与日志为准，不把截图当数据快照。
 4. **Docker 与真实 LLM 无法在本机验证**：不伪造结果。处理：Docker 标注“未端到端验证”，LLM 标注“未配置真实 key，evidence 模式已验证”。
+5. **模型缓存实际在仓库外**：README 把 `MODEL_DIR` 写成 ONNX 缓存，但 `OnnxEmbeddingFunction` 默认写到 `~/.cache/pyseekdb/onnx_models/<model>`，`data/models` 一直是空目录，约 91 MB 落在用户目录。处理：构造时传 `download_path=settings.model_dir / settings.embedding_model`，把已有缓存拷入 `data/models/bge-small-zh-v1.5/onnx`，避免重新下载；重启后 `/health` 正常，`verify.py` 再次全绿，README 与配置表改为写明实际子路径。
 
 ### 验证结果
 
@@ -247,7 +248,10 @@
 - `verify.py` 全绿，退出码 0；原始日志与证据日志已入库。
 - PowerContext 干净运行共 8 条记忆：`weakness` 4、`session_summary` 1、`profile` 1、`plan` 1、`task_state` 1。
 - 摘要问题去重生效：只剩一条“正则化和过拟合是什么关系”。
+- BGE ONNX 权重固定在 `data/models/bge-small-zh-v1.5/onnx`，模型缓存不再写到仓库外；改路径后验收仍全绿。
 
 ### 对应提交
 
 `fix(qoder): S7 clean-room verification and session query dedupe`
+
+`fix(qoder): pin ONNX model cache inside MODEL_DIR`

@@ -108,10 +108,14 @@ def ensure_user(user_id: str) -> None:
 def _embedding_function() -> Any:
     from pyseekdb.utils.embedding_functions import OnnxEmbeddingFunction
 
+    # The default pyseekdb cache lives in ~/.cache, outside this project.
+    # Pinning download_path keeps MODEL_DIR truthful and the repository
+    # self-contained: one copy of the ONNX weights under data/models.
     return OnnxEmbeddingFunction(
         model_name=settings.embedding_model,
         hf_model_id=settings.embedding_hf_id,
         dimension=settings.embedding_dim,
+        download_path=settings.model_dir / settings.embedding_model,
     )
 
 
