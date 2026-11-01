@@ -212,7 +212,7 @@ GET /api/memory
 ```
 
 - `history`：`connected`、`scope_id`、最近的 `searches`。
-- `memory`：`connected`、`scope_id`、`preferences`、`searches`、`entries`（含 artifact / revision / kind / state）。
+- `memory`：`connected`、`scope_id`、`preferences`、`searches`、`memories`（含 artifact / revision / kind / state）。
 
 ## 错误
 
