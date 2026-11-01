@@ -1,6 +1,8 @@
 fastapi==0.162.0
 uvicorn==0.54.0
 httpx==0.28.1
+PyMySQL==1.2.0
+jieba==0.42.1
 pyseekdb==1.4.0.post1
 pylibseekdb==1.4.0.post2
 pypdf==6.18.1

@@ -51,8 +51,8 @@ def _path(name: str, default: str) -> Path:
 @dataclass(frozen=True)
 class Settings:
     app_name: str = "StudyCoach"
-    version: str = "0.1.0"
-    stage: str = "S1"
+    version: str = "0.2.0"
+    stage: str = _text("APP_STAGE", "S2")
 
     host: str = _text("APP_HOST", "127.0.0.1")
     port: int = _integer("APP_PORT", 8090)
@@ -85,8 +85,12 @@ class Settings:
     def seed_dir(self) -> Path:
         return self.data_dir / "seed"
 
+    @property
+    def upload_dir(self) -> Path:
+        return self.data_dir / "uploads"
+
     def prepare(self) -> None:
-        for path in (self.data_dir, self.seekdb_path, self.model_dir, self.seed_dir):
+        for path in (self.data_dir, self.seekdb_path, self.model_dir, self.seed_dir, self.upload_dir):
             path.mkdir(parents=True, exist_ok=True)
 
 

@@ -1,18 +1,32 @@
 """FastAPI entry point.
 
-Only system routes are mounted here. Feature routers are added under
-``app/api/`` stage by stage so every stage stays independently runnable.
+Feature routers are mounted stage by stage, but the app always boots: schema
+creation happens in the lifespan hook, so a fresh clone creates its embedded
+seekdb directory on first start.
 """
+
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from .api.health import router as health_router
+from .api.study import router as study_router
 from .config import settings
+from .seekdb import db
 
-app = FastAPI(title=settings.app_name, version=settings.version)
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    settings.prepare()
+    db.init_schema()
+    yield
+
+
+app = FastAPI(title=settings.app_name, version=settings.version, lifespan=lifespan)
 app.include_router(health_router)
+app.include_router(study_router)
 app.mount("/static", StaticFiles(directory=str(settings.web_dir)), name="static")
 
 

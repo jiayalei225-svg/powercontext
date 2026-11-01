@@ -1,82 +1,154 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>StudyCoach · 个人学习与复习教练</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f5f2">
+  <title>StudyCoach · 个人学习教练</title>
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">
-      <div class="mark">SC</div>
-      <div>
-        <h1>StudyCoach</h1>
-        <p>个人学习与复习教练</p>
-      </div>
+    <a class="brand" href="#" data-page="ask">
+      <span class="brand-mark" aria-hidden="true">S</span>
+      <span class="brand-text">
+        <strong>StudyCoach</strong>
+        <small>个人学习教练</small>
+      </span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <button class="nav-item" data-page="review">今日复习</button>
+      <button class="nav-item is-active" data-page="ask">问答</button>
+      <button class="nav-item" data-page="library">资料库</button>
+    </nav>
+    <div class="topbar-actions">
+      <span class="status-pill" id="status-pill" title="后端与 seekdb 状态">
+        <span class="status-dot"></span><span id="status-text">连接中</span>
+      </span>
+      <button class="ghost-btn" id="demo-btn" title="导入种子资料并连续执行三次检索">演示模式</button>
+      <button class="trace-btn" id="trace-toggle" aria-expanded="false">
+        技术轨迹 <span class="trace-count" id="trace-count">0</span>
+      </button>
     </div>
-    <div id="status" class="status status--loading">正在连接后端…</div>
   </header>
 
-  <main>
-    <section class="hero">
-      <p class="eyebrow">S1 · 骨架已就位</p>
-      <h2>资料找得到，复习有节奏，助手记得你。</h2>
-      <p class="lede">
-        面向学生与科研人员的本地学习工作台。原文按语义切块后可混合检索，
-        掌握度决定今天复习什么，学习偏好与错因跨会话保留。
-      </p>
-    </section>
-
-    <section class="grid" aria-label="核心模块">
-      <article class="card">
-        <span class="tag">S4</span>
-        <h3>今日复习</h3>
-        <p>按掌握度与遗忘曲线排出今天该复习的知识点，答错自动缩短间隔。</p>
-      </article>
-      <article class="card">
-        <span class="tag">S3</span>
-        <h3>问答</h3>
-        <p>回答带原文出处，点开可看段落；右侧技术轨迹展示本次检索与记忆。</p>
-      </article>
-      <article class="card">
-        <span class="tag">S2</span>
-        <h3>资料库</h3>
-        <p>导入讲义、笔记与论文，按标题层级切块，向量与全文同时建索引。</p>
-      </article>
-    </section>
-
-    <section class="split" aria-label="技术分工">
-      <div class="panel">
-        <p class="panel-kicker">seekdb</p>
-        <h3>知识与分数</h3>
-        <p>
-          原文分块、向量与全文索引、元数据过滤、练习记录与掌握度。
-          回答“哪段原文相关、我得了多少分”。
-        </p>
+  <main class="main">
+    <section class="page" data-page-panel="review">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow">Today</p>
+          <h1>今日复习</h1>
+          <p class="lede">按掌握度和遗忘曲线，决定今天先看什么。</p>
+        </div>
       </div>
-      <div class="panel">
-        <p class="panel-kicker">PowerContext</p>
-        <h3>关于我的记忆</h3>
-        <p>
-          学习偏好、错因归因、会话摘要、计划与进展。
-          回答“我是谁、上次为什么错、接下来该做什么”。
-        </p>
+      <div class="empty-state" id="review-empty">
+        <p class="empty-title">复习调度正在接入</p>
+        <p>掌握度、SM-2 间隔和「今天该复习」列表会在 S4 完成后出现在这里。现在可以先去「问答」检索资料，或到「资料库」导入文档。</p>
+        <button class="primary-btn" data-page="ask">去问答</button>
       </div>
     </section>
 
-    <section class="note">
-      <h3>本阶段验证点</h3>
-      <p>
-        启动脚本、依赖、端口、静态页与数据模型定义。检索、记忆、调度将在后续阶段接入，
-        未接通的接口会在响应里明确标注，不会返回伪造数据。
-      </p>
+    <section class="page is-active" data-page-panel="ask">
+      <div class="page-head ask-head">
+        <div>
+          <p class="eyebrow">Ask your own material</p>
+          <h1>问你的资料，<br>而不是问搜索引擎</h1>
+          <p class="lede">一次查询同时走向量、全文和结构化过滤，每条结果都带原文出处。</p>
+        </div>
+        <div class="ask-stats" id="ask-stats" aria-live="polite"></div>
+      </div>
+
+      <form class="search-card" id="search-form">
+        <label class="sr-only" for="query-input">输入问题</label>
+        <textarea id="query-input" rows="2" placeholder="例如：L1 和 L2 正则化有什么区别？我上次错在哪？" maxlength="500" required></textarea>
+        <div class="search-controls">
+          <div class="segmented" role="group" aria-label="检索模式">
+            <button type="button" class="seg is-active" data-mode="hybrid">混合检索</button>
+            <button type="button" class="seg" data-mode="vector">仅向量</button>
+            <button type="button" class="seg" data-mode="fulltext">仅全文</button>
+          </div>
+          <label class="select-wrap">
+            <span>学科</span>
+            <select id="subject-filter">
+              <option value="">全部学科</option>
+            </select>
+          </label>
+          <button class="primary-btn" type="submit" id="search-btn">检索证据</button>
+        </div>
+        <div class="chips" id="example-chips">
+          <button type="button" class="chip" data-q="怎么防止模型过拟合？">怎么防止过拟合</button>
+          <button type="button" class="chip" data-q="PCA 为什么要先中心化？">PCA 与中心化</button>
+          <button type="button" class="chip" data-q="L1 和 L2 正则化有什么区别？">L1 vs L2</button>
+        </div>
+      </form>
+
+      <div class="search-meta" id="search-meta" hidden></div>
+      <div class="answer-panel" id="answer-panel" hidden></div>
+      <div class="results" id="results"></div>
+      <div class="empty-state" id="ask-empty">
+        <p class="empty-title">还没有检索记录</p>
+        <p>先在下方「资料库」导入示例资料，然后提一个问题。每一次检索都会写入 seekdb 并出现在右侧技术轨迹里。</p>
+        <button class="primary-btn" data-page="library">去导入资料</button>
+      </div>
+    </section>
+
+    <section class="page" data-page-panel="library">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow">Library</p>
+          <h1>资料库</h1>
+          <p class="lede">markdown、txt、pdf 都会被切成带章节和页码的 chunk，写入 seekdb 的混合索引。</p>
+        </div>
+      </div>
+
+      <div class="stat-row" id="library-stats"></div>
+
+      <div class="library-actions">
+        <button class="primary-btn" id="seed-btn">导入示例资料</button>
+        <form class="upload-form" id="upload-form">
+          <label class="file-label">
+            <input type="file" id="upload-input" accept=".md,.markdown,.txt,.pdf">
+            <span id="upload-name">选择 md / txt / pdf</span>
+          </label>
+          <select id="upload-subject" aria-label="上传学科">
+            <option value="学习笔记">学习笔记</option>
+            <option value="机器学习">机器学习</option>
+            <option value="线性代数">线性代数</option>
+            <option value="未分类">未分类</option>
+          </select>
+          <button class="ghost-btn" type="submit" id="upload-btn">上传并索引</button>
+        </form>
+      </div>
+
+      <div class="doc-list" id="doc-list"></div>
+      <div class="empty-state" id="library-empty">
+        <p class="empty-title">资料库是空的</p>
+        <p>点击「导入示例资料」会写入两份讲义和一份手写笔记（共约 36 个 chunk），用于立即体验检索。</p>
+      </div>
     </section>
   </main>
 
-  <footer>
-    <span>StudyCoach v0.1.0 · S1</span>
-    <a href="/docs">API 文档</a>
+  <aside class="trace-drawer" id="trace-drawer" aria-hidden="true">
+    <div class="trace-head">
+      <div>
+        <p class="eyebrow">Audit trail</p>
+        <h2>技术轨迹</h2>
+      </div>
+      <div class="trace-head-actions">
+        <button class="ghost-btn small" id="trace-refresh">刷新</button>
+        <button class="icon-btn" id="trace-close" aria-label="关闭技术轨迹">×</button>
+      </div>
+    </div>
+    <p class="trace-hint">每次 seekdb 检索与导入都会落一条 trace，含时间、输入、返回条数和关键摘要。</p>
+    <div class="trace-list" id="trace-list"></div>
+  </aside>
+  <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <footer class="footer">
+    <span>StudyCoach · seekdb 负责知识与练习数据，PowerContext 负责关于你的上下文</span>
+    <span id="footer-stage">stage —</span>
   </footer>
 
   <script src="/static/app.js"></script>
