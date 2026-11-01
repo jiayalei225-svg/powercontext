@@ -1,0 +1,103 @@
+{
+  "generated_at": "2026-11-01T10:14:56",
+  "base": "http://127.0.0.1:18081",
+  "passed": 19,
+  "failed": 0,
+  "steps": [
+    {
+      "name": "服务健康",
+      "ok": true,
+      "detail": "version=2.0.0 collection=paper_chunks_v2_bge_zh"
+    },
+    {
+      "name": "PowerContext 连接",
+      "ok": true,
+      "detail": "scope=scp_2gs37bhwx70f9gqx00jr6z7c82"
+    },
+    {
+      "name": "导入 01-adaptive-hybrid-retrieval.pdf",
+      "ok": true,
+      "detail": "面向向量数据库的混合检索自适应融合方法 / 6 片段 / 重复=True"
+    },
+    {
+      "name": "导入 02-memory-routed-rag.pdf",
+      "ok": true,
+      "detail": "检索增强生成中的记忆路由与证据筛选 / 5 片段 / 重复=True"
+    },
+    {
+      "name": "导入 03-hierarchical-chunking-rerank.pdf",
+      "ok": true,
+      "detail": "面向长上下文检索的分层分块与重排序 / 5 片段 / 重复=True"
+    },
+    {
+      "name": "导入 04-zh-keyphrase-low-resource.pdf",
+      "ok": true,
+      "detail": "低资源场景下的中文科技文献关键词抽取 / 5 片段 / 重复=True"
+    },
+    {
+      "name": "导入 05-progressive-filter-multimodal.pdf",
+      "ok": true,
+      "detail": "基于渐进式过滤的多模态文献检索 / 5 片段 / 重复=True"
+    },
+    {
+      "name": "文献库数量",
+      "ok": true,
+      "detail": "5 篇"
+    },
+    {
+      "name": "论文详情",
+      "ok": true,
+      "detail": "检索增强生成中的记忆路由与证据筛选 返回 5 个片段"
+    },
+    {
+      "name": "混合检索召回",
+      "ok": true,
+      "detail": "命中 6，策略=hybrid，1459ms"
+    },
+    {
+      "name": "搜索已写入记忆",
+      "ok": true,
+      "detail": "memory_connected=True"
+    },
+    {
+      "name": "保存记忆偏好",
+      "ok": true,
+      "detail": "artifact=art_fa6439afc29f496f81c313918af5eb5f revision=1"
+    },
+    {
+      "name": "记忆偏好自动应用",
+      "ok": true,
+      "detail": "applied=['field', 'only_with_code', 'venues', 'year_from'] notes=4 hits=2"
+    },
+    {
+      "name": "显式条件覆盖记忆",
+      "ok": true,
+      "detail": "filters={'year_from': 2023, 'year_to': None, 'venues': ['SIGIR'], 'field': '信息检索', 'paper_id': None, 'has_code': False} hits=2"
+    },
+    {
+      "name": "清除记忆偏好",
+      "ok": true,
+      "detail": "{}"
+    },
+    {
+      "name": "导出 Markdown",
+      "ok": true,
+      "detail": "4767 字节"
+    },
+    {
+      "name": "导出 CSV",
+      "ok": true,
+      "detail": "3982 字节"
+    },
+    {
+      "name": "检索轨迹",
+      "ok": true,
+      "detail": "12 条"
+    },
+    {
+      "name": "记忆快照",
+      "ok": true,
+      "detail": "scope=scp_2gs37bhwx70f9gqx00jr6z7c82 traces=20"
+    }
+  ]
+}

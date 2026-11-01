@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+config/powercontext.env
+data/
+runtime/
+frontend/node_modules/
+.tmp/
+*.log

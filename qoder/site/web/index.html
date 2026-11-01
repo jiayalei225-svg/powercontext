@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PaperDesk 2.0 · 从一句问题，翻到论文里的那一页</title>
+    <meta
+      name="description"
+      content="PaperDesk 是一个本地优先的中文文献检索工作台：seekdb 一次完成向量、全文、过滤与 RRF 融合，PowerContext 记住你的检索偏好与轨迹。"
+    />
+    <meta property="og:title" content="PaperDesk 2.0 · 文献检索工作台" />
+    <meta
+      property="og:description"
+      content="seekdb 混合检索 + PowerContext 长期记忆。Qoder × OceanBase 2026 参赛项目。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="assets/results.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">跳到主要内容</a>
+
+    <header class="topbar" id="top">
+      <div class="wrap topbar-inner">
+        <a class="brand" href="#top" aria-label="PaperDesk 首页">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="brand-text">
+            <strong>PaperDesk</strong>
+            <em>文献检索工作台 · 2.0</em>
+          </span>
+        </a>
+        <nav class="nav" aria-label="页面导航">
+          <a href="#why">为什么</a>
+          <a href="#pipeline">检索链路</a>
+          <a href="#memory">记忆</a>
+          <a href="#proof">验收</a>
+          <a href="#qoder">Qoder</a>
+        </nav>
+        <div class="topbar-actions">
+          <a class="ghost small" href="https://github.com/jiayalei225-svg/powercontext/tree/2026-competition-ecosystem/qoder" target="_blank" rel="noreferrer">代码仓库</a>
+          <a class="button small" href="#run">本地运行</a>
+        </div>
+      </div>
+      <div class="scroll-line" aria-hidden="true"><span id="scrollbar"></span></div>
+    </header>
+
+    <main id="main">
+      <section class="hero wrap">
+        <div class="hero-copy reveal">
+          <p class="eyebrow"><span>Qoder × OceanBase 2026</span> · 文献检索赛道</p>
+          <h1>
+            从一句问题，<br />
+            翻到论文里的<em>那一页</em>。
+          </h1>
+          <p class="lede">
+            PaperDesk 把 PDF 切成语义片段，用 <strong>seekdb</strong> 在一次查询里完成向量召回、全文召回、标量过滤和 RRF 融合；用
+            <strong>PowerContext</strong> 记住你的年份、会议与方向偏好。下一次提问，条件自动带上。
+          </p>
+          <div class="hero-actions">
+            <a class="button" href="#proof">查看真实验收 <span aria-hidden="true">↘</span></a>
+            <a class="ghost" href="#pipeline">它如何工作</a>
+          </div>
+          <ul class="hero-chips" aria-label="核心技术">
+            <li>seekdb hybrid_search</li>
+            <li>PowerContext memory</li>
+            <li>本地优先 · 无云依赖</li>
+          </ul>
+        </div>
+
+        <div class="hero-visual reveal">
+          <div class="shot-frame hero-frame">
+            <div class="shot-bar">
+              <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="shot-url">127.0.0.1:8080/#/search</span>
+              <span class="shot-live"><i></i> live</span>
+            </div>
+            <img src="assets/results.png" alt="PaperDesk 检索结果界面：命中 10 个相关段落，左侧为检索计划，右侧为带页码和代码链接的原文片段" />
+          </div>
+          <div class="float-card float-a">
+            <span class="mono">RRF</span>
+            <strong>124 ms</strong>
+            <em>向量 + 全文，一次调用</em>
+          </div>
+          <div class="float-card float-b">
+            <span class="mono">MEMORY</span>
+            <strong>4 条偏好已应用</strong>
+            <em>显式条件永远优先</em>
+          </div>
+        </div>
+      </section>
+
+      <section class="metrics-wrap" aria-label="项目数据">
+        <div class="wrap metrics reveal">
+          <div><strong>5</strong><span>篇原创演示论文</span></div>
+          <div><strong>26</strong><span>个语义片段</span></div>
+          <div><strong>19<small>/19</small></strong><span>端到端验收通过</span></div>
+          <div><strong>11</strong><span>个单元测试</span></div>
+          <div class="metric-note">
+            <i class="dot"></i>
+            <span>PowerContext 已连接 · 检索轨迹实时写入</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section wrap" id="why">
+        <header class="section-head reveal">
+          <p class="eyebrow"><span>01</span> 问题</p>
+          <h2>读论文时，真正难的是「想起」和「找回」</h2>
+          <p class="section-lede">不是缺 PDF，而是缺一条从模糊记忆到具体段落的路。</p>
+        </header>
+        <div class="cards three">
+          <article class="card reveal">
+            <span class="card-no mono">A</span>
+            <h3>只记得结论，不记得出处</h3>
+            <p>传统文件搜索只能找到 PDF，找不到第 3 页第 2 段。PaperDesk 从段落级建立索引，命中直接给页码和原文。</p>
+            <span class="card-foot">段落级定位</span>
+          </article>
+          <article class="card reveal">
+            <span class="card-no mono">B</span>
+            <h3>同义词搜不到，术语又被稀释</h3>
+            <p>纯向量擅长语义，却会混淆编号和专有名词；纯关键词覆盖不了改写。两路召回必须在同一引擎里融合。</p>
+            <span class="card-foot">dense + full-text + RRF</span>
+          </article>
+          <article class="card reveal">
+            <span class="card-no mono">C</span>
+            <h3>每次检索都重填同样条件</h3>
+            <p>年份、会议、方向、是否开源——这些偏好不该反复输入。PowerContext 把它们变成下一次检索的默认值。</p>
+            <span class="card-foot">跨会话记忆</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="section wrap" id="pipeline">
+        <header class="section-head reveal">
+          <p class="eyebrow"><span>02</span> 检索链路</p>
+          <h2>一次查询，四步到达原文</h2>
+          <p class="section-lede">查询理解、记忆合并、混合检索、结果整形；核心召回交给 seekdb，核心记忆交给 PowerContext。</p>
+        </header>
+
+        <div class="pipeline">
+          <ol class="steps">
+            <li class="reveal">
+              <span class="step-no mono">01</span>
+              <h3>解析问题</h3>
+              <p>jieba 词性筛选得到查询词项；用语料稀有度挑一个字面锚点，交给全文召回。</p>
+            </li>
+            <li class="reveal">
+              <span class="step-no mono">02</span>
+              <h3>合并记忆</h3>
+              <p>读取 PowerContext 偏好，逐字段补全用户没填的条件；显式输入永远覆盖记忆。</p>
+            </li>
+            <li class="reveal">
+              <span class="step-no mono">03</span>
+              <h3>seekdb 混合检索</h3>
+              <p>dense KNN、full-text、标量过滤同时下推，内置 RRF 融合，只调用一次。</p>
+            </li>
+            <li class="reveal">
+              <span class="step-no mono">04</span>
+              <h3>定位与导出</h3>
+              <p>每篇最多 2 段，保留论文多样性；展示页码、代码链接，可导出 Markdown / CSV。</p>
+            </li>
+          </ol>
+
+          <div class="code-card reveal">
+            <div class="code-head">
+              <span class="mono">backend/app/index.py</span>
+              <span class="tag">hybrid_search</span>
+            </div>
+            <pre><code><span class="c"># 语义、字面、过滤，一次查询</span>
+result = collection.hybrid_search(
+    query={
+        <span class="s">"n_results"</span>: limit * 3,
+        <span class="s">"where_document"</span>: {<span class="s">"$contains"</span>: literal},
+        <span class="s">"where"</span>: where,
+    },
+    knn={
+        <span class="s">"query_texts"</span>: [query],
+        <span class="s">"n_results"</span>: limit * 3,
+        <span class="s">"where"</span>: where,
+    },
+    rank={<span class="s">"rrf"</span>: {
+        <span class="s">"rank_window_size"</span>: 60,
+        <span class="s">"rank_constant"</span>: 60,
+    }},
+    n_results=limit,
+    include=[<span class="s">"documents"</span>, <span class="s">"metadatas"</span>, <span class="s">"distances"</span>],
+)</code></pre>
+            <p class="code-note">检索存储只有 seekdb 一个集合：<code>paper_chunks_v2_bge_zh</code>。没有第二个向量库，也没有应用层手写 RRF。</p>
+          </div>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature reveal"><span class="mono">DENSE</span><h4>语义召回</h4><p>本地 bge-small-zh-v1.5，512 维，中文语义相近即可命中。</p></div>
+          <div class="feature reveal"><span class="mono">LEXICAL</span><h4>字面召回</h4><p>稀有词作为锚点，专有名词、编号、缩写不会被向量稀释。</p></div>
+          <div class="feature reveal"><span class="mono">FILTER</span><h4>标量下推</h4><p>年份、会议、方向、开源标记同时作用于两路召回。</p></div>
+          <div class="feature reveal"><span class="mono">RRF</span><h4>融合排序</h4><p>seekdb 内置 reciprocal rank fusion，不引入第二套检索服务。</p></div>
+        </div>
+      </section>
+
+      <section class="section wrap" id="memory">
+        <header class="section-head reveal">
+          <p class="eyebrow"><span>03</span> 长期记忆</p>
+          <h2>让检索记住你的口味</h2>
+          <p class="section-lede">
+            偏好以带标记、可版本化的条目写入 PowerContext；每次检索再写一条轨迹。保存后，下一次不填条件也会自动沿用。
+          </p>
+        </header>
+
+        <div class="memory-grid">
+          <figure class="shot-card reveal">
+            <div class="shot-frame">
+              <div class="shot-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="shot-url">/#/memory</span></div>
+              <img src="assets/memory-prefs.png" alt="记忆页：保存 2024 年以后、ACL、检索增强生成、仅开源四条偏好" />
+            </div>
+            <figcaption><span class="mono">01 / PREFERENCE</span> 在记忆页保存偏好，写入 PowerContext 并返回 artifact ID 与 revision。</figcaption>
+          </figure>
+          <figure class="shot-card reveal">
+            <div class="shot-frame">
+              <div class="shot-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="shot-url">/#/search</span><span class="shot-live"><i></i> live</span></div>
+              <img src="assets/memory-applied.png" alt="检索计划显示四条记忆偏好已自动应用，结果只包含 2024 年以后、ACL、检索增强生成、带开源代码的论文" />
+            </div>
+            <figcaption><span class="mono">02 / RECALL</span> 下一次检索不填条件，计划面板自动列出四条「记忆偏好」并应用到结果。</figcaption>
+          </figure>
+        </div>
+
+        <div class="memory-facts">
+          <div class="fact reveal">
+            <span class="mono">ARTIFACT</span>
+            <code>art_672b745c33194117b3c4996f7d6a3cfa</code>
+            <p>真实保存响应中的 artifact ID；同一份偏好可追溯 revision。</p>
+          </div>
+          <div class="fact reveal">
+            <span class="mono">PRIORITY</span>
+            <strong>显式条件 &gt; 记忆默认值</strong>
+            <p>本次填了年份或会议，就用本次的；记忆只补空缺，不覆盖用户。</p>
+          </div>
+          <div class="fact reveal">
+            <span class="mono">DEGRADE</span>
+            <strong>记忆离线，检索可用</strong>
+            <p>PowerContext 不可用时自动降级，上传、检索、删除与导出不受影响。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section wrap" id="proof">
+        <header class="section-head reveal">
+          <p class="eyebrow"><span>04</span> 真实运行</p>
+          <h2>不是效果图，是可复现的运行结果</h2>
+          <p class="section-lede">5 篇原创演示 PDF、26 个片段、11 个单元测试、19 项端到端验收，全部在本机真实执行。</p>
+        </header>
+
+        <div class="proof-banner reveal">
+          <div class="score"><strong>19<small>/19</small></strong><span>端到端验收</span></div>
+          <div class="score"><strong>11</strong><span>单元测试</span></div>
+          <div class="score"><strong>6</strong><span>验收召回片段</span></div>
+          <div class="score"><strong>2</strong><span>导出格式</span></div>
+          <div class="proof-links">
+            <a href="https://github.com/jiayalei225-svg/powercontext/blob/2026-competition-ecosystem/qoder/docs/verification.md" target="_blank" rel="noreferrer">验收记录 ↗</a>
+            <a href="https://github.com/jiayalei225-svg/powercontext/blob/2026-competition-ecosystem/qoder/docs/verification/report.json" target="_blank" rel="noreferrer">原始报告 ↗</a>
+          </div>
+        </div>
+
+        <div class="gallery">
+          <figure class="shot-card wide reveal">
+            <div class="shot-frame">
+              <div class="shot-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="shot-url">/#/search · 向量数据库里怎么做混合检索</span></div>
+              <img src="assets/results.png" alt="检索结果：命中 10 个相关段落，首篇为计算机学报 2024 的混合检索论文，含代码链接与页码" />
+            </div>
+            <figcaption><span class="mono">RESULT</span> 词项、字面锚点、过滤、耗时全部可见；命中直达 p.1 的原文片段。</figcaption>
+          </figure>
+          <figure class="shot-card reveal">
+            <div class="shot-frame">
+              <div class="shot-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="shot-url">论文详情</span></div>
+              <img src="assets/drawer.png" alt="论文详情抽屉：显示页码、片段序号、完整原文、打开 PDF 与代码链接" />
+            </div>
+            <figcaption><span class="mono">DRAWER</span> 同一篇论文的全部片段、原始 PDF 与代码链接。</figcaption>
+          </figure>
+          <figure class="shot-card reveal">
+            <div class="shot-frame">
+              <div class="shot-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="shot-url">/#/library</span></div>
+              <img src="assets/library.png" alt="文献库：5 篇论文、26 个片段、模型与集合信息，支持拖拽上传与删除" />
+            </div>
+            <figcaption><span class="mono">LIBRARY</span> 拖拽上传、重复检测、查看详情与删除。</figcaption>
+          </figure>
+          <figure class="shot-card phone reveal">
+            <div class="shot-frame">
+              <img src="assets/mobile-results.png" alt="移动端检索结果界面" />
+            </div>
+            <figcaption><span class="mono">MOBILE</span> 390px 视口下的检索计划与结果。</figcaption>
+          </figure>
+          <aside class="phone-note reveal">
+            <p class="eyebrow"><span>390</span> PX</p>
+            <h3>同一份构建，窄屏也能读原文</h3>
+            <p>前端是同一套 React 构建：桌面双栏在 860px 以下折叠为单栏，检索计划、片段摘要、导出与详情抽屉在手机上仍可操作。</p>
+            <ul>
+              <li>桌面 1440px / 移动 390px，均取自真实运行</li>
+              <li>结果片段保留页码、会议、年份与代码链接</li>
+              <li>PowerContext 连接状态在页头实时显示</li>
+            </ul>
+          </aside>
+        </div>
+
+        <div class="verify-table reveal">
+          <div class="row head"><span>检查项</span><span>结果</span><span>证据</span></div>
+          <div class="row"><span>混合检索召回</span><span class="ok">PASS</span><span>命中 6 段，strategy=hybrid</span></div>
+          <div class="row"><span>记忆偏好自动应用</span><span class="ok">PASS</span><span>4 字段生效，notes=4，hits=2</span></div>
+          <div class="row"><span>显式条件覆盖记忆</span><span class="ok">PASS</span><span>SIGIR / 2023 / 无代码</span></div>
+          <div class="row"><span>清除记忆偏好</span><span class="ok">PASS</span><span>读取为 {}</span></div>
+          <div class="row"><span>Markdown / CSV 导出</span><span class="ok">PASS</span><span>4.7 KB / 3.9 KB，CSV 带 BOM</span></div>
+        </div>
+      </section>
+
+      <section class="section wrap" id="qoder">
+        <div class="qoder-grid">
+          <div class="qoder-copy reveal">
+            <p class="eyebrow"><span>05</span> Qoder 开发记录</p>
+            <h2>主要开发工作，在 Qoder 中完成</h2>
+            <p class="section-lede">
+              后端 8 个模块、React 前端、样例生成、测试、验收与站点，均在本 Qoder 会话中产生。账号 UID 与真实会话截图一并提交。
+            </p>
+            <dl class="qoder-facts">
+              <div><dt>Qoder 账号 UID</dt><dd class="mono">01a191a9-93d1-776f-b48c-c3727d164e84</dd></div>
+              <div><dt>开发时间</dt><dd>2026-10-31 — 2026-11-01</dd></div>
+              <div><dt>工作区</dt><dd class="mono">2026-10-31/5ae0bb21</dd></div>
+              <div><dt>开发记录</dt><dd><a class="inline" href="https://github.com/jiayalei225-svg/powercontext/blob/2026-competition-ecosystem/qoder/docs/qoder-records.md" target="_blank" rel="noreferrer">docs/qoder-records.md ↗</a></dd></div>
+            </dl>
+            <ul class="checklist">
+              <li>代码、测试、验收均可在仓库中复核</li>
+              <li>截图来自 Qoder 桌面端实际会话，未拼接</li>
+              <li>站点通过 Qoder Sites 发布，访问模式 public</li>
+            </ul>
+          </div>
+          <figure class="qoder-shot reveal">
+            <a class="shot-link" href="assets/qoder-session-final.png" target="_blank" rel="noreferrer">
+              <div class="shot-frame">
+                <div class="shot-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="shot-url">Qoder · 交付结果</span></div>
+                <img src="assets/qoder-session-final.png" alt="Qoder 桌面端会话截图：显示重建任务、工具调用、终端命令与验收结果" />
+              </div>
+            </a>
+            <figcaption><span class="mono">SESSION</span> Qoder 桌面端真实会话：任务执行、工具调用与终端命令。点击查看原图。</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section wrap" id="run">
+        <header class="section-head reveal">
+          <p class="eyebrow"><span>06</span> 本地运行</p>
+          <h2>一条命令，启动整套本地检索</h2>
+          <p class="section-lede">不需要云服务、不需要 API Key。首次运行会安装依赖、下载本地 BGE 模型，并启动 PowerContext。</p>
+        </header>
+        <div class="run-grid">
+          <div class="run-card reveal">
+            <div class="run-head"><span class="mono">WINDOWS</span><button class="copy" data-copy="powershell -ExecutionPolicy Bypass -File scripts\start.ps1">复制</button></div>
+            <pre><code>powershell -ExecutionPolicy Bypass ^
+  -File scripts\start.ps1</code></pre>
+            <p>打开 <code>http://127.0.0.1:8080</code></p>
+          </div>
+          <div class="run-card reveal">
+            <div class="run-head"><span class="mono">macOS / LINUX</span><button class="copy" data-copy="bash scripts/start.sh">复制</button></div>
+            <pre><code>bash scripts/start.sh</code></pre>
+            <p>打开 <code>http://127.0.0.1:8080</code></p>
+          </div>
+        </div>
+        <div class="run-notes reveal">
+          <p><span class="mono">VERIFY</span><span><code>pytest</code> · <code>python scripts/accept.py --base http://127.0.0.1:8080</code></span></p>
+          <p><span class="mono">DATA</span><span>PDF、seekdb 索引与记忆都在本机；<code>.env</code> 与 PowerContext 配置不会进入仓库。</span></p>
+          <p><span class="mono">PORT</span><span>8080 被占用时设置 <code>PAPERDESK_PORT=18081</code>。</span></p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap footer-inner">
+        <div>
+          <strong>PaperDesk 2.0</strong>
+          <p>Qoder × OceanBase 2026 · 文献检索赛道</p>
+        </div>
+        <nav aria-label="相关链接">
+          <a href="https://github.com/jiayalei225-svg/powercontext/tree/2026-competition-ecosystem/qoder" target="_blank" rel="noreferrer">代码仓库</a>
+          <a href="https://github.com/jiayalei225-svg/powercontext/blob/2026-competition-ecosystem/qoder/README.md" target="_blank" rel="noreferrer">运行说明</a>
+          <a href="https://github.com/jiayalei225-svg/powercontext/blob/2026-competition-ecosystem/qoder/docs/verification.md" target="_blank" rel="noreferrer">验收记录</a>
+          <a href="https://github.com/jiayalei225-svg/powercontext/blob/2026-competition-ecosystem/qoder/docs/qoder-records.md" target="_blank" rel="noreferrer">Qoder 记录</a>
+        </nav>
+        <p class="footer-note">用 Qoder 构建 · seekdb 混合检索 · PowerContext 长期记忆</p>
+      </div>
+    </footer>
+
+    <script src="main.js"></script>
+  </body>
+</html>
