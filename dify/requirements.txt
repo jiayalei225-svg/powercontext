@@ -1,0 +1,4 @@
+# 月蚀镇运行依赖（Python 3.11+，Windows 建议 64 位 3.12/3.13）
+powercontext[server]==1.4.1
+httpx>=0.28,<1.0
+PyYAML>=6,<7

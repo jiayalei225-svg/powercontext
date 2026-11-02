@@ -1,0 +1,39 @@
+test_all_roles_finish_and_keep_match (test_moonfall.FullGameTests.test_all_roles_finish_and_keep_match) ... ok
+
+test_restart_confirmation (test_moonfall.FullGameTests.test_restart_confirmation) ... ok
+
+test_cross_game_memory_and_relations (test_moonfall.MemoryTests.test_cross_game_memory_and_relations) ... ok
+
+test_memory_dedup_prefers_ended (test_moonfall.MemoryTests.test_memory_dedup_prefers_ended) ... ok
+
+test_recap_without_active (test_moonfall.MemoryTests.test_recap_without_active) ... ok
+
+test_seer_can_skip (test_moonfall.NightTests.test_seer_can_skip) ... ok
+
+test_seer_check_result_recorded (test_moonfall.NightTests.test_seer_check_result_recorded) ... ok
+
+test_vote_requires_day (test_moonfall.NightTests.test_vote_requires_day) ... ok
+
+test_witch_save_consumes_antidote (test_moonfall.NightTests.test_witch_save_consumes_antidote) ... ok
+
+test_wolf_cannot_kill_teammate (test_moonfall.NightTests.test_wolf_cannot_kill_teammate) ... ok
+
+test_llm_merge_and_fallback (test_moonfall.RenderTests.test_llm_merge_and_fallback) ... ok
+
+test_each_role_composition (test_moonfall.RoleTests.test_each_role_composition) ... ok
+
+test_first_night_player_is_protected (test_moonfall.RoleTests.test_first_night_player_is_protected) ... ok
+
+test_role_can_be_chosen_in_first_message (test_moonfall.RoleTests.test_role_can_be_chosen_in_first_message) ... ok
+
+test_setup_enters_role_select (test_moonfall.RoleTests.test_setup_enters_role_select) ... ok
+
+
+
+----------------------------------------------------------------------
+
+Ran 15 tests in 0.020s
+
+
+
+OK

@@ -1,0 +1,17 @@
+demo 记忆已写入
+
+  scope_id  = scp_736q3a7f9g6v4pb195ccabp9nf
+
+  memory_id = demo
+
+  entries   = 3
+
+
+
+在 Dify 开始表单填写：
+
+  你的称呼 = 演示玩家
+
+  记忆 ID  = demo
+
+第一句输入 `继续` 接上第三局；输入 `重开确认` 放弃第三局，再输入 `预言家/女巫/...` 开新局。

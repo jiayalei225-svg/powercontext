@@ -1,0 +1,277 @@
+DSL: dify\dsl\moonfall-werewolf.chatflow.yml
+
+[PASS] YAML 可解析
+
+[PASS] kind=app
+
+[PASS] DSL version 0.3.1  (0.3.1)
+
+[PASS] mode=advanced-chat
+
+[PASS] 应用名称非空
+
+[PASS] dependencies 是列表
+
+[PASS] conversation_variables 为空
+
+[PASS] 节点数量合理  (10 nodes)
+
+[PASS] 节点 ID 唯一  (10 unique)
+
+[PASS] 存在 start 节点
+
+[PASS] 存在 answer 节点
+
+[PASS] 每个节点都有 type
+
+[PASS] answer 节点类型正确
+
+[PASS] 边 start -> prep  (端点存在)
+
+[PASS] 边 start sourceType 匹配  (start vs start)
+
+[PASS] 边 prep targetType 匹配  (code vs code)
+
+[PASS] 边 prep -> scope  (端点存在)
+
+[PASS] 边 prep sourceType 匹配  (code vs code)
+
+[PASS] 边 scope targetType 匹配  (http-request vs http-request)
+
+[PASS] 边 scope -> prep_scope  (端点存在)
+
+[PASS] 边 scope sourceType 匹配  (http-request vs http-request)
+
+[PASS] 边 prep_scope targetType 匹配  (code vs code)
+
+[PASS] 边 prep_scope -> recall  (端点存在)
+
+[PASS] 边 prep_scope sourceType 匹配  (code vs code)
+
+[PASS] 边 recall targetType 匹配  (http-request vs http-request)
+
+[PASS] 边 recall -> engine  (端点存在)
+
+[PASS] 边 recall sourceType 匹配  (http-request vs http-request)
+
+[PASS] 边 engine targetType 匹配  (code vs code)
+
+[PASS] 边 engine -> narrator  (端点存在)
+
+[PASS] 边 engine sourceType 匹配  (code vs code)
+
+[PASS] 边 narrator targetType 匹配  (llm vs llm)
+
+[PASS] 边 narrator -> render  (端点存在)
+
+[PASS] 边 narrator sourceType 匹配  (llm vs llm)
+
+[PASS] 边 render targetType 匹配  (code vs code)
+
+[PASS] 边 render -> save  (端点存在)
+
+[PASS] 边 render sourceType 匹配  (code vs code)
+
+[PASS] 边 save targetType 匹配  (http-request vs http-request)
+
+[PASS] 边 save -> answer  (端点存在)
+
+[PASS] 边 save sourceType 匹配  (http-request vs http-request)
+
+[PASS] 边 answer targetType 匹配  (answer vs answer)
+
+[PASS] 所有节点从 start 可达  (missing=[])
+
+[PASS] answer 从 start 可达
+
+[PASS] 变量节点存在 prep.scope_key  (root.workflow.graph.nodes[2].data.body.data[0].value)
+
+[PASS] 变量输出存在 prep.scope_key  (root.workflow.graph.nodes[2].data.body.data[0].value)
+
+[PASS] 环境变量 env.POWERCONTEXT_BASE  (root.workflow.graph.nodes[2].data.url)
+
+[PASS] 变量节点存在 prep_scope.scope_id  (root.workflow.graph.nodes[4].data.body.data[0].value)
+
+[PASS] 变量输出存在 prep_scope.scope_id  (root.workflow.graph.nodes[4].data.body.data[0].value)
+
+[PASS] 环境变量 env.POWERCONTEXT_BASE  (root.workflow.graph.nodes[4].data.url)
+
+[PASS] 变量节点存在 engine.brief_json  (root.workflow.graph.nodes[6].data.prompt_template[1].text)
+
+[PASS] 变量输出存在 engine.brief_json  (root.workflow.graph.nodes[6].data.prompt_template[1].text)
+
+[PASS] 变量节点存在 engine.memory_digest  (root.workflow.graph.nodes[6].data.prompt_template[1].text)
+
+[PASS] 变量输出存在 engine.memory_digest  (root.workflow.graph.nodes[6].data.prompt_template[1].text)
+
+[PASS] 变量节点存在 prep_scope.scope_id  (root.workflow.graph.nodes[8].data.body.data[0].value)
+
+[PASS] 变量输出存在 prep_scope.scope_id  (root.workflow.graph.nodes[8].data.body.data[0].value)
+
+[PASS] 变量节点存在 render.save_text_json  (root.workflow.graph.nodes[8].data.body.data[0].value)
+
+[PASS] 变量输出存在 render.save_text_json  (root.workflow.graph.nodes[8].data.body.data[0].value)
+
+[PASS] 变量节点存在 engine.game_id  (root.workflow.graph.nodes[8].data.body.data[0].value)
+
+[PASS] 变量输出存在 engine.game_id  (root.workflow.graph.nodes[8].data.body.data[0].value)
+
+[PASS] 变量节点存在 engine.turn  (root.workflow.graph.nodes[8].data.body.data[0].value)
+
+[PASS] 变量输出存在 engine.turn  (root.workflow.graph.nodes[8].data.body.data[0].value)
+
+[PASS] 环境变量 env.POWERCONTEXT_BASE  (root.workflow.graph.nodes[8].data.url)
+
+[PASS] 变量节点存在 render.answer  (root.workflow.graph.nodes[9].data.answer)
+
+[PASS] 变量输出存在 render.answer  (root.workflow.graph.nodes[9].data.answer)
+
+[PASS] scope URL 使用环境变量  ({{#env.POWERCONTEXT_BASE#}}/v1/scopes)
+
+[PASS] scope body 是 JSON 对象  ({'title': '月蚀镇·狼人杀玩家档案', 'summary': '保存玩家在月蚀镇的每一局身份、胜负、NPC 关系与对局存档，供跨会话续局和 NPC 记)
+
+[PASS] scope 有 HTTP 兜底
+
+[PASS] scope default_value 非空
+
+[PASS] recall URL 使用环境变量  ({{#env.POWERCONTEXT_BASE#}}/v1/memory/entries/list)
+
+[PASS] recall body 是 JSON 对象  ({'scope_id': 'x', 'limit': 100})
+
+[PASS] recall 有 HTTP 兜底
+
+[PASS] recall default_value 非空
+
+[PASS] save URL 使用环境变量  ({{#env.POWERCONTEXT_BASE#}}/v1/memory/remember)
+
+[PASS] save body 是 JSON 对象  ({'scope_id': 'x', 'kind': 'save', 'text': '__save__', 'reason': '月蚀镇自动存档 x / tur)
+
+[PASS] save 有 HTTP 兜底
+
+[PASS] save default_value 非空
+
+[PASS] prep code 非空  (559 chars)
+
+[PASS] prep 定义 main()
+
+[PASS] prep code_language
+
+[PASS] prep 声明 outputs  (4 outputs)
+
+[PASS] prep_scope code 非空  (471 chars)
+
+[PASS] prep_scope 定义 main()
+
+[PASS] prep_scope code_language
+
+[PASS] prep_scope 声明 outputs  (3 outputs)
+
+[PASS] engine code 非空  (61651 chars)
+
+[PASS] engine 定义 main()
+
+[PASS] engine code_language
+
+[PASS] engine 声明 outputs  (12 outputs)
+
+[PASS] render code 非空  (4618 chars)
+
+[PASS] render 定义 main()
+
+[PASS] render code_language
+
+[PASS] render 声明 outputs  (5 outputs)
+
+[PASS] prep 生成 scope_key  ({'player': '外乡人', 'memory_id': 'demo', 'scope_key': 'moonfall:user:demo', 'scope_key_json': '"moonfall:user:demo"'})
+
+[PASS] prep scope_key_json 是字符串
+
+[PASS] prep_scope 解析 scope_id
+
+[PASS] prep_scope memory_ok
+
+[PASS] engine 输出 answer_fallback
+
+[PASS] engine 输出 scene_json
+
+[PASS] engine 输出 brief_json
+
+[PASS] engine 输出 save_text
+
+[PASS] engine 输出 save_text_json
+
+[PASS] engine 输出 should_save
+
+[PASS] engine 输出 memory_digest
+
+[PASS] engine 输出 phase
+
+[PASS] engine 输出 game_id
+
+[PASS] engine 输出 turn
+
+[PASS] engine 输出 player_role
+
+[PASS] engine 输出 debug_json
+
+[PASS] engine 首轮进入 role_select  (role_select)
+
+[PASS] engine should_save 是 bool
+
+[PASS] engine 存档含玩家称呼
+
+[PASS] engine save_text_json 转义正确
+
+[PASS] engine 选身份后进入 night  (night)
+
+[PASS] engine 身份正确  (预言家)
+
+[PASS] scene brief 含 speaker_plan
+
+[PASS] render 输出 answer
+
+[PASS] render 输出 save_text
+
+[PASS] render 输出 save_text_json
+
+[PASS] render 输出 should_save
+
+[PASS] render 输出 llm_used
+
+[PASS] render 保留私密身份
+
+[PASS] render 识别 LLM JSON
+
+[PASS] render 透传存档
+
+[PASS] render 抽风时仍有完整兜底
+
+[PASS] render 标记未使用 LLM
+
+[PASS] graphon 节点模型 start  (start)
+
+[PASS] graphon 节点模型 prep  (code)
+
+[PASS] graphon 节点模型 scope  (http-request)
+
+[PASS] graphon 节点模型 prep_scope  (code)
+
+[PASS] graphon 节点模型 recall  (http-request)
+
+[PASS] graphon 节点模型 engine  (code)
+
+[PASS] graphon 节点模型 narrator  (llm)
+
+[PASS] graphon 节点模型 render  (code)
+
+[PASS] graphon 节点模型 save  (http-request)
+
+[PASS] graphon 节点模型 answer  (answer)
+
+[PASS] graphon 官方 DSL 解析  (status=loadable reason=None)
+
+[PASS] graphon 依赖列表  ([])
+
+
+
+136/136 checks passed

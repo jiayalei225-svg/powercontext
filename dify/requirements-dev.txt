@@ -1,0 +1,4 @@
+# 仅维护/复现「官方 DSL 解析」校验时需要；普通运行不需要。
+# graphon 是 Dify 1.17 使用的 DSL/graph 解析库。
+-r requirements.txt
+graphon==0.7.0

@@ -1,0 +1,1323 @@
+{
+  "dsl": "dify\\dsl\\moonfall-werewolf.chatflow.yml",
+  "generated_at": "2026-11-02T14:07:57+0800",
+  "games": [
+    {
+      "game": 1,
+      "memory_id": "sim-final3",
+      "turns": 6,
+      "winner": "wolf",
+      "match": {
+        "no": 1,
+        "gid": "mfb0f7d10827",
+        "role": "seer",
+        "winner": "wolf",
+        "result": "lose",
+        "days": 2,
+        "player_alive": true,
+        "betrayed": [
+          2
+        ],
+        "defended": [],
+        "impressions": {
+          "2": -1,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0
+        },
+        "highlight": "你活到了最后，却没看清谁在说谎。",
+        "eclipse": 62,
+        "quote": "月蚀镇不记仇，它只记账。",
+        "post_mortem": []
+      },
+      "scope_id": "scp_02312w311wq5vznzrd8eg172j7",
+      "log": [
+        {
+          "node": "prep",
+          "type": "code",
+          "outputs": [
+            "memory_id",
+            "player",
+            "scope_key",
+            "scope_key_json"
+          ]
+        },
+        {
+          "node": "scope",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/scopes",
+          "status": 201,
+          "error": "",
+          "body": "{\"scope_id\":\"scp_02312w311wq5vznzrd8eg172j7\",\"title\":\"月蚀镇·狼人杀玩家档案\",\"summary\":\"保存玩家在月蚀镇的每一局身份、胜负、NPC 关系与对局存档，供跨会话续局和 NPC 记忆复用。\",\"parent_scope_id\":null,\"context_references\":[],\"external_references\":[],\"version\":1}"
+        },
+        {
+          "node": "prep_scope",
+          "type": "code",
+          "outputs": [
+            "error",
+            "memory_ok",
+            "scope_id"
+          ]
+        },
+        {
+          "node": "recall",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/entries/list",
+          "status": 200,
+          "error": "",
+          "body": "{\"entries\":[],\"next_cursor\":null}"
+        },
+        {
+          "node": "engine",
+          "type": "code",
+          "outputs": [
+            "answer_fallback",
+            "brief_json",
+            "debug_json",
+            "game_id",
+            "memory_digest",
+            "phase",
+            "player_role",
+            "save_text",
+            "save_text_json",
+            "scene_json",
+            "should_save",
+            "turn"
+          ]
+        },
+        {
+          "node": "narrator",
+          "type": "llm",
+          "chars": 72,
+          "preview": "{\"narration\": \"天亮了。月蚀镇已经三天没有邮差出镇了。酒馆里没人先开口，只有钟表匠的怀表在走。\", \"speeches\": []}"
+        },
+        {
+          "node": "render",
+          "type": "code",
+          "outputs": [
+            "answer",
+            "llm_used",
+            "save_text",
+            "save_text_json",
+            "should_save"
+          ]
+        },
+        {
+          "node": "save",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/remember",
+          "status": 200,
+          "error": "",
+          "body": "{\"changed\":true,\"records\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_57cf499df1cf4fe18c8b6dc61607dadd\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.091214,\\\"turn\\\":1,\\\"phase\\\":\\\"role_select\\\",\\\"day\\\":0,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"p"
+        },
+        {
+          "node": "answer",
+          "type": "answer",
+          "chars": 519
+        },
+        {
+          "node": "prep",
+          "type": "code",
+          "outputs": [
+            "memory_id",
+            "player",
+            "scope_key",
+            "scope_key_json"
+          ]
+        },
+        {
+          "node": "scope",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/scopes",
+          "status": 201,
+          "error": "",
+          "body": "{\"scope_id\":\"scp_02312w311wq5vznzrd8eg172j7\",\"title\":\"月蚀镇·狼人杀玩家档案\",\"summary\":\"保存玩家在月蚀镇的每一局身份、胜负、NPC 关系与对局存档，供跨会话续局和 NPC 记忆复用。\",\"parent_scope_id\":null,\"context_references\":[],\"external_references\":[],\"version\":1}"
+        },
+        {
+          "node": "prep_scope",
+          "type": "code",
+          "outputs": [
+            "error",
+            "memory_ok",
+            "scope_id"
+          ]
+        },
+        {
+          "node": "recall",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/entries/list",
+          "status": 200,
+          "error": "",
+          "body": "{\"entries\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_57cf499df1cf4fe18c8b6dc61607dadd\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.091214,\\\"turn\\\":1,\\\"phase\\\":\\\"role_select\\\",\\\"day\\\":0,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\":[{\\\"se"
+        },
+        {
+          "node": "engine",
+          "type": "code",
+          "outputs": [
+            "answer_fallback",
+            "brief_json",
+            "debug_json",
+            "game_id",
+            "memory_digest",
+            "phase",
+            "player_role",
+            "save_text",
+            "save_text_json",
+            "scene_json",
+            "should_save",
+            "turn"
+          ]
+        },
+        {
+          "node": "narrator",
+          "type": "llm",
+          "chars": 84,
+          "preview": "{\"narration\": \"第 1 夜的月亮像一枚生锈的硬币。风从门缝里钻进来，吹得烛火东倒西歪。有人翻了个身，也有人一直没有睡。\", \"speeches\": []}"
+        },
+        {
+          "node": "render",
+          "type": "code",
+          "outputs": [
+            "answer",
+            "llm_used",
+            "save_text",
+            "save_text_json",
+            "should_save"
+          ]
+        },
+        {
+          "node": "save",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/remember",
+          "status": 200,
+          "error": "",
+          "body": "{\"changed\":true,\"records\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_38440fcc4d9c42b0a58651388630b544\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.264165,\\\"turn\\\":3,\\\"phase\\\":\\\"night\\\",\\\"day\\\":1,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players"
+        },
+        {
+          "node": "answer",
+          "type": "answer",
+          "chars": 330
+        },
+        {
+          "node": "prep",
+          "type": "code",
+          "outputs": [
+            "memory_id",
+            "player",
+            "scope_key",
+            "scope_key_json"
+          ]
+        },
+        {
+          "node": "scope",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/scopes",
+          "status": 201,
+          "error": "",
+          "body": "{\"scope_id\":\"scp_02312w311wq5vznzrd8eg172j7\",\"title\":\"月蚀镇·狼人杀玩家档案\",\"summary\":\"保存玩家在月蚀镇的每一局身份、胜负、NPC 关系与对局存档，供跨会话续局和 NPC 记忆复用。\",\"parent_scope_id\":null,\"context_references\":[],\"external_references\":[],\"version\":1}"
+        },
+        {
+          "node": "prep_scope",
+          "type": "code",
+          "outputs": [
+            "error",
+            "memory_ok",
+            "scope_id"
+          ]
+        },
+        {
+          "node": "recall",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/entries/list",
+          "status": 200,
+          "error": "",
+          "body": "{\"entries\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_38440fcc4d9c42b0a58651388630b544\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.264165,\\\"turn\\\":3,\\\"phase\\\":\\\"night\\\",\\\"day\\\":1,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\":[{\\\"seat\\\":1"
+        },
+        {
+          "node": "engine",
+          "type": "code",
+          "outputs": [
+            "answer_fallback",
+            "brief_json",
+            "debug_json",
+            "game_id",
+            "memory_digest",
+            "phase",
+            "player_role",
+            "save_text",
+            "save_text_json",
+            "scene_json",
+            "should_save",
+            "turn"
+          ]
+        },
+        {
+          "node": "narrator",
+          "type": "llm",
+          "chars": 212,
+          "preview": "{\"narration\": \"天亮了。天亮时，所有人都还活着。酒馆里没人先开口，只有钟表匠的怀表在走。\", \"speeches\": [{\"seat\": 2, \"text\": \"我抡铁锤的，不讲虚的。3 号，你昨晚到底在哪儿？\"}, {\"seat\": 3, \"text\": \"2 号，我不是在审判你，我只是在记账。\"}, {\"seat\": 4, \"text\": \"我重复一遍，2 号说“我没出门”，可雪地上有他的脚印。\"}]}"
+        },
+        {
+          "node": "render",
+          "type": "code",
+          "outputs": [
+            "answer",
+            "llm_used",
+            "save_text",
+            "save_text_json",
+            "should_save"
+          ]
+        },
+        {
+          "node": "save",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/remember",
+          "status": 200,
+          "error": "",
+          "body": "{\"changed\":true,\"records\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_3819bb5c80c3424e866bf9f5bc3c89bf\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.476788,\\\"turn\\\":4,\\\"phase\\\":\\\"day\\\",\\\"day\\\":1,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\""
+        },
+        {
+          "node": "answer",
+          "type": "answer",
+          "chars": 482
+        },
+        {
+          "node": "prep",
+          "type": "code",
+          "outputs": [
+            "memory_id",
+            "player",
+            "scope_key",
+            "scope_key_json"
+          ]
+        },
+        {
+          "node": "scope",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/scopes",
+          "status": 201,
+          "error": "",
+          "body": "{\"scope_id\":\"scp_02312w311wq5vznzrd8eg172j7\",\"title\":\"月蚀镇·狼人杀玩家档案\",\"summary\":\"保存玩家在月蚀镇的每一局身份、胜负、NPC 关系与对局存档，供跨会话续局和 NPC 记忆复用。\",\"parent_scope_id\":null,\"context_references\":[],\"external_references\":[],\"version\":1}"
+        },
+        {
+          "node": "prep_scope",
+          "type": "code",
+          "outputs": [
+            "error",
+            "memory_ok",
+            "scope_id"
+          ]
+        },
+        {
+          "node": "recall",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/entries/list",
+          "status": 200,
+          "error": "",
+          "body": "{\"entries\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_3819bb5c80c3424e866bf9f5bc3c89bf\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.476788,\\\"turn\\\":4,\\\"phase\\\":\\\"day\\\",\\\"day\\\":1,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\":[{\\\"seat\\\":1,\\"
+        },
+        {
+          "node": "engine",
+          "type": "code",
+          "outputs": [
+            "answer_fallback",
+            "brief_json",
+            "debug_json",
+            "game_id",
+            "memory_digest",
+            "phase",
+            "player_role",
+            "save_text",
+            "save_text_json",
+            "scene_json",
+            "should_save",
+            "turn"
+          ]
+        },
+        {
+          "node": "narrator",
+          "type": "llm",
+          "chars": 221,
+          "preview": "{\"narration\": \"晨光从百叶窗缝里挤进来，照出桌上几道没有擦干净的血印。你说：“我觉得 2 号有问题”。\", \"speeches\": [{\"seat\": 2, \"text\": \"别绕弯子。3 号，你刚才那句话前后对不上。\"}, {\"seat\": 3, \"text\": \"主说不要妄断，可 2 号，你今天的沉默太吵了。\"}, {\"seat\": 4, \"text\": \"我跟你们说，这事儿不对劲。2 号，你昨天可不是这么说的。\"}]}"
+        },
+        {
+          "node": "render",
+          "type": "code",
+          "outputs": [
+            "answer",
+            "llm_used",
+            "save_text",
+            "save_text_json",
+            "should_save"
+          ]
+        },
+        {
+          "node": "save",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/remember",
+          "status": 200,
+          "error": "",
+          "body": "{\"changed\":true,\"records\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_e338067f8ac240c19d30d1c1d963f0f8\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.553185,\\\"turn\\\":5,\\\"phase\\\":\\\"day\\\",\\\"day\\\":1,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\""
+        },
+        {
+          "node": "answer",
+          "type": "answer",
+          "chars": 509
+        },
+        {
+          "node": "prep",
+          "type": "code",
+          "outputs": [
+            "memory_id",
+            "player",
+            "scope_key",
+            "scope_key_json"
+          ]
+        },
+        {
+          "node": "scope",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/scopes",
+          "status": 201,
+          "error": "",
+          "body": "{\"scope_id\":\"scp_02312w311wq5vznzrd8eg172j7\",\"title\":\"月蚀镇·狼人杀玩家档案\",\"summary\":\"保存玩家在月蚀镇的每一局身份、胜负、NPC 关系与对局存档，供跨会话续局和 NPC 记忆复用。\",\"parent_scope_id\":null,\"context_references\":[],\"external_references\":[],\"version\":1}"
+        },
+        {
+          "node": "prep_scope",
+          "type": "code",
+          "outputs": [
+            "error",
+            "memory_ok",
+            "scope_id"
+          ]
+        },
+        {
+          "node": "recall",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/entries/list",
+          "status": 200,
+          "error": "",
+          "body": "{\"entries\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_3819bb5c80c3424e866bf9f5bc3c89bf\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.476788,\\\"turn\\\":4,\\\"phase\\\":\\\"day\\\",\\\"day\\\":1,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\":[{\\\"seat\\\":1,\\"
+        },
+        {
+          "node": "engine",
+          "type": "code",
+          "outputs": [
+            "answer_fallback",
+            "brief_json",
+            "debug_json",
+            "game_id",
+            "memory_digest",
+            "phase",
+            "player_role",
+            "save_text",
+            "save_text_json",
+            "scene_json",
+            "should_save",
+            "turn"
+          ]
+        },
+        {
+          "node": "narrator",
+          "type": "llm",
+          "chars": 68,
+          "preview": "{\"narration\": \"钟楼敲了十二下，最后一下没有回音。第 2 夜的月蚀镇，连老鼠都闭了嘴。\", \"speeches\": []}"
+        },
+        {
+          "node": "render",
+          "type": "code",
+          "outputs": [
+            "answer",
+            "llm_used",
+            "save_text",
+            "save_text_json",
+            "should_save"
+          ]
+        },
+        {
+          "node": "save",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/remember",
+          "status": 200,
+          "error": "",
+          "body": "{\"changed\":true,\"records\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_efdb3ac128384923a0027f1a1a72ab7e\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.670461,\\\"turn\\\":6,\\\"phase\\\":\\\"night\\\",\\\"day\\\":2,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players"
+        },
+        {
+          "node": "answer",
+          "type": "answer",
+          "chars": 561
+        },
+        {
+          "node": "prep",
+          "type": "code",
+          "outputs": [
+            "memory_id",
+            "player",
+            "scope_key",
+            "scope_key_json"
+          ]
+        },
+        {
+          "node": "scope",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/scopes",
+          "status": 201,
+          "error": "",
+          "body": "{\"scope_id\":\"scp_02312w311wq5vznzrd8eg172j7\",\"title\":\"月蚀镇·狼人杀玩家档案\",\"summary\":\"保存玩家在月蚀镇的每一局身份、胜负、NPC 关系与对局存档，供跨会话续局和 NPC 记忆复用。\",\"parent_scope_id\":null,\"context_references\":[],\"external_references\":[],\"version\":1}"
+        },
+        {
+          "node": "prep_scope",
+          "type": "code",
+          "outputs": [
+            "error",
+            "memory_ok",
+            "scope_id"
+          ]
+        },
+        {
+          "node": "recall",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/entries/list",
+          "status": 200,
+          "error": "",
+          "body": "{\"entries\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_3819bb5c80c3424e866bf9f5bc3c89bf\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.476788,\\\"turn\\\":4,\\\"phase\\\":\\\"day\\\",\\\"day\\\":1,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\":[{\\\"seat\\\":1,\\"
+        },
+        {
+          "node": "engine",
+          "type": "code",
+          "outputs": [
+            "answer_fallback",
+            "brief_json",
+            "debug_json",
+            "game_id",
+            "memory_digest",
+            "phase",
+            "player_role",
+            "save_text",
+            "save_text_json",
+            "scene_json",
+            "should_save",
+            "turn"
+          ]
+        },
+        {
+          "node": "narrator",
+          "type": "llm",
+          "chars": 61,
+          "preview": "{\"narration\": \"月亮彻底暗了下去。狼人阵营获胜。月蚀镇不记仇，它只记账。\", \"speeches\": []}"
+        },
+        {
+          "node": "render",
+          "type": "code",
+          "outputs": [
+            "answer",
+            "llm_used",
+            "save_text",
+            "save_text_json",
+            "should_save"
+          ]
+        },
+        {
+          "node": "save",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/remember",
+          "status": 200,
+          "error": "",
+          "body": "{\"changed\":true,\"records\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_0ddcb1f480dc4aa3937619e07aebb81a\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"ended\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.805984,\\\"turn\\\":7,\\\"phase\\\":\\\"ended\\\",\\\"day\\\":2,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\"
+        },
+        {
+          "node": "answer",
+          "type": "answer",
+          "chars": 513
+        }
+      ]
+    },
+    {
+      "game": 2,
+      "memory_id": "sim-final3",
+      "turns": 9,
+      "winner": "wolf",
+      "match": {
+        "no": 2,
+        "gid": "mfbed4175b7c",
+        "role": "seer",
+        "winner": "wolf",
+        "result": "lose",
+        "days": 3,
+        "player_alive": true,
+        "betrayed": [
+          2,
+          5
+        ],
+        "defended": [],
+        "impressions": {
+          "2": -1,
+          "3": 0,
+          "4": 0,
+          "5": -1,
+          "6": 0,
+          "7": 0,
+          "8": 0
+        },
+        "highlight": "你活到了最后，却没看清谁在说谎。",
+        "eclipse": 78,
+        "quote": "月蚀镇不记仇，它只记账。",
+        "post_mortem": []
+      },
+      "scope_id": "scp_02312w311wq5vznzrd8eg172j7",
+      "log": [
+        {
+          "node": "prep",
+          "type": "code",
+          "outputs": [
+            "memory_id",
+            "player",
+            "scope_key",
+            "scope_key_json"
+          ]
+        },
+        {
+          "node": "scope",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/scopes",
+          "status": 201,
+          "error": "",
+          "body": "{\"scope_id\":\"scp_02312w311wq5vznzrd8eg172j7\",\"title\":\"月蚀镇·狼人杀玩家档案\",\"summary\":\"保存玩家在月蚀镇的每一局身份、胜负、NPC 关系与对局存档，供跨会话续局和 NPC 记忆复用。\",\"parent_scope_id\":null,\"context_references\":[],\"external_references\":[],\"version\":1}"
+        },
+        {
+          "node": "prep_scope",
+          "type": "code",
+          "outputs": [
+            "error",
+            "memory_ok",
+            "scope_id"
+          ]
+        },
+        {
+          "node": "recall",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/entries/list",
+          "status": 200,
+          "error": "",
+          "body": "{\"entries\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_0ddcb1f480dc4aa3937619e07aebb81a\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"ended\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.805984,\\\"turn\\\":7,\\\"phase\\\":\\\"ended\\\",\\\"day\\\":2,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\":[{\\\"seat\\\":1,"
+        },
+        {
+          "node": "engine",
+          "type": "code",
+          "outputs": [
+            "answer_fallback",
+            "brief_json",
+            "debug_json",
+            "game_id",
+            "memory_digest",
+            "phase",
+            "player_role",
+            "save_text",
+            "save_text_json",
+            "scene_json",
+            "should_save",
+            "turn"
+          ]
+        },
+        {
+          "node": "narrator",
+          "type": "llm",
+          "chars": 72,
+          "preview": "{\"narration\": \"天亮了。月蚀镇已经三天没有邮差出镇了。酒馆里没人先开口，只有钟表匠的怀表在走。\", \"speeches\": []}"
+        },
+        {
+          "node": "render",
+          "type": "code",
+          "outputs": [
+            "answer",
+            "llm_used",
+            "save_text",
+            "save_text_json",
+            "should_save"
+          ]
+        },
+        {
+          "node": "save",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/remember",
+          "status": 200,
+          "error": "",
+          "body": "{\"changed\":true,\"records\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_cf6bc5da94e64083a70943d1b97c8d48\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfbed4175b7c\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599676.468366,\\\"updated\\\":1793599676.468397,\\\"turn\\\":1,\\\"phase\\\":\\\"role_select\\\",\\\"day\\\":0,\\\"match_no\\\":2,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"p"
+        },
+        {
+          "node": "answer",
+          "type": "answer",
+          "chars": 585
+        },
+        {
+          "node": "prep",
+          "type": "code",
+          "outputs": [
+            "memory_id",
+            "player",
+            "scope_key",
+            "scope_key_json"
+          ]
+        },
+        {
+          "node": "scope",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/scopes",
+          "status": 201,
+          "error": "",
+          "body": "{\"scope_id\":\"scp_02312w311wq5vznzrd8eg172j7\",\"title\":\"月蚀镇·狼人杀玩家档案\",\"summary\":\"保存玩家在月蚀镇的每一局身份、胜负、NPC 关系与对局存档，供跨会话续局和 NPC 记忆复用。\",\"parent_scope_id\":null,\"context_references\":[],\"external_references\":[],\"version\":1}"
+        },
+        {
+          "node": "prep_scope",
+          "type": "code",
+          "outputs": [
+            "error",
+            "memory_ok",
+            "scope_id"
+          ]
+        },
+        {
+          "node": "recall",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/entries/list",
+          "status": 200,
+          "error": "",
+          "body": "{\"entries\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_0ddcb1f480dc4aa3937619e07aebb81a\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"ended\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.805984,\\\"turn\\\":7,\\\"phase\\\":\\\"ended\\\",\\\"day\\\":2,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\":[{\\\"seat\\\":1,"
+        },
+        {
+          "node": "engine",
+          "type": "code",
+          "outputs": [
+            "answer_fallback",
+            "brief_json",
+            "debug_json",
+            "game_id",
+            "memory_digest",
+            "phase",
+            "player_role",
+            "save_text",
+            "save_text_json",
+            "scene_json",
+            "should_save",
+            "turn"
+          ]
+        },
+        {
+          "node": "narrator",
+          "type": "llm",
+          "chars": 84,
+          "preview": "{\"narration\": \"第 1 夜的月亮像一枚生锈的硬币。风从门缝里钻进来，吹得烛火东倒西歪。有人翻了个身，也有人一直没有睡。\", \"speeches\": []}"
+        },
+        {
+          "node": "render",
+          "type": "code",
+          "outputs": [
+            "answer",
+            "llm_used",
+            "save_text",
+            "save_text_json",
+            "should_save"
+          ]
+        },
+        {
+          "node": "save",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/remember",
+          "status": 200,
+          "error": "",
+          "body": "{\"changed\":true,\"records\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_6e02420e2b464f988de7fe2ec90dfdad\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfbed4175b7c\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599676.468366,\\\"updated\\\":1793599676.576957,\\\"turn\\\":3,\\\"phase\\\":\\\"night\\\",\\\"day\\\":1,\\\"match_no\\\":2,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players"
+        },
+        {
+          "node": "answer",
+          "type": "answer",
+          "chars": 396
+        },
+        {
+          "node": "prep",
+          "type": "code",
+          "outputs": [
+            "memory_id",
+            "player",
+            "scope_key",
+            "scope_key_json"
+          ]
+        },
+        {
+          "node": "scope",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/scopes",
+          "status": 201,
+          "error": "",
+          "body": "{\"scope_id\":\"scp_02312w311wq5vznzrd8eg172j7\",\"title\":\"月蚀镇·狼人杀玩家档案\",\"summary\":\"保存玩家在月蚀镇的每一局身份、胜负、NPC 关系与对局存档，供跨会话续局和 NPC 记忆复用。\",\"parent_scope_id\":null,\"context_references\":[],\"external_references\":[],\"version\":1}"
+        },
+        {
+          "node": "prep_scope",
+          "type": "code",
+          "outputs": [
+            "error",
+            "memory_ok",
+            "scope_id"
+          ]
+        },
+        {
+          "node": "recall",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/entries/list",
+          "status": 200,
+          "error": "",
+          "body": "{\"entries\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_0ddcb1f480dc4aa3937619e07aebb81a\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"ended\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.805984,\\\"turn\\\":7,\\\"phase\\\":\\\"ended\\\",\\\"day\\\":2,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\":[{\\\"seat\\\":1,"
+        },
+        {
+          "node": "engine",
+          "type": "code",
+          "outputs": [
+            "answer_fallback",
+            "brief_json",
+            "debug_json",
+            "game_id",
+            "memory_digest",
+            "phase",
+            "player_role",
+            "save_text",
+            "save_text_json",
+            "scene_json",
+            "should_save",
+            "turn"
+          ]
+        },
+        {
+          "node": "narrator",
+          "type": "llm",
+          "chars": 242,
+          "preview": "{\"narration\": \"天亮了。天亮时，6号 皮皮（小丑） 没有再醒来。酒馆里没人先开口，只有钟表匠的怀表在走。\", \"speeches\": [{\"seat\": 2, \"text\": \"又是你。上次你也这么看着我，结果我是好人。 我抡铁锤的，不讲虚的。3 号，你昨晚到底在哪儿？\"}, {\"seat\": 3, \"text\": \"2 号，我不是在审判你，我只是在记账。\"}, {\"seat\": 4, \"text\": \"我重复一遍，2 号说“我没出门”，可雪地上有他的脚印。\"}]}"
+        },
+        {
+          "node": "render",
+          "type": "code",
+          "outputs": [
+            "answer",
+            "llm_used",
+            "save_text",
+            "save_text_json",
+            "should_save"
+          ]
+        },
+        {
+          "node": "save",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/remember",
+          "status": 200,
+          "error": "",
+          "body": "{\"changed\":true,\"records\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_56465961684240a3b60a6b6b4da65e17\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfbed4175b7c\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599676.468366,\\\"updated\\\":1793599676.669293,\\\"turn\\\":4,\\\"phase\\\":\\\"day\\\",\\\"day\\\":1,\\\"match_no\\\":2,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\""
+        },
+        {
+          "node": "answer",
+          "type": "answer",
+          "chars": 586
+        },
+        {
+          "node": "prep",
+          "type": "code",
+          "outputs": [
+            "memory_id",
+            "player",
+            "scope_key",
+            "scope_key_json"
+          ]
+        },
+        {
+          "node": "scope",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/scopes",
+          "status": 201,
+          "error": "",
+          "body": "{\"scope_id\":\"scp_02312w311wq5vznzrd8eg172j7\",\"title\":\"月蚀镇·狼人杀玩家档案\",\"summary\":\"保存玩家在月蚀镇的每一局身份、胜负、NPC 关系与对局存档，供跨会话续局和 NPC 记忆复用。\",\"parent_scope_id\":null,\"context_references\":[],\"external_references\":[],\"version\":1}"
+        },
+        {
+          "node": "prep_scope",
+          "type": "code",
+          "outputs": [
+            "error",
+            "memory_ok",
+            "scope_id"
+          ]
+        },
+        {
+          "node": "recall",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/entries/list",
+          "status": 200,
+          "error": "",
+          "body": "{\"entries\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_0ddcb1f480dc4aa3937619e07aebb81a\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"ended\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.805984,\\\"turn\\\":7,\\\"phase\\\":\\\"ended\\\",\\\"day\\\":2,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\":[{\\\"seat\\\":1,"
+        },
+        {
+          "node": "engine",
+          "type": "code",
+          "outputs": [
+            "answer_fallback",
+            "brief_json",
+            "debug_json",
+            "game_id",
+            "memory_digest",
+            "phase",
+            "player_role",
+            "save_text",
+            "save_text_json",
+            "scene_json",
+            "should_save",
+            "turn"
+          ]
+        },
+        {
+          "node": "narrator",
+          "type": "llm",
+          "chars": 243,
+          "preview": "{\"narration\": \"晨光从百叶窗缝里挤进来，照出桌上几道没有擦干净的血印。你说：“我觉得 2 号有问题”。\", \"speeches\": [{\"seat\": 2, \"text\": \"又是你。上次你也这么看着我，结果我是好人。 别绕弯子。3 号，你刚才那句话前后对不上。\"}, {\"seat\": 3, \"text\": \"主说不要妄断，可 2 号，你今天的沉默太吵了。\"}, {\"seat\": 4, \"text\": \"我跟你们说，这事儿不对劲。2 号，你昨天可不是这么说的。\"}]}"
+        },
+        {
+          "node": "render",
+          "type": "code",
+          "outputs": [
+            "answer",
+            "llm_used",
+            "save_text",
+            "save_text_json",
+            "should_save"
+          ]
+        },
+        {
+          "node": "save",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/remember",
+          "status": 200,
+          "error": "",
+          "body": "{\"changed\":true,\"records\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_8043e6741f934f588160434245b93c68\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfbed4175b7c\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599676.468366,\\\"updated\\\":1793599676.829347,\\\"turn\\\":5,\\\"phase\\\":\\\"day\\\",\\\"day\\\":1,\\\"match_no\\\":2,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\""
+        },
+        {
+          "node": "answer",
+          "type": "answer",
+          "chars": 597
+        },
+        {
+          "node": "prep",
+          "type": "code",
+          "outputs": [
+            "memory_id",
+            "player",
+            "scope_key",
+            "scope_key_json"
+          ]
+        },
+        {
+          "node": "scope",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/scopes",
+          "status": 201,
+          "error": "",
+          "body": "{\"scope_id\":\"scp_02312w311wq5vznzrd8eg172j7\",\"title\":\"月蚀镇·狼人杀玩家档案\",\"summary\":\"保存玩家在月蚀镇的每一局身份、胜负、NPC 关系与对局存档，供跨会话续局和 NPC 记忆复用。\",\"parent_scope_id\":null,\"context_references\":[],\"external_references\":[],\"version\":1}"
+        },
+        {
+          "node": "prep_scope",
+          "type": "code",
+          "outputs": [
+            "error",
+            "memory_ok",
+            "scope_id"
+          ]
+        },
+        {
+          "node": "recall",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/entries/list",
+          "status": 200,
+          "error": "",
+          "body": "{\"entries\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_0ddcb1f480dc4aa3937619e07aebb81a\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"ended\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.805984,\\\"turn\\\":7,\\\"phase\\\":\\\"ended\\\",\\\"day\\\":2,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\":[{\\\"seat\\\":1,"
+        },
+        {
+          "node": "engine",
+          "type": "code",
+          "outputs": [
+            "answer_fallback",
+            "brief_json",
+            "debug_json",
+            "game_id",
+            "memory_digest",
+            "phase",
+            "player_role",
+            "save_text",
+            "save_text_json",
+            "scene_json",
+            "should_save",
+            "turn"
+          ]
+        },
+        {
+          "node": "narrator",
+          "type": "llm",
+          "chars": 68,
+          "preview": "{\"narration\": \"钟楼敲了十二下，最后一下没有回音。第 2 夜的月蚀镇，连老鼠都闭了嘴。\", \"speeches\": []}"
+        },
+        {
+          "node": "render",
+          "type": "code",
+          "outputs": [
+            "answer",
+            "llm_used",
+            "save_text",
+            "save_text_json",
+            "should_save"
+          ]
+        },
+        {
+          "node": "save",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/remember",
+          "status": 200,
+          "error": "",
+          "body": "{\"changed\":true,\"records\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_687ad3528f434bd2a6b9916c8c6a386b\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfbed4175b7c\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599676.468366,\\\"updated\\\":1793599676.946746,\\\"turn\\\":6,\\\"phase\\\":\\\"night\\\",\\\"day\\\":2,\\\"match_no\\\":2,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players"
+        },
+        {
+          "node": "answer",
+          "type": "answer",
+          "chars": 625
+        },
+        {
+          "node": "prep",
+          "type": "code",
+          "outputs": [
+            "memory_id",
+            "player",
+            "scope_key",
+            "scope_key_json"
+          ]
+        },
+        {
+          "node": "scope",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/scopes",
+          "status": 201,
+          "error": "",
+          "body": "{\"scope_id\":\"scp_02312w311wq5vznzrd8eg172j7\",\"title\":\"月蚀镇·狼人杀玩家档案\",\"summary\":\"保存玩家在月蚀镇的每一局身份、胜负、NPC 关系与对局存档，供跨会话续局和 NPC 记忆复用。\",\"parent_scope_id\":null,\"context_references\":[],\"external_references\":[],\"version\":1}"
+        },
+        {
+          "node": "prep_scope",
+          "type": "code",
+          "outputs": [
+            "error",
+            "memory_ok",
+            "scope_id"
+          ]
+        },
+        {
+          "node": "recall",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/entries/list",
+          "status": 200,
+          "error": "",
+          "body": "{\"entries\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_0ddcb1f480dc4aa3937619e07aebb81a\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"ended\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.805984,\\\"turn\\\":7,\\\"phase\\\":\\\"ended\\\",\\\"day\\\":2,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\":[{\\\"seat\\\":1,"
+        },
+        {
+          "node": "engine",
+          "type": "code",
+          "outputs": [
+            "answer_fallback",
+            "brief_json",
+            "debug_json",
+            "game_id",
+            "memory_digest",
+            "phase",
+            "player_role",
+            "save_text",
+            "save_text_json",
+            "scene_json",
+            "should_save",
+            "turn"
+          ]
+        },
+        {
+          "node": "narrator",
+          "type": "llm",
+          "chars": 234,
+          "preview": "{\"narration\": \"晨光从百叶窗缝里挤进来，照出桌上几道没有擦干净的血印。天亮时，3号 白露（修女） 没有再醒来。\", \"speeches\": [{\"seat\": 5, \"text\": \"7 号，你昨晚那杯酒一口没动。是不敢喝，还是怕睡着？\"}, {\"seat\": 7, \"text\": \"时间会证明一切，通常证明我是对的。5 号，你迟到了三分钟。\"}, {\"seat\": 8, \"text\": \"5 号，我胆子小，可我看得很清楚。你昨晚没有回房间。\"}]}"
+        },
+        {
+          "node": "render",
+          "type": "code",
+          "outputs": [
+            "answer",
+            "llm_used",
+            "save_text",
+            "save_text_json",
+            "should_save"
+          ]
+        },
+        {
+          "node": "save",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/remember",
+          "status": 200,
+          "error": "",
+          "body": "{\"changed\":true,\"records\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_905cf6eddac342a580a1e96628e48823\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfbed4175b7c\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599676.468366,\\\"updated\\\":1793599677.101313,\\\"turn\\\":7,\\\"phase\\\":\\\"day\\\",\\\"day\\\":2,\\\"match_no\\\":2,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\""
+        },
+        {
+          "node": "answer",
+          "type": "answer",
+          "chars": 620
+        },
+        {
+          "node": "prep",
+          "type": "code",
+          "outputs": [
+            "memory_id",
+            "player",
+            "scope_key",
+            "scope_key_json"
+          ]
+        },
+        {
+          "node": "scope",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/scopes",
+          "status": 201,
+          "error": "",
+          "body": "{\"scope_id\":\"scp_02312w311wq5vznzrd8eg172j7\",\"title\":\"月蚀镇·狼人杀玩家档案\",\"summary\":\"保存玩家在月蚀镇的每一局身份、胜负、NPC 关系与对局存档，供跨会话续局和 NPC 记忆复用。\",\"parent_scope_id\":null,\"context_references\":[],\"external_references\":[],\"version\":1}"
+        },
+        {
+          "node": "prep_scope",
+          "type": "code",
+          "outputs": [
+            "error",
+            "memory_ok",
+            "scope_id"
+          ]
+        },
+        {
+          "node": "recall",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/entries/list",
+          "status": 200,
+          "error": "",
+          "body": "{\"entries\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_0ddcb1f480dc4aa3937619e07aebb81a\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"ended\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.805984,\\\"turn\\\":7,\\\"phase\\\":\\\"ended\\\",\\\"day\\\":2,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\":[{\\\"seat\\\":1,"
+        },
+        {
+          "node": "engine",
+          "type": "code",
+          "outputs": [
+            "answer_fallback",
+            "brief_json",
+            "debug_json",
+            "game_id",
+            "memory_digest",
+            "phase",
+            "player_role",
+            "save_text",
+            "save_text_json",
+            "scene_json",
+            "should_save",
+            "turn"
+          ]
+        },
+        {
+          "node": "narrator",
+          "type": "llm",
+          "chars": 232,
+          "preview": "{\"narration\": \"面包烤糊了，没人去管。你说：“我觉得 5 号有问题”。所有人都在等第一个开口的人。\", \"speeches\": [{\"seat\": 5, \"text\": \"我做买卖讲究现结。7 号，你的解释最好也现结。\"}, {\"seat\": 7, \"text\": \"我记录过 5 号昨晚的灯：子时亮，丑时灭。中间那一个小时，够做很多事。\"}, {\"seat\": 8, \"text\": \"我、我不想投错人……但是 5 号，你的鞋底有井边的泥。\"}]}"
+        },
+        {
+          "node": "render",
+          "type": "code",
+          "outputs": [
+            "answer",
+            "llm_used",
+            "save_text",
+            "save_text_json",
+            "should_save"
+          ]
+        },
+        {
+          "node": "save",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/remember",
+          "status": 200,
+          "error": "",
+          "body": "{\"changed\":true,\"records\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_bae697a42a1d4440b78a1fa572450ff3\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfbed4175b7c\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599676.468366,\\\"updated\\\":1793599677.265358,\\\"turn\\\":8,\\\"phase\\\":\\\"day\\\",\\\"day\\\":2,\\\"match_no\\\":2,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\""
+        },
+        {
+          "node": "answer",
+          "type": "answer",
+          "chars": 609
+        },
+        {
+          "node": "prep",
+          "type": "code",
+          "outputs": [
+            "memory_id",
+            "player",
+            "scope_key",
+            "scope_key_json"
+          ]
+        },
+        {
+          "node": "scope",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/scopes",
+          "status": 201,
+          "error": "",
+          "body": "{\"scope_id\":\"scp_02312w311wq5vznzrd8eg172j7\",\"title\":\"月蚀镇·狼人杀玩家档案\",\"summary\":\"保存玩家在月蚀镇的每一局身份、胜负、NPC 关系与对局存档，供跨会话续局和 NPC 记忆复用。\",\"parent_scope_id\":null,\"context_references\":[],\"external_references\":[],\"version\":1}"
+        },
+        {
+          "node": "prep_scope",
+          "type": "code",
+          "outputs": [
+            "error",
+            "memory_ok",
+            "scope_id"
+          ]
+        },
+        {
+          "node": "recall",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/entries/list",
+          "status": 200,
+          "error": "",
+          "body": "{\"entries\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_0ddcb1f480dc4aa3937619e07aebb81a\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"ended\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.805984,\\\"turn\\\":7,\\\"phase\\\":\\\"ended\\\",\\\"day\\\":2,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\":[{\\\"seat\\\":1,"
+        },
+        {
+          "node": "engine",
+          "type": "code",
+          "outputs": [
+            "answer_fallback",
+            "brief_json",
+            "debug_json",
+            "game_id",
+            "memory_digest",
+            "phase",
+            "player_role",
+            "save_text",
+            "save_text_json",
+            "scene_json",
+            "should_save",
+            "turn"
+          ]
+        },
+        {
+          "node": "narrator",
+          "type": "llm",
+          "chars": 67,
+          "preview": "{\"narration\": \"窗外的雾贴着玻璃，像一张没有五官的脸。第 3 夜，谁也没有吹灭蜡烛。\", \"speeches\": []}"
+        },
+        {
+          "node": "render",
+          "type": "code",
+          "outputs": [
+            "answer",
+            "llm_used",
+            "save_text",
+            "save_text_json",
+            "should_save"
+          ]
+        },
+        {
+          "node": "save",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/remember",
+          "status": 200,
+          "error": "",
+          "body": "{\"changed\":true,\"records\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_3e6a732a591d46f8b7378d25e6ed3f5e\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfbed4175b7c\\\",\\\"status\\\":\\\"active\\\",\\\"created\\\":1793599676.468366,\\\"updated\\\":1793599677.380089,\\\"turn\\\":9,\\\"phase\\\":\\\"night\\\",\\\"day\\\":3,\\\"match_no\\\":2,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players"
+        },
+        {
+          "node": "answer",
+          "type": "answer",
+          "chars": 571
+        },
+        {
+          "node": "prep",
+          "type": "code",
+          "outputs": [
+            "memory_id",
+            "player",
+            "scope_key",
+            "scope_key_json"
+          ]
+        },
+        {
+          "node": "scope",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/scopes",
+          "status": 201,
+          "error": "",
+          "body": "{\"scope_id\":\"scp_02312w311wq5vznzrd8eg172j7\",\"title\":\"月蚀镇·狼人杀玩家档案\",\"summary\":\"保存玩家在月蚀镇的每一局身份、胜负、NPC 关系与对局存档，供跨会话续局和 NPC 记忆复用。\",\"parent_scope_id\":null,\"context_references\":[],\"external_references\":[],\"version\":1}"
+        },
+        {
+          "node": "prep_scope",
+          "type": "code",
+          "outputs": [
+            "error",
+            "memory_ok",
+            "scope_id"
+          ]
+        },
+        {
+          "node": "recall",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/entries/list",
+          "status": 200,
+          "error": "",
+          "body": "{\"entries\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_0ddcb1f480dc4aa3937619e07aebb81a\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfb0f7d10827\\\",\\\"status\\\":\\\"ended\\\",\\\"created\\\":1793599675.091192,\\\"updated\\\":1793599675.805984,\\\"turn\\\":7,\\\"phase\\\":\\\"ended\\\",\\\"day\\\":2,\\\"match_no\\\":1,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players\\\":[{\\\"seat\\\":1,"
+        },
+        {
+          "node": "engine",
+          "type": "code",
+          "outputs": [
+            "answer_fallback",
+            "brief_json",
+            "debug_json",
+            "game_id",
+            "memory_digest",
+            "phase",
+            "player_role",
+            "save_text",
+            "save_text_json",
+            "scene_json",
+            "should_save",
+            "turn"
+          ]
+        },
+        {
+          "node": "narrator",
+          "type": "llm",
+          "chars": 61,
+          "preview": "{\"narration\": \"月亮彻底暗了下去。狼人阵营获胜。月蚀镇不记仇，它只记账。\", \"speeches\": []}"
+        },
+        {
+          "node": "render",
+          "type": "code",
+          "outputs": [
+            "answer",
+            "llm_used",
+            "save_text",
+            "save_text_json",
+            "should_save"
+          ]
+        },
+        {
+          "node": "save",
+          "type": "http",
+          "url": "http://127.0.0.1:8099/v1/memory/remember",
+          "status": 200,
+          "error": "",
+          "body": "{\"changed\":true,\"records\":[{\"artifact\":{\"family\":\"atomic-memory\",\"artifact_id\":\"art_c75269f93a714d38817defd9865e1931\",\"revision\":1},\"kind\":\"save\",\"text\":\"{\\\"v\\\":1,\\\"gid\\\":\\\"mfbed4175b7c\\\",\\\"status\\\":\\\"ended\\\",\\\"created\\\":1793599676.468366,\\\"updated\\\":1793599677.462933,\\\"turn\\\":10,\\\"phase\\\":\\\"ended\\\",\\\"day\\\":3,\\\"match_no\\\":2,\\\"player_name\\\":\\\"验收员\\\",\\\"player\\\":{\\\"seat\\\":1,\\\"name\\\":\\\"验收员\\\"},\\\"players"
+        },
+        {
+          "node": "answer",
+          "type": "answer",
+          "chars": 582
+        }
+      ]
+    }
+  ],
+  "turns": 15
+}

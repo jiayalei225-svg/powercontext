@@ -1,0 +1,20 @@
+# local runtime
+.venv/
+/logs/
+*.pid
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# keep committed evidence
+!evidence/logs/
+!evidence/logs/**
